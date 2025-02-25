@@ -102,7 +102,7 @@ export const SideBar = ({ navOpen, setNavOpen }: Props) => {
           <Input
             onFocus={() => plausible('page-filter')}
             placeholder="Find Page"
-            variant="outlined"
+            variant="outline"
             w="full"
             size="small"
             sx={{

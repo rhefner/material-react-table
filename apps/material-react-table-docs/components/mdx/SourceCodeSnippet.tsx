@@ -154,7 +154,7 @@ export const SourceCodeSnippet = ({
                       leftIcon={<Icon as={ElectricBoltIcon} />}
                       sx={{ cursor: 'pointer' }}
                       target="_blank"
-                      variant="outlined"
+                      variant="outline"
                     >
                       Open Stackblitz
                     </Button>
@@ -168,7 +168,7 @@ export const SourceCodeSnippet = ({
                       leftIcon={<Icon as={CodeIcon} />}
                       sx={{ cursor: 'pointer' }}
                       target="_blank"
-                      variant="outlined"
+                      variant="outline"
                     >
                       Open Code Sandbox
                     </Button>
@@ -184,7 +184,7 @@ export const SourceCodeSnippet = ({
                       leftIcon={<Icon as={GitHubIcon} />}
                       sx={{ cursor: 'pointer' }}
                       target="_blank"
-                      variant="outlined"
+                      variant="outline"
                     >
                       Open on GitHub
                     </Button>
@@ -239,7 +239,7 @@ export const SourceCodeSnippet = ({
       )}
       <div>
         <Collapse in={showV2Alert}>
-          <Alert sx={{ mb: '1rem' }} variant="outlined">
+          <Alert sx={{ mb: '1rem' }} variant="outline">
             <CloseButton onClick={handleDismissV2Alert} />
             <AlertTitle>This example is written for MRT V3.</AlertTitle>
             If your app is still using MRT V1, either{' '}

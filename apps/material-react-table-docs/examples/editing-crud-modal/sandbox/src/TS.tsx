@@ -17,8 +17,8 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { type User, fakeData, usStates } from './makeData';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { MdEdit as EditIcon } from 'react-icons/md';
+import { MdDelete as DeleteIcon } from 'react-icons/md';
 
 const Example = () => {
   const [validationErrors, setValidationErrors] = useState<

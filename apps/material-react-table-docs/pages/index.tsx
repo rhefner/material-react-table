@@ -1,16 +1,6 @@
 import Link from 'next/link';
-import {
-  alpha,
-  Box,
-  Button,
-  darken,
-  Stack,
-  Typography,
-  Link as MuiLink,
-  Alert,
-  AlertTitle,
-} from '@mui/material';
-import { ArrowForwardIos } from '@mui/icons-material';
+import {alpha, Box, Button, darken, Stack, Text, Link as MuiLink, Alert, AlertTitle, } from '@chakra-ui/react';
+import {ArrowForwardIos} from 'react-icons/md';
 import { HomeCards } from '../components/mdx/HomeCards';
 import { LinkCards } from '../components/mdx/LinkCards';
 import { StatBadges } from '../components/mdx/StatBadges';
@@ -26,7 +16,7 @@ const HomePage = () => {
   return (
     <>
       <Stack sx={{ maxWidth: '1200px', m: 'auto' }}>
-        <Alert severity="success" variant="outlined" sx={{}}>
+        <Alert severity="success" variant="outline" sx={{}}>
           <AlertTitle>
             Material React Table V3 was released September 5th, 2024!
           </AlertTitle>
@@ -153,7 +143,7 @@ const HomePage = () => {
               endIcon={<ArrowForwardIos />}
               fullWidth
               size="large"
-              variant="contained"
+              colorScheme="blue"
             >
               Get Started
             </Button>
@@ -173,7 +163,7 @@ const HomePage = () => {
                   ),
                 },
               })}
-              variant="contained"
+              colorScheme="blue"
             >
               API
             </Button>
@@ -193,7 +183,7 @@ const HomePage = () => {
                   ),
                 },
               })}
-              variant="contained"
+              colorScheme="blue"
             >
               Examples
             </Button>
@@ -213,7 +203,7 @@ const HomePage = () => {
                   ),
                 },
               })}
-              variant="contained"
+              colorScheme="blue"
             >
               Guides
             </Button>

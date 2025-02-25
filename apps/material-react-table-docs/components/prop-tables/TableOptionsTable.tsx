@@ -5,12 +5,7 @@ import {
   type MRT_TableOptions,
   type MRT_ColumnDef,
 } from 'chakra-react-table';
-import {
-  Link as MuiLink,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from '@mui/material';
+import {Link as MuiLink, Text, useMediaQuery, useTheme, } from '@chakra-ui/react';
 import { SampleCodeSnippet } from '../mdx/SampleCodeSnippet';
 import { type TableOption, tableOptions } from './tableOptions';
 

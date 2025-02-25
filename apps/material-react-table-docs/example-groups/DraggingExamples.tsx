@@ -1,11 +1,11 @@
 import { useRouter } from 'next/router';
-import { Box, Tab, Tabs } from '@mui/material';
+import {Box, Tab, Tabs} from '@chakra-ui/react';
 import ColumnOrdering from '../examples/enable-column-ordering';
 import RowOrdering from '../examples/enable-row-ordering';
 import RowDragging from '../examples/enable-row-dragging';
 import { useState } from 'react';
 import Link from 'next/link';
-import LaunchIcon from '@mui/icons-material/Launch';
+import { MdLaunch as LaunchIcon } from 'react-icons/md';
 
 const RemoteFetchingExamples = ({ isPage = false }) => {
   const { pathname, push } = useRouter();

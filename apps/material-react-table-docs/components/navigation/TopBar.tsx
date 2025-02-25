@@ -93,8 +93,8 @@ export const TopBar = ({ navOpen, setNavOpen }: Props) => {
         bg={bgColor}
         opacity={0.95}
       >
-        <Flex justify="space-between" align="center" p="2px 8px" height="48px">
-          <Flex align="center">
+        <Flex justify="space-between" textAlign="center" p="2px 8px" height="48px">
+          <Flex textAlign="center">
             {!isDesktop && (
               <IconButton
                 color={textColor}
@@ -162,7 +162,7 @@ export const TopBar = ({ navOpen, setNavOpen }: Props) => {
             display="grid"
             width={isDesktop ? '400px' : !isTablet ? '250px' : undefined}
           />
-          <Flex align="center" gap="0.25rem">
+          <Flex textAlign="center" gap="0.25rem">
             <Tooltip label="Github">
               <IconButton
                 as="a"

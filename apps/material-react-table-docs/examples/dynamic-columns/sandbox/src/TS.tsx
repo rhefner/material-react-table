@@ -9,7 +9,7 @@ import {
   // type MRT_ColumnOrderState,
 } from 'chakra-react-table';
 import {IconButton, Tooltip} from '@chakra-ui/react';
-import RefreshIcon from '@mui/icons-material/Refresh';
+import { MdRefresh as RefreshIcon } from 'react-icons/md';
 import {
   keepPreviousData,
   QueryClient,

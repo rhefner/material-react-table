@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { Box, Tab, Tabs } from '@mui/material';
+import {Box, Tab, Tabs} from '@chakra-ui/react';
 import Link from 'next/link';
-import LaunchIcon from '@mui/icons-material/Launch';
+import { MdLaunch as LaunchIcon } from 'react-icons/md';
 import ModalExample from '../examples/editing-crud-modal';
 import InlineRowExample from '../examples/editing-crud-row';
 import InlineCellExample from '../examples/editing-crud-cell';

@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { Box, Tab, Tabs } from '@mui/material';
+import {Box, Tab, Tabs} from '@chakra-ui/react';
 import EnableColumnGroupingExample from '../examples/enable-column-grouping';
 import CustomizeRemoveColumnGroupingExample from '../examples/customize-remove-column-grouping';
 import AggregationAndGroupingExample from '../examples/aggregation-and-grouping';
@@ -9,7 +9,7 @@ import ExpandingTreeExample from '../examples/expanding-tree-expanded';
 import ExpandingParsedTreeExample from '../examples/expanding-tree-flat-parse';
 import { useState } from 'react';
 import Link from 'next/link';
-import LaunchIcon from '@mui/icons-material/Launch';
+import { MdLaunch as LaunchIcon } from 'react-icons/md';
 
 const ExpandingExamples = ({ isPage = false }) => {
   const { pathname, push } = useRouter();

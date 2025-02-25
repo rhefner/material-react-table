@@ -1,11 +1,6 @@
 import Head from 'next/head';
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Typography,
-} from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import {Accordion, AccordionDetails, AccordionSummary, Text, } from '@chakra-ui/react';
+import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md';
 
 interface FAQStructuredData {
   '@context': string;

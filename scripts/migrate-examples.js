@@ -5,21 +5,7 @@ const path = require('path');
 const { execSync } = require('child_process');
 
 // Configuration
-const EXAMPLES_DIR = path.resolve(
-  __dirname,
-  '../apps/material-react-table-docs/examples',
-);
-const COMPLETED_EXAMPLES = [
-  'minimal',
-  'linear-progress',
-  'enable-column-pinning',
-  'customize-table-styles',
-  'persistent-state',
-  'multi-sorting',
-  'row-actions-buttons',
-  'single-row-selection',
-  'custom-headless',
-]; // Skip examples already migrated
+const APPS_DIR = path.resolve(__dirname, '../apps');
 
 // Material UI to Chakra UI mapping
 const COMPONENT_MAPPING = {
@@ -107,12 +93,12 @@ function updatePackageJson(exampleDir) {
       '@mui/x-date-pickers',
       'dayjs',
       'material-react-table',
+      '@chakra-ui/icons',
     ];
 
     // Add Chakra UI dependencies
     const depsToAdd = {
       '@chakra-ui/react': '^2.9.0',
-      '@chakra-ui/icons': '^2.1.1',
       'chakra-react-table': 'workspace:*',
       'framer-motion': '^11.0.8',
       'react-icons': '^5.0.1',
@@ -149,230 +135,199 @@ function updatePackageJson(exampleDir) {
   }
 }
 
-function updateTsxFiles(exampleDir) {
-  console.log(`Updating TSX/JSX files in ${exampleDir}`);
+function updateTsxFiles(dir) {
+  console.log(`Updating TSX/JSX files in ${dir}`);
 
-  // Find all TSX/JSX files in the src directory
-  const srcDir = path.join(exampleDir, 'src');
-  if (!fs.existsSync(srcDir)) {
-    console.warn(`  No src directory found in ${exampleDir}`);
-    return false;
-  }
-
-  try {
-    const files = fs
-      .readdirSync(srcDir)
-      .filter((file) => file.endsWith('.tsx') || file.endsWith('.jsx'));
-
-    if (files.length === 0) {
-      console.warn(`  No TSX/JSX files found in ${srcDir}`);
-      return false;
-    }
-
-    let anyFileUpdated = false;
-
-    files.forEach((file) => {
-      const filePath = path.join(srcDir, file);
-      console.log(`  Processing ${file}`);
-
-      try {
-        let content = fs.readFileSync(filePath, 'utf8');
-        let updatedContent = content;
-
-        // Replace material-react-table with chakra-react-table
-        updatedContent = updatedContent.replace(
-          /from ['"]material-react-table['"]/g,
-          "from 'chakra-react-table'",
-        );
-
-        // Handle direct MUI icon imports like: import AddIcon from '@mui/icons-material/Add';
-        const directIconImportRegex =
-          /import\s+([A-Za-z0-9_]+)\s+from\s+['"]@mui\/icons-material\/([A-Za-z0-9_]+)['"]/g;
-        updatedContent = updatedContent.replace(
-          directIconImportRegex,
-          (match, iconAlias, iconName) => {
-            // Convert the icon name to its equivalent in react-icons/md
-            // Remove 'Icon' suffix if present in the name being imported (not the alias)
-            const baseName = iconName.endsWith('Icon')
-              ? iconName.slice(0, -4)
-              : iconName;
-            // Map to Md prefixed icon if possible
-            const reactIconName = ICON_MAPPING[baseName] || `Md${baseName}`;
-            return `import { ${reactIconName} as ${iconAlias} } from 'react-icons/md'`;
-          },
-        );
-
-        // Replace Material UI imports with Chakra UI imports
-        const muiImportRegex =
-          /import\s+{([^}]+)}\s+from\s+['"]@mui\/material['"]/g;
-        const muiIconsImportRegex =
-          /import\s+{([^}]+)}\s+from\s+['"]@mui\/icons-material['"]/g;
-
-        updatedContent = updatedContent.replace(
-          muiImportRegex,
-          (match, imports) => {
-            // Parse the imported components
-            const importedComponents = imports
-              .split(',')
-              .map((comp) => comp.trim());
-
-            // Filter components that have mapping
-            const mappableComponents = importedComponents.filter((comp) => {
-              // Handle renamed imports like: Edit as EditIcon
-              const componentName = comp.split(' as ')[0].trim();
-              return Object.keys(COMPONENT_MAPPING).includes(componentName);
-            });
-
-            if (mappableComponents.length === 0) {
-              return match; // No components to replace
-            }
-
-            // Map components to Chakra equivalents
-            const mappedImports = importedComponents.map((comp) => {
-              const parts = comp.split(' as ');
-              const componentName = parts[0].trim();
-              const alias = parts.length > 1 ? parts[1].trim() : null;
-
-              if (Object.keys(COMPONENT_MAPPING).includes(componentName)) {
-                const chakraComponent = COMPONENT_MAPPING[componentName];
-                return alias
-                  ? `${chakraComponent} as ${alias}`
-                  : chakraComponent;
-              }
-
-              return comp; // Keep unmapped components
-            });
-
-            return `import {${mappedImports.join(', ')}} from '@chakra-ui/react'`;
-          },
-        );
-
-        // Handle Material UI icon imports with destructuring
-        updatedContent = updatedContent.replace(
-          muiIconsImportRegex,
-          (match, imports) => {
-            // Parse the imported icons
-            const importedIcons = imports.split(',').map((icon) => icon.trim());
-
-            // Map to react-icons (MdIcons)
-            const mappedIcons = importedIcons.map((icon) => {
-              const parts = icon.split(' as ');
-              const iconName = parts[0].trim();
-              const alias = parts.length > 1 ? parts[1].trim() : null;
-
-              if (Object.keys(ICON_MAPPING).includes(iconName)) {
-                const mappedIcon = ICON_MAPPING[iconName];
-                return alias ? `${mappedIcon} as ${alias}` : mappedIcon;
-              }
-              return icon;
-            });
-
-            return `import {${mappedIcons.join(', ')}} from 'react-icons/md'`;
-          },
-        );
-
-        // Replace sx props with Chakra UI style props
-        const sxPropRegex = /sx={{([^}]+)}}/g;
-        updatedContent = updatedContent.replace(
-          sxPropRegex,
-          (match, styleProps) => {
-            // Convert to style props
-            // This is a simple version - a complete version would need to parse the object more carefully
-            let chakraProps = '';
-
-            // Simple case: string value props like m="2rem 0"
-            if (styleProps.includes(':')) {
-              const props = styleProps.split(',').map((prop) => {
-                let [key, value] = prop.split(':').map((p) => p.trim());
-
-                // Remove quotes from string keys
-                key = key.replace(/['"]/g, '');
-
-                // Map the CSS property if needed
-                const mappedKey = CSS_PROP_MAPPING[key] || key;
-
-                return `${mappedKey}={${value}}`;
-              });
-
-              chakraProps = props.join(' ');
-            } else {
-              // Just pass through as is for now
-              chakraProps = `sx={{${styleProps}}}`;
-            }
-
-            return chakraProps;
-          },
-        );
-
-        // Replace Material UI IconButton with Chakra IconButton
-        updatedContent = updatedContent.replace(
-          /<IconButton([^>]*)>([^<]*)<([^>]+)\/><\/IconButton>/g,
-          (match, props, content, iconComp) => {
-            // Extract icon component
-            const iconCompClean = iconComp.trim();
-            return `<IconButton${props} icon={<${iconCompClean}/>} />`;
-          },
-        );
-
-        // Replace selected prop with Chakra equivalent
-        updatedContent = updatedContent.replace(
-          /selected={([^}]+)}/g,
-          'bg={$1 ? "gray.100" : undefined}',
-        );
-
-        // Replace align="center" with textAlign="center"
-        updatedContent = updatedContent.replace(
-          /align="center"/g,
-          'textAlign="center"',
-        );
-
-        // Replace variant="contained" with colorScheme="blue"
-        updatedContent = updatedContent.replace(
-          /variant="contained"/g,
-          'colorScheme="blue"',
-        );
-
-        // Replace variant="outlined" with variant="outline"
-        updatedContent = updatedContent.replace(
-          /variant="outlined"/g,
-          'variant="outline"',
-        );
-
-        // Replace color="primary" with colorScheme="blue"
-        updatedContent = updatedContent.replace(
-          /color="primary"/g,
-          'colorScheme="blue"',
-        );
-
-        // Replace color="secondary" with colorScheme="purple"
-        updatedContent = updatedContent.replace(
-          /color="secondary"/g,
-          'colorScheme="purple"',
-        );
-
-        // Replace color="error" with colorScheme="red"
-        updatedContent = updatedContent.replace(
-          /color="error"/g,
-          'colorScheme="red"',
-        );
-
-        if (content !== updatedContent) {
-          fs.writeFileSync(filePath, updatedContent);
-          console.log(`  Updated ${file} successfully`);
-          anyFileUpdated = true;
-        } else {
-          console.log(`  No changes needed for ${file}`);
-        }
-      } catch (error) {
-        console.error(`  Error updating ${file}:`, error);
+  // Recursively find all JS/JSX/TS/TSX files in the directory
+  const files = [];
+  function findFiles(currentDir) {
+    const entries = fs.readdirSync(currentDir, { withFileTypes: true });
+    for (const entry of entries) {
+      const fullPath = path.join(currentDir, entry.name);
+      if (entry.isDirectory()) {
+        findFiles(fullPath);
+      } else if (
+        entry.isFile() &&
+        (entry.name.endsWith('.js') ||
+          entry.name.endsWith('.jsx') ||
+          entry.name.endsWith('.ts') ||
+          entry.name.endsWith('.tsx'))
+      ) {
+        files.push(fullPath);
       }
-    });
+    }
+  }
+  findFiles(dir);
 
-    return anyFileUpdated;
-  } catch (error) {
-    console.error(`  Error updating files in ${exampleDir}:`, error);
+  if (files.length === 0) {
+    console.warn(`  No JS/JSX/TS/TSX files found in ${dir}`);
     return false;
   }
+
+  let anyFileUpdated = false;
+
+  files.forEach((filePath) => {
+    console.log(`  Processing ${filePath}`);
+
+    try {
+      let content = fs.readFileSync(filePath, 'utf8');
+      let updatedContent = content;
+
+      // Replace material-react-table with chakra-react-table
+      updatedContent = updatedContent.replace(
+        /from ['"]material-react-table['"]/g,
+        "from 'chakra-react-table'",
+      );
+
+      // Handle direct MUI icon imports like: import AddIcon from '@mui/icons-material/Add';
+      const directIconImportRegex =
+        /import\s+([A-Za-z0-9_]+)\s+from\s+['"]@mui\/icons-material\/([A-Za-z0-9_]+)['"]/g;
+      updatedContent = updatedContent.replace(
+        directIconImportRegex,
+        (match, iconAlias, iconName) => {
+          // Convert the icon name to its equivalent in react-icons/md
+          // Remove 'Icon' suffix if present in the name being imported (not the alias)
+          const baseName = iconName.endsWith('Icon')
+            ? iconName.slice(0, -4)
+            : iconName;
+          // Map to Md prefixed icon if possible
+          const reactIconName = ICON_MAPPING[baseName] || `Md${baseName}`;
+          return `import { ${reactIconName} as ${iconAlias} } from 'react-icons/md'`;
+        },
+      );
+
+      // Replace Material UI imports with Chakra UI imports
+      const muiImportRegex =
+        /import\s+{([^}]+)}\s+from\s+['"]@mui\/material['"]/g;
+      const muiIconsImportRegex =
+        /import\s+{([^}]+)}\s+from\s+['"]@mui\/icons-material['"]/g;
+
+      updatedContent = updatedContent.replace(
+        muiImportRegex,
+        (match, imports) => {
+          // Parse the imported components
+          const importedComponents = imports
+            .split(',')
+            .map((comp) => comp.trim());
+
+          // Filter components that have mapping
+          const mappableComponents = importedComponents.filter((comp) => {
+            // Handle renamed imports like: Edit as EditIcon
+            const componentName = comp.split(' as ')[0].trim();
+            return Object.keys(COMPONENT_MAPPING).includes(componentName);
+          });
+
+          if (mappableComponents.length === 0) {
+            return match; // No components to replace
+          }
+
+          // Map components to Chakra equivalents
+          const mappedImports = importedComponents.map((comp) => {
+            const parts = comp.split(' as ');
+            const componentName = parts[0].trim();
+            const alias = parts.length > 1 ? parts[1].trim() : null;
+
+            if (Object.keys(COMPONENT_MAPPING).includes(componentName)) {
+              const chakraComponent = COMPONENT_MAPPING[componentName];
+              return alias ? `${chakraComponent} as ${alias}` : chakraComponent;
+            }
+
+            return comp; // Keep unmapped components
+          });
+
+          return `import {${mappedImports.join(', ')}} from '@chakra-ui/react'`;
+        },
+      );
+
+      // Handle Material UI icon imports with destructuring
+      updatedContent = updatedContent.replace(
+        muiIconsImportRegex,
+        (match, imports) => {
+          // Parse the imported icons
+          const importedIcons = imports.split(',').map((icon) => icon.trim());
+
+          // Map to react-icons (MdIcons)
+          const mappedIcons = importedIcons.map((icon) => {
+            const parts = icon.split(' as ');
+            const iconName = parts[0].trim();
+            const alias = parts.length > 1 ? parts[1].trim() : null;
+
+            if (Object.keys(ICON_MAPPING).includes(iconName)) {
+              const mappedIcon = ICON_MAPPING[iconName];
+              return alias ? `${mappedIcon} as ${alias}` : mappedIcon;
+            }
+            return icon;
+          });
+
+          return `import {${mappedIcons.join(', ')}} from 'react-icons/md'`;
+        },
+      );
+
+      // Replace Material UI IconButton with Chakra IconButton
+      updatedContent = updatedContent.replace(
+        /<IconButton([^>]*)>([^<]*)<([^>]+)\/><\/IconButton>/g,
+        (match, props, content, iconComp) => {
+          // Extract icon component
+          const iconCompClean = iconComp.trim();
+          return `<IconButton${props} icon={<${iconCompClean}/>} />`;
+        },
+      );
+
+      // Replace selected prop with Chakra equivalent
+      updatedContent = updatedContent.replace(
+        /selected={([^}]+)}/g,
+        'bg={$1 ? "gray.100" : undefined}',
+      );
+
+      // Replace align="center" with textAlign="center"
+      updatedContent = updatedContent.replace(
+        /align="center"/g,
+        'textAlign="center"',
+      );
+
+      // Replace variant="contained" with colorScheme="blue"
+      updatedContent = updatedContent.replace(
+        /variant="contained"/g,
+        'colorScheme="blue"',
+      );
+
+      // Replace variant="outlined" with variant="outline"
+      updatedContent = updatedContent.replace(
+        /variant="outlined"/g,
+        'variant="outline"',
+      );
+
+      // Replace color="primary" with colorScheme="blue"
+      updatedContent = updatedContent.replace(
+        /color="primary"/g,
+        'colorScheme="blue"',
+      );
+
+      // Replace color="secondary" with colorScheme="purple"
+      updatedContent = updatedContent.replace(
+        /color="secondary"/g,
+        'colorScheme="purple"',
+      );
+
+      // Replace color="error" with colorScheme="red"
+      updatedContent = updatedContent.replace(
+        /color="error"/g,
+        'colorScheme="red"',
+      );
+
+      if (content !== updatedContent) {
+        fs.writeFileSync(filePath, updatedContent);
+        console.log(`  Updated ${filePath} successfully`);
+        anyFileUpdated = true;
+      } else {
+        console.log(`  No changes needed for ${filePath}`);
+      }
+    } catch (error) {
+      console.error(`  Error updating ${filePath}:`, error);
+    }
+  });
+
+  return anyFileUpdated;
 }
 
 function installDependencies(exampleDir) {
@@ -392,7 +347,7 @@ function installDependencies(exampleDir) {
 }
 
 function migrateExample(exampleName) {
-  const exampleDir = path.join(EXAMPLES_DIR, exampleName, 'sandbox');
+  const exampleDir = path.join(APPS_DIR, exampleName);
 
   console.log(`\n=== Migrating example: ${exampleName} ===`);
 
@@ -409,15 +364,6 @@ function migrateExample(exampleName) {
   }
 
   const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
-
-  // Skip if already using chakra-react-table
-  if (
-    packageJson.dependencies &&
-    packageJson.dependencies['chakra-react-table']
-  ) {
-    console.log(`Example already migrated: ${exampleName}`);
-    return true;
-  }
 
   // Update package.json
   const packageUpdated = updatePackageJson(exampleDir);
@@ -437,28 +383,47 @@ function migrateExample(exampleName) {
   return true;
 }
 
-// Main execution
+function findPackageJsonFiles(dir) {
+  const packageJsonFiles = [];
+  function findFiles(currentDir) {
+    const entries = fs.readdirSync(currentDir, { withFileTypes: true });
+    for (const entry of entries) {
+      const fullPath = path.join(currentDir, entry.name);
+      if (entry.isDirectory()) {
+        findFiles(fullPath);
+      } else if (entry.isFile() && entry.name === 'package.json') {
+        packageJsonFiles.push(fullPath);
+      }
+    }
+  }
+  findFiles(dir);
+  return packageJsonFiles;
+}
+
+function updateAllPackageJsonFiles() {
+  console.log('Updating all package.json files...');
+
+  const packageJsonFiles = findPackageJsonFiles(APPS_DIR);
+  packageJsonFiles.forEach((packageJsonPath) => {
+    const exampleDir = path.dirname(packageJsonPath);
+    updatePackageJson(exampleDir);
+  });
+
+  console.log('All package.json files updated.');
+}
+
 function main() {
   console.log('Starting the migration process...');
 
-  // Get all example directories
+  // Update all package.json files
+  updateAllPackageJsonFiles();
+
+  // Get all directories in the apps directory
   const examples = fs
-    .readdirSync(EXAMPLES_DIR)
-    .filter((dir) => fs.statSync(path.join(EXAMPLES_DIR, dir)).isDirectory())
-    .filter((dir) => !COMPLETED_EXAMPLES.includes(dir)); // Skip already migrated
+    .readdirSync(APPS_DIR)
+    .filter((dir) => fs.statSync(path.join(APPS_DIR, dir)).isDirectory());
 
-  console.log(`Found ${examples.length} examples to migrate`);
-
-  // Process one example (for testing)
-  if (process.argv.length > 2) {
-    const targetExample = process.argv[2];
-    if (examples.includes(targetExample)) {
-      migrateExample(targetExample);
-    } else {
-      console.error(`Example not found: ${targetExample}`);
-    }
-    return;
-  }
+  console.log(`Found ${examples.length} directories to migrate`);
 
   // Process all examples
   let migratedCount = 0;
@@ -470,7 +435,7 @@ function main() {
   });
 
   console.log(
-    `\nMigration completed. Successfully migrated ${migratedCount}/${examples.length} examples.`,
+    `\nMigration completed. Successfully migrated ${migratedCount}/${examples.length} directories.`,
   );
 }
 

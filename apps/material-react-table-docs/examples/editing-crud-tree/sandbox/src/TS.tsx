@@ -16,9 +16,9 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { type User, fakeData, usStates } from './makeData';
-import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { MdPersonAddAlt as PersonAddAltIcon } from 'react-icons/md';
+import { MdEdit as EditIcon } from 'react-icons/md';
+import { MdDelete as DeleteIcon } from 'react-icons/md';
 
 const Example = () => {
   const [creatingRowIndex, setCreatingRowIndex] = useState<

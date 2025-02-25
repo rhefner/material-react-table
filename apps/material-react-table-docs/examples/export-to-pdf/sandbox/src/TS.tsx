@@ -5,7 +5,7 @@ import {
   createMRTColumnHelper,
 } from 'chakra-react-table';
 import {Box, Button} from '@chakra-ui/react';
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import { MdFileDownload as FileDownloadIcon } from 'react-icons/md';
 import { jsPDF } from 'jspdf'; //or use your library of choice here
 import autoTable from 'jspdf-autotable';
 import { data, type Person } from './makeData';

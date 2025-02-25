@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { Box, Tab, Tabs } from '@mui/material';
+import {Box, Tab, Tabs} from '@chakra-ui/react';
 
 const InstanceAPIsSwitcher = () => {
   const { pathname, push } = useRouter();

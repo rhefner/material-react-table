@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { Box, Link, Stack, Typography } from '@mui/material';
+import {Box, Link, Stack, Text} from '@chakra-ui/react';
 
 interface Props {
   author?: string;

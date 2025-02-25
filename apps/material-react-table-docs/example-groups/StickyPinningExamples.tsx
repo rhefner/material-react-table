@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { Box, Tab, Tabs } from '@mui/material';
+import {Box, Tab, Tabs} from '@chakra-ui/react';
 import StickyHeaderExample from '../examples/enable-sticky-header';
 import ColumnPinningExample from '../examples/enable-column-pinning';
 import RowPinningStickyExample from '../examples/enable-row-pinning-sticky';
@@ -7,7 +7,7 @@ import RowPinningStaticExample from '../examples/enable-row-pinning-static';
 import StickySelectExample from '../examples/enable-row-pinning-select';
 import { useState } from 'react';
 import Link from 'next/link';
-import LaunchIcon from '@mui/icons-material/Launch';
+import { MdLaunch as LaunchIcon } from 'react-icons/md';
 
 const StickyPinningExamples = ({ isPage = false }) => {
   const { pathname, push } = useRouter();

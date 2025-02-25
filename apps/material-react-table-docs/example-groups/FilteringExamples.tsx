@@ -1,13 +1,13 @@
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { Box, Tab, Tabs } from '@mui/material';
+import {Box, Tab, Tabs} from '@chakra-ui/react';
 import FilterVariantsExample from '../examples/customize-filter-variants';
 import FacetedValuesExample from '../examples/enable-filter-facet-values';
 import FilterModesExample from '../examples/customize-filter-modes';
 import PopoverFiltersExample from '../examples/alternate-column-filtering';
 import CustomFilterUIExample from '../examples/custom-column-filtering-ui';
 import Link from 'next/link';
-import LaunchIcon from '@mui/icons-material/Launch';
+import { MdLaunch as LaunchIcon } from 'react-icons/md';
 
 const FilteringExamples = ({ isPage = false }) => {
   const { pathname, push } = useRouter();

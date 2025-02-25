@@ -9,8 +9,8 @@ import {
   type MRT_Row,
 } from 'chakra-react-table';
 import {Alert, Spinner, Stack} from '@chakra-ui/react';
-import AddIcon from '@mui/icons-material/Add';
-import MinusIcon from '@mui/icons-material/Remove';
+import { MdAdd as AddIcon } from 'react-icons/md';
+import { MdRemove as MinusIcon } from 'react-icons/md';
 import {
   QueryClient,
   QueryClientProvider,

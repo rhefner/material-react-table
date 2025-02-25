@@ -1,12 +1,12 @@
 import { useRouter } from 'next/router';
-import { Box, Tab, Tabs } from '@mui/material';
+import {Box, Tab, Tabs} from '@chakra-ui/react';
 import FullyVirtualizedExample from '../examples/virtualized';
 import RowVirtualization from '../examples/enable-row-virtualization';
 import ColumnVirtualization from '../examples/enable-column-virtualization';
 import InfiniteScrolling from '../examples/infinite-scrolling';
 import { useState } from 'react';
 import Link from 'next/link';
-import LaunchIcon from '@mui/icons-material/Launch';
+import { MdLaunch as LaunchIcon } from 'react-icons/md';
 
 const VirtualizedExamples = ({ isPage = false }) => {
   const { pathname, push } = useRouter();

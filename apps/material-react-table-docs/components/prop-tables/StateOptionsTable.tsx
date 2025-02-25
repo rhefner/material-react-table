@@ -5,7 +5,7 @@ import {
   type MRT_ColumnDef,
   type MRT_TableState,
 } from 'chakra-react-table';
-import { Link as MuiLink, Typography, useMediaQuery } from '@mui/material';
+import {Link as MuiLink, Text, useMediaQuery} from '@chakra-ui/react';
 import { SampleCodeSnippet } from '../mdx/SampleCodeSnippet';
 import { type StateOption, stateOptions } from './stateOptions';
 

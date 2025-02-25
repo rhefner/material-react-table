@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, Tab, Tabs } from '@mui/material';
+import {Box, Tab, Tabs} from '@chakra-ui/react';
 import AR_Table from '../examples/localization-i18n-ar';
 import AZ_Table from '../examples/localization-i18n-az';
 import BG_Table from '../examples/localization-i18n-bg';

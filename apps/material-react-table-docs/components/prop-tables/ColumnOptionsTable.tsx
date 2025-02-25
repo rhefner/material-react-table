@@ -1,12 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { MaterialReactTable, type MRT_ColumnDef } from 'chakra-react-table';
-import {
-  Link as MuiLink,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from '@mui/material';
+import {Link as MuiLink, Text, useMediaQuery, useTheme, } from '@chakra-ui/react';
 import { SampleCodeSnippet } from '../mdx/SampleCodeSnippet';
 import { type ColumnOption, columnOptions } from './columnOptions';
 

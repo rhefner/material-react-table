@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { Box, Tab, Tabs } from '@mui/material';
+import {Box, Tab, Tabs} from '@chakra-ui/react';
 import ReactQueryExample from '../examples/react-query';
 import LazyDetailPanelExample from '../examples/lazy-detail-panel';
 import LazySubRowsExample from '../examples/lazy-sub-rows';
@@ -7,7 +7,7 @@ import DynamicColumns from '../examples/dynamic-columns';
 import RemoteExample from '../examples/remote';
 import { useState } from 'react';
 import Link from 'next/link';
-import LaunchIcon from '@mui/icons-material/Launch';
+import { MdLaunch as LaunchIcon } from 'react-icons/md';
 
 const RemoteFetchingExamples = ({ isPage = false }) => {
   const { pathname, push } = useRouter();

@@ -15,7 +15,6 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "@chakra-ui/react": "^2.9.0",
-    "@chakra-ui/icons": "^2.1.1",
     "chakra-react-table": "workspace:*",
     "framer-motion": "^11.0.8",
     "react-icons": "^5.0.1"
