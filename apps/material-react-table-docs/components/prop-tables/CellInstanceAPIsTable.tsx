@@ -4,7 +4,7 @@ import {
   MaterialReactTable,
   type MRT_ColumnDef,
   type MRT_Cell,
-} from 'material-react-table';
+} from 'chakra-react-table';
 import { Link as MuiLink, Typography, useMediaQuery } from '@mui/material';
 import { SampleCodeSnippet } from '../mdx/SampleCodeSnippet';
 import { type CellInstanceAPI, cellInstanceAPIs } from './cellInstanceAPIs';

@@ -1,8 +1,6 @@
-import { ThemeProvider, CssBaseline } from '@mui/material';
+import { ChakraProvider, CSSReset, useColorMode } from '@chakra-ui/react';
 import { createContext, useContext, useEffect, useState } from 'react';
-import { theme } from './MuiTheme';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { theme } from './ChakraTheme';
 
 const ThemeContext = createContext<{
   isLightTheme: boolean;
@@ -21,6 +19,7 @@ export const ThemeContextProvider = ({ children }) => {
   const [secondaryColor, setSecondaryColor] =
     useState<string>('rgb(20,184,166)');
   const [isSandboxOpen, setIsSandboxOpen] = useState(false);
+  const { setColorMode } = useColorMode();
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -32,8 +31,9 @@ export const ThemeContextProvider = ({ children }) => {
     if (typeof window !== 'undefined') {
       document.body.style.backgroundColor = isLightTheme ? '#fff' : '#111';
       localStorage.setItem('isLightTheme', isLightTheme.toString());
+      setColorMode(isLightTheme ? 'light' : 'dark');
     }
-  }, [isLightTheme]);
+  }, [isLightTheme, setColorMode]);
 
   return (
     <ThemeContext.Provider
@@ -48,18 +48,16 @@ export const ThemeContextProvider = ({ children }) => {
         setIsSandboxOpen,
       }}
     >
-      <CssBaseline />
-      <ThemeProvider
+      <CSSReset />
+      <ChakraProvider
         theme={theme({
           isLightTheme,
           primaryColor,
           secondaryColor,
         })}
       >
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          {children}
-        </LocalizationProvider>
-      </ThemeProvider>
+        {children}
+      </ChakraProvider>
     </ThemeContext.Provider>
   );
 };

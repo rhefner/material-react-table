@@ -4,11 +4,10 @@ import {
   MRT_ActionMenuItem,
   useMaterialReactTable,
   type MRT_ColumnDef,
-} from 'material-react-table';
+} from 'chakra-react-table';
 import { data, type Person } from './makeData';
-import { Divider } from '@mui/material';
-import EmailIcon from '@mui/icons-material/Email';
-import PersonOffOutlinedIcon from '@mui/icons-material/PersonOffOutlined';
+import { Divider } from '@chakra-ui/react';
+import { EmailIcon, NotAllowedIcon } from '@chakra-ui/icons';
 
 export const Example = () => {
   const columns = useMemo<MRT_ColumnDef<Person>[]>(
@@ -59,7 +58,7 @@ export const Example = () => {
         table={table}
       />,
       <MRT_ActionMenuItem
-        icon={<PersonOffOutlinedIcon />}
+        icon={<NotAllowedIcon />}
         key={2}
         label="Item 2"
         onClick={() => {

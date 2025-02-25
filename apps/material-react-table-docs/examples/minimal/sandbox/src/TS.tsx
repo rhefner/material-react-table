@@ -3,7 +3,7 @@ import {
   MRT_Table, //import alternative sub-component if we do not want toolbars
   type MRT_ColumnDef,
   useMaterialReactTable,
-} from 'material-react-table';
+} from 'chakra-react-table';
 import { data, type Person } from './makeData';
 
 export const Example = () => {

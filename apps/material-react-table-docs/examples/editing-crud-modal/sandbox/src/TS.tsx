@@ -7,7 +7,7 @@ import {
   type MRT_Row,
   type MRT_TableOptions,
   useMaterialReactTable,
-} from 'material-react-table';
+} from 'chakra-react-table';
 import {
   Box,
   Button,

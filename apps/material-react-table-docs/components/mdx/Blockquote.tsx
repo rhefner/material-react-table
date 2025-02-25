@@ -1,4 +1,5 @@
-import { alpha, darken, useMediaQuery, useTheme } from '@mui/material';
+import { useMediaQuery, useTheme } from '@chakra-ui/react';
+import { alpha, darken } from 'chakra-react-table/src/utils/color.utils';
 
 export const Blockquote = (props) => {
   const theme = useTheme();

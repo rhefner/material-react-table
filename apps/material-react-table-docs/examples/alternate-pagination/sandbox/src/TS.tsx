@@ -1,7 +1,4 @@
-import {
-  MaterialReactTable,
-  useMaterialReactTable,
-} from 'material-react-table';
+import { MaterialReactTable, useMaterialReactTable } from 'chakra-react-table';
 import { columns, data } from './makeData';
 
 const Example = () => {

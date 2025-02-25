@@ -1,45 +1,47 @@
 import { useRouter } from 'next/router';
-import { Box, Tab, Tabs } from '@mui/material';
+import { Box, Tabs, TabList, Tab } from '@chakra-ui/react';
 import CSVExport from '../examples/export-to-csv';
 import PDFExport from '../examples/export-to-pdf';
 import { useState } from 'react';
 import Link from 'next/link';
-import LaunchIcon from '@mui/icons-material/Launch';
+import { FiExternalLink } from 'react-icons/fi';
 
 const RemoteFetchingExamples = ({ isPage = false }) => {
   const { pathname, push } = useRouter();
-  const [activeTab, setActiveTab] = useState(
-    isPage ? pathname.split('/').pop() : 'export-csv',
-  );
+  const tabValues = ['export-csv', 'export-pdf', 'more'];
+  const initialTab = isPage
+    ? pathname.split('/').pop() || 'export-csv'
+    : 'export-csv';
+  const [activeTab, setActiveTab] = useState(initialTab);
+  const tabIndex = tabValues.indexOf(activeTab);
+
+  const handleTabsChange = (index) => {
+    const newValue = tabValues[index];
+    if (isPage && newValue !== 'more') {
+      push(newValue);
+    } else {
+      setActiveTab(newValue);
+    }
+  };
 
   return (
     <>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs
-          scrollButtons="auto"
-          variant="scrollable"
-          textColor="secondary"
-          indicatorColor="secondary"
-          value={isPage ? pathname.split('/').pop() : activeTab}
-          onChange={(_e, newPath) =>
-            isPage && newPath !== 'more'
-              ? push(newPath as string)
-              : setActiveTab(newPath as string)
-          }
-        >
-          <Tab label="Export to CSV" value="export-csv" />
-          <Tab label="Export to PDF" value="export-pdf" />
-          <Link href="/docs/examples" passHref legacyBehavior>
-            <Tab
-              label={
-                <Box>
-                  More Examples
-                  <LaunchIcon sx={{ fontSize: '1rem' }} />
+      <Box borderBottom="1px" borderColor="gray.200">
+        <Tabs index={tabIndex} onChange={handleTabsChange} variant="line">
+          <TabList>
+            <Tab>Export to CSV</Tab>
+            <Tab>Export to PDF</Tab>
+            <Link href="/docs/examples" passHref legacyBehavior>
+              <Tab as="a">
+                <Box display="flex" alignItems="center">
+                  More Examples{' '}
+                  <FiExternalLink
+                    style={{ marginLeft: '4px', fontSize: '1rem' }}
+                  />
                 </Box>
-              }
-              value="more"
-            />
-          </Link>
+              </Tab>
+            </Link>
+          </TabList>
         </Tabs>
       </Box>
       <Box>

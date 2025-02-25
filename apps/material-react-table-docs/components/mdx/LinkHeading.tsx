@@ -1,17 +1,16 @@
 import { type ReactNode, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import LinkIcon from '@mui/icons-material/Link';
-import AddLinkIcon from '@mui/icons-material/AddLink';
+import { MdAddLink as AddLinkIcon, MdLink as LinkIcon } from 'react-icons/md';
 import {
   IconButton,
   Tooltip,
-  Typography,
-  type TypographyProps,
-  Link as MuiLink,
-} from '@mui/material';
+  Text,
+  type TextProps,
+  Link as ChakraLink,
+} from '@chakra-ui/react';
 
-interface Props extends TypographyProps {
+interface Props extends TextProps {
   children: ReactNode | string;
   tableId?: string;
   href?: string;
@@ -37,7 +36,7 @@ export const LinkHeading = ({ children, tableId, ...rest }: Props) => {
 
   return (
     <Link href={href} passHref legacyBehavior>
-      <MuiLink
+      <ChakraLink
         sx={{
           color: 'inherit',
           textDecoration: 'none',
@@ -46,7 +45,7 @@ export const LinkHeading = ({ children, tableId, ...rest }: Props) => {
           },
         }}
       >
-        <Typography
+        <Text
           className={id.includes('relevant') ? 'relevant' : undefined}
           id={id}
           {...rest}
@@ -63,12 +62,12 @@ export const LinkHeading = ({ children, tableId, ...rest }: Props) => {
               },
             }}
           >
-            <Tooltip arrow title={isCopied ? 'Copied!' : 'Copy Link'}>
+            <Tooltip title={isCopied ? 'Copied!' : 'Copy Link'}>
               {isCopied ? <AddLinkIcon /> : <LinkIcon />}
             </Tooltip>
           </IconButton>
-        </Typography>
-      </MuiLink>
+        </Text>
+      </ChakraLink>
     </Link>
   );
 };

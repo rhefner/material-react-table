@@ -3,8 +3,8 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
   type MRT_ColumnDef,
-} from 'material-react-table';
-import { Divider, MenuItem } from '@mui/material';
+} from 'chakra-react-table';
+import { Divider, MenuItem } from '@chakra-ui/react';
 import { data, type Person } from './makeData';
 
 const Example = () => {

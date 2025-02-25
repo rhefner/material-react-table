@@ -1,9 +1,9 @@
-import { Box, Link, Paper } from '@mui/material';
+import { Box, Card, Link, theme } from '@chakra-ui/react';
 import {
   MRT_TableContainer,
   type MRT_ColumnDef,
   useMaterialReactTable,
-} from 'material-react-table';
+} from 'chakra-react-table';
 
 const columns: MRT_ColumnDef<(typeof data)[0]>[] = [
   {
@@ -15,21 +15,21 @@ const columns: MRT_ColumnDef<(typeof data)[0]>[] = [
         href={row.original.libraryLink}
         target="_blank"
         rel="noopener"
-        sx={(theme) => ({
+        sx={{
           color:
             cell.getValue() === 'Material React Table'
-              ? theme.palette.primary.main
+              ? theme.colors.blue[500]
               : cell.getValue() === 'Mantine React Table'
-                ? theme.palette.secondary.light
+                ? theme.colors.blue[500]
                 : cell.getValue() === 'TanStack Table (React Table)'
-                  ? theme.palette.error.main
-                  : theme.palette.text.primary,
+                  ? theme.colors.red[500]
+                  : theme.colors.gray[500],
           fontWeight: 'bold',
           textDecoration: 'none',
           '&:hover': {
             textDecoration: 'underline',
           },
-        })}
+        }}
       >
         <>{cell.getValue<string>()}</>
       </Link>
@@ -157,5 +157,5 @@ export const ComparisonTable = () => {
     enableColumnActions: false,
   });
 
-  return <MRT_TableContainer component={Paper} table={table} />;
+  return <MRT_TableContainer as={Card} table={table} />;
 };

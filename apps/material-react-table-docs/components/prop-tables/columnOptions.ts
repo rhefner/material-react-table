@@ -1,4 +1,4 @@
-import { type MRT_ColumnDef } from 'material-react-table';
+import { type MRT_ColumnDef } from 'chakra-react-table';
 
 export type ColumnOption = {
   columnOption: keyof MRT_ColumnDef<ColumnOption>;

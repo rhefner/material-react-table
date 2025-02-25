@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { MaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
+import { MaterialReactTable, type MRT_ColumnDef } from 'chakra-react-table';
 import { type Person } from './makeData';
 
 const data: Array<Person> = [];

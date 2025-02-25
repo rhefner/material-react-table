@@ -8,9 +8,9 @@ import {
   useMaterialReactTable,
   type MRT_ColumnDef,
   MRT_TableContainer,
-} from 'material-react-table';
-import { IconButton, Box, Button, Typography, Tooltip } from '@mui/material';
-import PrintIcon from '@mui/icons-material/Print';
+} from 'chakra-react-table';
+import { Box, Button, IconButton, Text, Tooltip } from '@chakra-ui/react';
+import { FiPrinter } from 'react-icons/fi';
 import { data, type Person } from './makeData';
 
 const columns: MRT_ColumnDef<Person>[] = [
@@ -41,59 +41,60 @@ const Example = () => {
   });
 
   return (
-    <Box sx={{ border: 'gray 2px dashed', padding: '16px' }}>
+    <Box border="gray 2px dashed" padding="16px">
       {/* Our Custom External Top Toolbar */}
       <Box
-        sx={(theme) => ({
-          display: 'flex',
-          backgroundColor: 'inherit',
-          borderRadius: '4px',
-          flexDirection: 'row',
-          gap: '16px',
-          justifyContent: 'space-between',
-          padding: '24px 16px',
+        display="flex"
+        backgroundColor="inherit"
+        borderRadius="4px"
+        flexDirection="row"
+        gap="16px"
+        justifyContent="space-between"
+        padding="24px 16px"
+        sx={{
           '@media max-width: 768px': {
             flexDirection: 'column',
           },
-        })}
+        }}
       >
         <Box>
           <Button
-            color="primary"
+            colorScheme="blue"
             onClick={() => {
               alert('Add User');
             }}
-            variant="contained"
           >
             Create New Account
           </Button>
         </Box>
         <MRT_GlobalFilterTextField table={table} />
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <Box display="flex" alignItems="center" gap="8px">
           <MRT_ToggleFiltersButton table={table} />
           <MRT_ShowHideColumnsButton table={table} />
           <MRT_ToggleDensePaddingButton table={table} />
-          <Tooltip title="Print">
-            <IconButton onClick={() => window.print()}>
-              <PrintIcon />
-            </IconButton>
+          <Tooltip label="Print">
+            <IconButton
+              aria-label="Print"
+              icon={<FiPrinter />}
+              onClick={() => window.print()}
+            />
           </Tooltip>
         </Box>
       </Box>
       {/* Some Page Content */}
-      <Typography p="16px 4px">
+      <Text p="16px 4px">
         {
           "Hey I'm some page content. I'm just one of your normal components between your custom toolbar and the MRT Table below"
         }
-      </Typography>
+      </Text>
       {/* The MRT Table with no toolbars built-in */}
       <MRT_TableContainer table={table} />
       {/* Our Custom Bottom Toolbar */}
       <Box>
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <Box display="flex" justifyContent="flex-end">
           <MRT_TablePagination table={table} />
         </Box>
-        <Box sx={{ display: 'grid', width: '100%' }}>
+        <Box display="grid" width="100%">
           <MRT_ToolbarAlertBanner stackAlertBanner table={table} />
         </Box>
       </Box>

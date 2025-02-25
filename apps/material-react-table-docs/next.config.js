@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
-  transpilePackages: ['material-react-table', '@mui/x-charts'],
+  transpilePackages: ['chakra-react-table'],
   reactStrictMode: true,
   i18n: {
     locales: ['en'],

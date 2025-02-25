@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
-import { Box, Stack } from '@mui/material';
+import { Box, Stack } from '@chakra-ui/react';
 import {
   MaterialReactTable,
   useMaterialReactTable,
   type MRT_ColumnDef,
-} from 'material-react-table';
+} from 'chakra-react-table';
 import { data, type Person } from './makeData';
 
 const Example = () => {
@@ -38,9 +38,7 @@ const Example = () => {
           <>
             Oldest by{' '}
             {table.getColumn(cell.row.groupingColumnId ?? '').columnDef.header}:{' '}
-            <Box
-              sx={{ color: 'info.main', display: 'inline', fontWeight: 'bold' }}
-            >
+            <Box color="blue.500" as="span" fontWeight="bold">
               {cell.getValue<number>()}
             </Box>
           </>
@@ -48,7 +46,7 @@ const Example = () => {
         Footer: () => (
           <Stack>
             Max Age:
-            <Box color="warning.main">{Math.round(maxAge)}</Box>
+            <Box color="orange.500">{Math.round(maxAge)}</Box>
           </Stack>
         ),
       },
@@ -57,7 +55,7 @@ const Example = () => {
         accessorKey: 'gender',
         //optionally, customize the cell render when this column is grouped. Make the text blue and pluralize the word
         GroupedCell: ({ cell, row }) => (
-          <Box sx={{ color: 'primary.main' }}>
+          <Box color="blue.600">
             <strong>{cell.getValue<string>()}s </strong> ({row.subRows?.length})
           </Box>
         ),
@@ -75,7 +73,7 @@ const Example = () => {
           <>
             Average by{' '}
             {table.getColumn(cell.row.groupingColumnId ?? '').columnDef.header}:{' '}
-            <Box sx={{ color: 'success.main', fontWeight: 'bold' }}>
+            <Box color="green.500" fontWeight="bold">
               {cell.getValue<number>()?.toLocaleString?.('en-US', {
                 style: 'currency',
                 currency: 'USD',
@@ -99,7 +97,7 @@ const Example = () => {
         Footer: () => (
           <Stack>
             Average Salary:
-            <Box color="warning.main">
+            <Box color="orange.500">
               {averageSalary?.toLocaleString?.('en-US', {
                 style: 'currency',
                 currency: 'USD',
@@ -133,7 +131,7 @@ const Example = () => {
       pagination: { pageIndex: 0, pageSize: 20 },
       sorting: [{ id: 'state', desc: false }], //sort by state by default
     },
-    muiToolbarAlertBannerChipProps: { color: 'primary' },
+    muiToolbarAlertBannerChipProps: { colorScheme: 'blue' },
     muiTableContainerProps: { sx: { maxHeight: 700 } },
   });
 

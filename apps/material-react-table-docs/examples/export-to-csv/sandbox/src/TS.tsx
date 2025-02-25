@@ -3,9 +3,9 @@ import {
   useMaterialReactTable,
   type MRT_Row,
   createMRTColumnHelper,
-} from 'material-react-table';
-import { Box, Button } from '@mui/material';
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
+} from 'chakra-react-table';
+import { Box, Button } from '@chakra-ui/react';
+import { DownloadIcon } from '@chakra-ui/icons';
 import { mkConfig, generateCsv, download } from 'export-to-csv'; //or use your library of choice here
 import { data, type Person } from './makeData';
 
@@ -63,46 +63,39 @@ const Example = () => {
     paginationDisplayMode: 'pages',
     positionToolbarAlertBanner: 'bottom',
     renderTopToolbarCustomActions: ({ table }) => (
-      <Box
-        sx={{
-          display: 'flex',
-          gap: '16px',
-          padding: '8px',
-          flexWrap: 'wrap',
-        }}
-      >
+      <Box display="flex" gap="16px" padding="8px" flexWrap="wrap">
         <Button
           //export all data that is currently in the table (ignore pagination, sorting, filtering, etc.)
           onClick={handleExportData}
-          startIcon={<FileDownloadIcon />}
+          leftIcon={<DownloadIcon />}
         >
           Export All Data
         </Button>
         <Button
-          disabled={table.getPrePaginationRowModel().rows.length === 0}
+          isDisabled={table.getPrePaginationRowModel().rows.length === 0}
           //export all rows, including from the next page, (still respects filtering and sorting)
           onClick={() =>
             handleExportRows(table.getPrePaginationRowModel().rows)
           }
-          startIcon={<FileDownloadIcon />}
+          leftIcon={<DownloadIcon />}
         >
           Export All Rows
         </Button>
         <Button
-          disabled={table.getRowModel().rows.length === 0}
+          isDisabled={table.getRowModel().rows.length === 0}
           //export all rows as seen on the screen (respects pagination, sorting, filtering, etc.)
           onClick={() => handleExportRows(table.getRowModel().rows)}
-          startIcon={<FileDownloadIcon />}
+          leftIcon={<DownloadIcon />}
         >
           Export Page Rows
         </Button>
         <Button
-          disabled={
+          isDisabled={
             !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
           }
           //only export selected rows
           onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
-          startIcon={<FileDownloadIcon />}
+          leftIcon={<DownloadIcon />}
         >
           Export Selected Rows
         </Button>

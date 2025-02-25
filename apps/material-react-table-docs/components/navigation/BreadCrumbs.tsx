@@ -1,15 +1,16 @@
 import { useMemo } from 'react';
-import Link from 'next/link';
+import NextLink from 'next/link';
 import {
   Box,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
   IconButton,
-  Breadcrumbs as MuiBreadcrumbs,
-  Link as MuiLink,
   Tooltip,
-} from '@mui/material';
+} from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
-import { ArrowBack } from '@mui/icons-material';
+import { ArrowBackIcon } from '@chakra-ui/icons';
 
 export const BreadCrumbs = () => {
   const { route, back } = useRouter();
@@ -43,7 +44,7 @@ export const BreadCrumbs = () => {
         link === '/'
           ? 'Home'
           : link.split('/').pop()?.replaceAll('-', ' ') || '',
-      item: `https://www.material-react-table.com${link}`,
+      item: `https://www.chakra-react-table.com${link}`,
     })),
   };
 
@@ -55,41 +56,35 @@ export const BreadCrumbs = () => {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
       </Head>
-      <Box
-        sx={{ display: 'flex', alignItems: 'center', gap: '1rem', pt: '1rem' }}
-      >
-        <Tooltip title="Go Back">
+      <Box display="flex" alignItems="center" gap="1rem" pt="1rem">
+        <Tooltip label="Go Back">
           <IconButton
             aria-label="Go Back"
-            color="default"
+            icon={<ArrowBackIcon />}
             onClick={back}
-            size="small"
-          >
-            <ArrowBack />
-          </IconButton>
+            size="sm"
+          />
         </Tooltip>
-        <MuiBreadcrumbs aria-label="breadcrumb" sx={{ m: 0 }}>
+        <Breadcrumb>
           {breadCrumbLinks.map((link, index) => (
-            <Link key={index} href={link} passHref legacyBehavior>
-              <MuiLink
-                color="inherit"
-                sx={{ cursor: 'pointer', textTransform: 'capitalize' }}
-                underline="hover"
-              >
-                {link === '/'
-                  ? 'Home'
-                  : link
-                      .split('/')
-                      .pop()
-                      ?.replaceAll('-', ' ')
-                      ?.replaceAll('mrt', 'MRT')
-                      ?.replaceAll('css', 'CSS')
-                      ?.replaceAll(' ui', ' UI')
-                      ?.replaceAll('api', 'API')}
-              </MuiLink>
-            </Link>
+            <BreadcrumbItem key={index}>
+              <NextLink href={link} passHref legacyBehavior>
+                <BreadcrumbLink textTransform="capitalize">
+                  {link === '/'
+                    ? 'Home'
+                    : link
+                        .split('/')
+                        .pop()
+                        ?.replaceAll('-', ' ')
+                        ?.replaceAll('mrt', 'MRT')
+                        ?.replaceAll('css', 'CSS')
+                        ?.replaceAll(' ui', ' UI')
+                        ?.replaceAll('api', 'API')}
+                </BreadcrumbLink>
+              </NextLink>
+            </BreadcrumbItem>
           ))}
-        </MuiBreadcrumbs>
+        </Breadcrumb>
       </Box>
     </>
   );

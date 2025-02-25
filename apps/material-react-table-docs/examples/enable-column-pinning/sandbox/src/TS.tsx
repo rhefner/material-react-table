@@ -3,9 +3,9 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
   type MRT_ColumnDef,
-} from 'material-react-table';
+} from 'chakra-react-table';
 import { data, type Person } from './makeData';
-import { MenuItem } from '@mui/material';
+import { MenuItem } from '@chakra-ui/react';
 
 const Example = () => {
   const columns = useMemo<MRT_ColumnDef<Person>[]>(

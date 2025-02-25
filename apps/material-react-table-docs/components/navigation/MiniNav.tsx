@@ -1,12 +1,19 @@
 import { useEffect, useState } from 'react';
-import { Box, Link, Typography, useMediaQuery } from '@mui/material';
+import {
+  Box,
+  Link,
+  Text,
+  theme,
+  useMediaQuery,
+  useColorMode,
+} from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { EthicalAd } from '../mdx/EthicalAd';
 
 export const MiniNav = () => {
   const { pathname } = useRouter();
   const isXLDesktop = useMediaQuery('(min-width: 1800px)');
-
+  const { colorMode } = useColorMode();
   const [headings, setHeadings] = useState<NodeListOf<HTMLElement>>();
 
   useEffect(() => {
@@ -25,9 +32,9 @@ export const MiniNav = () => {
         maxWidth: isXLDesktop ? '250px' : '500px',
       }}
     >
-      <Typography mt="1rem" component="div" variant="h6">
+      <Text mt="1rem" as="div" variant="h6">
         On This Page
-      </Typography>
+      </Text>
       <ul
         style={{
           padding: 0,
@@ -61,16 +68,13 @@ export const MiniNav = () => {
             >
               <Link
                 href={`#${heading.id}`}
-                sx={(theme) => ({
-                  color:
-                    theme.palette.grey[
-                      theme.palette.mode === 'dark' ? 400 : 700
-                    ],
-                })}
+                sx={{
+                  color: colorMode === 'dark' ? 'gray.400' : 'gray.700',
+                }}
               >
-                <Typography component="span" variant="subtitle2">
+                <Text as="span" variant="subtitle2">
                   {heading.innerText}
-                </Typography>
+                </Text>
               </Link>
             </li>
           );

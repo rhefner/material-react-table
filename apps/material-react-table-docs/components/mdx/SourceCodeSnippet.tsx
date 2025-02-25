@@ -8,27 +8,30 @@ import {
   Button,
   Collapse,
   Divider,
+  Icon,
   IconButton,
   Link as MuiLink,
   MenuItem,
-  Paper,
   Select,
-  TextField,
-  ToggleButton,
-  ToggleButtonGroup,
   Tooltip,
-  rgbToHex,
   useMediaQuery,
   useTheme,
-} from '@mui/material';
-import CodeIcon from '@mui/icons-material/Code';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import ElectricBoltIcon from '@mui/icons-material/ElectricBolt';
-import GitHubIcon from '@mui/icons-material/GitHub';
-import LaunchIcon from '@mui/icons-material/Launch';
-import LibraryAddCheckIcon from '@mui/icons-material/LibraryAddCheck';
-import UnfoldLessIcon from '@mui/icons-material/UnfoldLess';
-import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
+  Textarea,
+  CloseButton,
+  Switch,
+  InputGroup,
+  Card,
+} from '@chakra-ui/react';
+import {
+  MdCode as CodeIcon,
+  MdContentCopy as ContentCopyIcon,
+  MdElectricBolt as ElectricBoltIcon,
+  MdLibraryAddCheck as LibraryAddCheckIcon,
+  MdUnfoldLess as UnfoldLessIcon,
+  MdUnfoldMore as UnfoldMoreIcon,
+  MdLaunch as LaunchIcon,
+} from 'react-icons/md';
+import { VscGithub as GitHubIcon } from 'react-icons/vsc';
 import { LinkHeading } from './LinkHeading';
 import { usePlausible } from 'next-plausible';
 import { useThemeContext } from '../../styles/ThemeContext';
@@ -142,12 +145,13 @@ export const SourceCodeSnippet = ({
                     }}
                   >
                     <Button
+                      as={Link}
                       color="success"
-                      endIcon={<LaunchIcon />}
+                      rightIcon={<Icon as={LaunchIcon} />}
                       href={`https://stackblitz.com/github/KevinVandy/material-react-table/tree/v3/apps/material-react-table-docs/examples/${tableId}/sandbox?file=src/TS.tsx`}
                       onClick={() => plausible('open-stackblitz')}
                       rel="noopener"
-                      startIcon={<ElectricBoltIcon />}
+                      leftIcon={<Icon as={ElectricBoltIcon} />}
                       sx={{ cursor: 'pointer' }}
                       target="_blank"
                       variant="outlined"
@@ -155,12 +159,13 @@ export const SourceCodeSnippet = ({
                       Open Stackblitz
                     </Button>
                     <Button
+                      as={Link}
                       color="warning"
-                      endIcon={<LaunchIcon />}
+                      rightIcon={<Icon as={LaunchIcon} />}
                       href={`https://codesandbox.io/s/github/KevinVandy/material-react-table/tree/v3/apps/material-react-table-docs/examples/${tableId}/sandbox?file=/src/TS.tsx`}
                       onClick={() => plausible('open-code-sandbox')}
                       rel="noopener"
-                      startIcon={<CodeIcon />}
+                      leftIcon={<Icon as={CodeIcon} />}
                       sx={{ cursor: 'pointer' }}
                       target="_blank"
                       variant="outlined"
@@ -168,14 +173,15 @@ export const SourceCodeSnippet = ({
                       Open Code Sandbox
                     </Button>
                     <Button
+                      as={Link}
                       color="info"
-                      endIcon={<LaunchIcon />}
+                      rightIcon={<Icon as={LaunchIcon} />}
                       href={`https://github.com/KevinVandy/material-react-table/tree/v3/apps/material-react-table-docs/examples/${tableId}/sandbox/src/${
                         codeTab === 'ts' ? 'TS.tsx' : 'API.ts'
                       }`}
                       onClick={() => plausible('open-on-github')}
                       rel="noopener"
-                      startIcon={<GitHubIcon />}
+                      leftIcon={<Icon as={GitHubIcon} />}
                       sx={{ cursor: 'pointer' }}
                       target="_blank"
                       variant="outlined"
@@ -193,26 +199,21 @@ export const SourceCodeSnippet = ({
                     flexGrow: 1,
                   }}
                 >
-                  <TextField
-                    label="Primary"
-                    type="color"
-                    value={rgbToHex(primaryColor ?? '#4dabf5')}
+                  <Textarea
+                    value={primaryColor}
                     onChange={(e) => setPrimaryColor(e.target.value)}
                     onClick={() => plausible('change-primary-color')}
                     sx={{ minWidth: '60px' }}
                     variant="standard"
                   />
-                  <TextField
-                    label="Secondary"
-                    type="color"
-                    value={rgbToHex(secondaryColor)}
+                  <Textarea
+                    value={secondaryColor}
                     onChange={(e) => setSecondaryColor(e.target.value)}
                     onClick={() => plausible('change-secondary-color')}
                     sx={{ minWidth: '60px' }}
                     variant="standard"
                   />
                   <Select
-                    MenuProps={{ disableScrollLock: true }}
                     value={isLightTheme ? 'light' : 'dark'}
                     onChange={(e) => {
                       setIsLightTheme(e.target.value === 'light');
@@ -238,13 +239,8 @@ export const SourceCodeSnippet = ({
       )}
       <div>
         <Collapse in={showV2Alert}>
-          <Alert
-            onClose={handleDismissV2Alert}
-            sx={{ mb: '1rem' }}
-            severity="info"
-            variant="outlined"
-            closeText="Don't show again"
-          >
+          <Alert sx={{ mb: '1rem' }} variant="outlined">
+            <CloseButton onClick={handleDismissV2Alert} />
             <AlertTitle>This example is written for MRT V3.</AlertTitle>
             If your app is still using MRT V1, either{' '}
             <Link href="/migrating-to-v2" passHref legacyBehavior>
@@ -285,46 +281,43 @@ export const SourceCodeSnippet = ({
             }}
           >
             <span>
-              <ToggleButtonGroup>
-                <ToggleButton
+              <InputGroup>
+                <Switch
                   onClick={() => {
                     setCodeTab('ts');
                     plausible('toggle-to-typescript');
                   }}
-                  selected={codeTab === 'ts'}
+                  isChecked={codeTab === 'ts'}
                   sx={{ textTransform: 'none' }}
-                  value="ts"
                 >
                   {isMobile ? 'TS' : 'TypeScript'}
-                </ToggleButton>
-                <ToggleButton
+                </Switch>
+                <Switch
                   onClick={() => {
                     setCodeTab('stackblitz');
                     plausible('toggle-to-stackblitz');
                   }}
-                  value="stackblitz"
-                  selected={codeTab === 'stackblitz'}
+                  isChecked={codeTab === 'stackblitz'}
                   sx={{ textTransform: 'none' }}
                 >
                   Stackblitz
-                </ToggleButton>
-                <ToggleButton
+                </Switch>
+                <Switch
                   onClick={() => {
                     setCodeTab('sandbox');
                     plausible('toggle-to-sandbox');
                   }}
-                  value="sandbox"
-                  selected={codeTab === 'sandbox'}
+                  isChecked={codeTab === 'sandbox'}
                   sx={{ textTransform: 'none' }}
                 >
                   Sandbox
-                </ToggleButton>
-              </ToggleButtonGroup>
+                </Switch>
+              </InputGroup>
             </span>
             {!isMobile && <EthicalAd id="demo" compact text />}
           </Box>
         </Box>
-        <Collapse mountOnEnter in={codeTab === 'stackblitz'}>
+        <Collapse unmountOnExit in={codeTab === 'stackblitz'}>
           <iframe
             src={`https://stackblitz.com/github/KevinVandy/material-react-table/tree/v3/apps/material-react-table-docs/examples/${tableId}/sandbox?file=src/TS.tsx`}
             style={{
@@ -340,7 +333,7 @@ export const SourceCodeSnippet = ({
             sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
           />
         </Collapse>
-        <Collapse mountOnEnter in={codeTab === 'sandbox'}>
+        <Collapse unmountOnExit in={codeTab === 'sandbox'}>
           <iframe
             src={`https://codesandbox.io/s/github/KevinVandy/material-react-table/tree/v3/apps/material-react-table-docs/examples/${tableId}/sandbox?fontsize=14&hidenavigation=1&theme=${
               isLightTheme ? 'light' : 'dark'
@@ -359,7 +352,7 @@ export const SourceCodeSnippet = ({
           />
         </Collapse>
         {['ts', 'api'].includes(codeTab) && (
-          <Paper elevation={3}>
+          <Card>
             <Highlight
               code={typeScriptCode ?? ''}
               language={'tsx'}
@@ -376,8 +369,9 @@ export const SourceCodeSnippet = ({
                     fontSize: isMobile ? '1em' : '1.2em',
                   }}
                 >
-                  <Tooltip arrow title={isCopied ? 'Copied!' : 'Copy Code'}>
+                  <Tooltip title={isCopied ? 'Copied!' : 'Copy Code'}>
                     <IconButton
+                      aria-label={isCopied ? 'Copied!' : 'Copy Code'}
                       sx={{
                         position: 'absolute',
                         top: '0.5rem',
@@ -389,7 +383,6 @@ export const SourceCodeSnippet = ({
                     </IconButton>
                   </Tooltip>
                   <Tooltip
-                    arrow
                     title={
                       isFullCode
                         ? 'Hide columns and data definitions'
@@ -397,6 +390,11 @@ export const SourceCodeSnippet = ({
                     }
                   >
                     <IconButton
+                      aria-label={
+                        isFullCode
+                          ? 'Hide columns and data definitions'
+                          : 'Show columns and data definitions'
+                      }
                       sx={{
                         position: 'absolute',
                         top: '0.5rem',
@@ -465,7 +463,7 @@ export const SourceCodeSnippet = ({
                 </div>
               )}
             </Highlight>
-          </Paper>
+          </Card>
         )}
       </div>
       <Divider />

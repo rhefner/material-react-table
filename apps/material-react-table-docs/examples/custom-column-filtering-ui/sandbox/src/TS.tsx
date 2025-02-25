@@ -4,7 +4,7 @@ import {
   type MRT_ColumnDef,
   MRT_TableContainer,
   MRT_TableHeadCellFilterContainer,
-} from 'material-react-table';
+} from 'chakra-react-table';
 import { data, type Person } from './makeData';
 import { Paper, Stack, useMediaQuery } from '@mui/material';
 

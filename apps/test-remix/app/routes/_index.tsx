@@ -4,8 +4,9 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
   type MRT_ColumnDef,
-} from 'material-react-table';
-import { MRT_Localization_ES } from 'material-react-table/locales/es/index.js';
+} from 'chakra-react-table';
+import { MRT_Localization_ES } from 'chakra-react-table/locales/es/index.js';
+import { Box } from '@chakra-ui/react';
 
 //example data type
 type Person = {
@@ -113,5 +114,9 @@ export default function Index() {
     localization: MRT_Localization_ES,
   });
 
-  return <MaterialReactTable table={table} />;
+  return (
+    <Box p={4}>
+      <MaterialReactTable table={table} />
+    </Box>
+  );
 }

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Button } from '@mui/material';
+import { Button } from '@chakra-ui/react';
 import {
   MaterialReactTable,
   type MRT_ColumnDef,
@@ -7,7 +7,7 @@ import {
   type MRT_DensityState,
   type MRT_SortingState,
   type MRT_VisibilityState,
-} from 'material-react-table';
+} from 'chakra-react-table';
 import { data, type Person } from './makeData';
 
 //column definitions...

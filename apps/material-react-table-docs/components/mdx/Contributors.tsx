@@ -1,5 +1,6 @@
-import { alpha, Box, Card, Typography, Link } from '@mui/material';
+import { Box, Card, Link, Text, theme } from '@chakra-ui/react';
 import Image from 'next/image';
+import { alpha } from 'chakra-react-table/src/utils/color.utils';
 
 const cardData = [
   {
@@ -51,11 +52,10 @@ export const Contributors = () => {
             sx={{ textDecoration: 'none' }}
           >
             <Card
-              elevation={4}
-              sx={(theme) => ({
+              sx={{
                 alignItems: 'center',
                 borderRadius: '0.5rem',
-                color: theme.palette.primary.dark,
+                color: theme.colors.blue[500],
                 cursor: 'pointer',
                 display: 'flex',
                 flexDirection: 'column',
@@ -69,7 +69,7 @@ export const Contributors = () => {
                 width: '10rem',
                 '&:hover': {
                   boxShadow: `1px 4px 8px ${alpha(
-                    theme.palette.primary.dark,
+                    theme.colors.blue[500],
                     0.5,
                   )}`,
                   '& img': {
@@ -77,7 +77,7 @@ export const Contributors = () => {
                     transition: 'transform 150ms ease-in-out',
                   },
                 },
-              })}
+              }}
             >
               <Image
                 src={cd.image}
@@ -86,8 +86,8 @@ export const Contributors = () => {
                 height={170}
                 style={{ borderRadius: '4px' }}
               />
-              <Typography variant="body1">{cd.name}</Typography>
-              <Typography variant="body2">{cd.role}</Typography>
+              <Text>{cd.name}</Text>
+              <Text>{cd.role}</Text>
             </Card>
           </Link>
         ))}

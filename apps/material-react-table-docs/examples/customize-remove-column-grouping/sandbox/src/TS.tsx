@@ -5,7 +5,7 @@ import {
   type MRT_ColumnDef,
   type MRT_Row,
   MRT_ExpandAllButton,
-} from 'material-react-table';
+} from 'chakra-react-table';
 import { data, type Person } from './makeData';
 import { Box, Stack } from '@mui/material';
 

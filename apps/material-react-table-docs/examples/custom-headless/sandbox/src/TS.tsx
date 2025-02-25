@@ -6,18 +6,18 @@ import {
   flexRender,
   type MRT_ColumnDef,
   useMaterialReactTable,
-} from 'material-react-table';
+} from 'chakra-react-table';
 import {
   Box,
   Stack,
   Table,
-  TableBody,
-  TableCell,
+  Tbody,
+  Td,
   TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-} from '@mui/material';
+  Thead,
+  Tr,
+  Heading,
+} from '@chakra-ui/react';
 import { type Person, data } from './makeData';
 
 const columns: MRT_ColumnDef<Person>[] = [
@@ -56,21 +56,14 @@ const Example = () => {
     //customize the MRT components
     muiPaginationProps: {
       rowsPerPageOptions: [5, 10, 15],
-      variant: 'outlined',
     },
     paginationDisplayMode: 'pages',
   });
 
   return (
-    <Stack sx={{ m: '2rem 0' }}>
-      <Typography variant="h4">My Custom Headless Table</Typography>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-      >
+    <Stack margin="2rem 0">
+      <Heading size="lg">My Custom Headless Table</Heading>
+      <Box display="flex" justifyContent="space-between" alignItems="center">
         {/**
          * Use MRT components along side your own markup.
          * They just need the `table` instance passed as a prop to work!
@@ -78,15 +71,15 @@ const Example = () => {
         <MRT_GlobalFilterTextField table={table} />
         <MRT_TablePagination table={table} />
       </Box>
-      {/* Using Vanilla Material-UI Table components here */}
+      {/* Using Vanilla Chakra UI Table components here */}
       <TableContainer>
         <Table>
           {/* Use your own markup, customize however you want using the power of TanStack Table */}
-          <TableHead>
+          <Thead>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
+              <Tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <TableCell align="center" variant="head" key={header.id}>
+                  <Td textAlign="center" key={header.id}>
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -94,27 +87,30 @@ const Example = () => {
                             header.column.columnDef.header,
                           header.getContext(),
                         )}
-                  </TableCell>
+                  </Td>
                 ))}
-              </TableRow>
+              </Tr>
             ))}
-          </TableHead>
-          <TableBody>
+          </Thead>
+          <Tbody>
             {table.getRowModel().rows.map((row, rowIndex) => (
-              <TableRow key={row.id} selected={row.getIsSelected()}>
+              <Tr
+                key={row.id}
+                bg={row.getIsSelected() ? 'gray.100' : undefined}
+              >
                 {row.getVisibleCells().map((cell, _columnIndex) => (
-                  <TableCell align="center" variant="body" key={cell.id}>
+                  <Td textAlign="center" key={cell.id}>
                     {/* Use MRT's cell renderer that provides better logic than flexRender */}
                     <MRT_TableBodyCellValue
                       cell={cell}
                       table={table}
                       staticRowIndex={rowIndex} //just for batch row selection to work
                     />
-                  </TableCell>
+                  </Td>
                 ))}
-              </TableRow>
+              </Tr>
             ))}
-          </TableBody>
+          </Tbody>
         </Table>
       </TableContainer>
       <MRT_ToolbarAlertBanner stackAlertBanner table={table} />

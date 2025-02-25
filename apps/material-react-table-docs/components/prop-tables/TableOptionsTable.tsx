@@ -4,7 +4,7 @@ import {
   MaterialReactTable,
   type MRT_TableOptions,
   type MRT_ColumnDef,
-} from 'material-react-table';
+} from 'chakra-react-table';
 import {
   Link as MuiLink,
   Typography,

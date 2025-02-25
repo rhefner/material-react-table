@@ -3,7 +3,7 @@ import {
   MaterialReactTable,
   MRT_ActionMenuItem,
   type MRT_ColumnDef,
-} from 'material-react-table';
+} from 'chakra-react-table';
 import { data, type Person } from './makeData';
 import { Edit, Delete } from '@mui/icons-material';
 

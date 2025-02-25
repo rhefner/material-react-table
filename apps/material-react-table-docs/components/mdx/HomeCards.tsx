@@ -1,4 +1,4 @@
-import { Box, Card, Stack, Typography } from '@mui/material';
+import { Box, Card, Stack, Text } from '@chakra-ui/react';
 import Image from 'next/image';
 import { AnchorLink } from './AnchorLink';
 
@@ -35,7 +35,7 @@ export const HomeCards = () => {
           }}
         >
           <Card sx={{ p: '1rem' }}>
-            <Typography variant="h3">The Best of Both Worlds</Typography>
+            <Text variant="h3">The Best of Both Worlds</Text>
             <Box
               sx={{
                 display: 'flex',
@@ -50,13 +50,13 @@ export const HomeCards = () => {
                 width={256}
               />
             </Box>
-            <Typography>
+            <Text>
               Combine TanStack Table&apos;s Extensive API With Material
               UI&apos;s Awesome Pre-Built Components!
-            </Typography>
+            </Text>
           </Card>
           <Card sx={{ p: '1rem' }}>
-            <Typography variant="h3">
+            <Text variant="h3">
               <Image
                 alt="Efficiency Icon"
                 height={24}
@@ -64,13 +64,13 @@ export const HomeCards = () => {
                 src={'/efficient.svg'}
               />{' '}
               Efficient Bundle Size
-            </Typography>
-            <Typography>37-53 KB depending on components imported.</Typography>
-            <Typography>
+            </Text>
+            <Text>37-53 KB depending on components imported.</Text>
+            <Text>
               Import the recommended <code>MaterialReactTable</code> component,
               or optionally import lighter weight MRT sub-components that only
               include the UI you need.
-            </Typography>
+            </Text>
           </Card>
         </Box>
         <Box
@@ -84,7 +84,7 @@ export const HomeCards = () => {
           }}
         >
           <Card sx={{ p: '1rem' }}>
-            <Typography variant="h3">
+            <Text variant="h3">
               <Image
                 alt="Quality Icon"
                 height={24}
@@ -92,22 +92,22 @@ export const HomeCards = () => {
                 src={'/customizable.svg'}
               />{' '}
               Pre-Built or 100% Custom
-            </Typography>
-            <Typography>
+            </Text>
+            <Text>
               Use the pre-built single component data grid with the{' '}
               <code>&lt;MaterialReactTable /&gt;</code> component.
-            </Typography>
-            <Typography>
+            </Text>
+            <Text>
               Or build your own markup from scratch using the{' '}
               <code>useMaterialReactTable</code> hook.
-            </Typography>
-            <Typography>
+            </Text>
+            <Text>
               All internal MRT components are exported for you to use as
               &quot;lego blocks&quot; to build your own custom tables.
-            </Typography>
+            </Text>
           </Card>
           <Card sx={{ p: '1rem' }}>
-            <Typography variant="h3">
+            <Text variant="h3">
               <Image
                 alt="Customizable Icon"
                 height={24}
@@ -115,19 +115,19 @@ export const HomeCards = () => {
                 src={`/source-code.svg`}
               />{' '}
               Easy Customization
-            </Typography>
-            <Typography>
+            </Text>
+            <Text>
               Just about everything is customizable or overridable in Material
               React Table. Pass in custom props or styles to all internal
               components. Use simple <code>enable*</code> props to easily enable
               or disable features.
-            </Typography>
+            </Text>
           </Card>
         </Box>
       </Stack>
       <Stack sx={{ display: 'grid', gap: '1rem' }}>
         <Card sx={{ p: '1rem' }}>
-          <Typography variant="h3">
+          <Text variant="h3">
             <Image
               alt="Quality Icon"
               height={24}
@@ -135,8 +135,8 @@ export const HomeCards = () => {
               src={`/quality.svg`}
             />{' '}
             Powerful Features
-          </Typography>
-          <Typography>
+          </Text>
+          <Text>
             Material React Table has most of the features you would expect from
             a modern table library including{' '}
             <AnchorLink href="/docs/guides/pagination">Pagination</AnchorLink>,{' '}
@@ -161,8 +161,8 @@ export const HomeCards = () => {
               Column Reordering
             </AnchorLink>
             , etc.
-          </Typography>
-          <Typography>
+          </Text>
+          <Text>
             However, Material React Table also has advanced features that you
             may not find in other table libraries such as{' '}
             <AnchorLink href="/docs/guides/virtualization">
@@ -197,17 +197,17 @@ export const HomeCards = () => {
               Click to Copy
             </AnchorLink>
             , and more.
-          </Typography>
+          </Text>
         </Card>
         <Card sx={{ p: '1rem' }}>
-          <Typography variant="h3">30+ i18n Locales</Typography>
-          <Typography>
+          <Text variant="h3">30+ i18n Locales</Text>
+          <Text>
             The MRT Community has contributed{' '}
             <AnchorLink href="/docs/guides/localization">
               over&nbsp;30&nbsp;Locales
             </AnchorLink>{' '}
             for everyone to import and use.
-          </Typography>
+          </Text>
         </Card>
       </Stack>
     </Box>

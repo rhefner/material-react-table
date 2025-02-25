@@ -3,14 +3,15 @@ import {
   useTheme,
   Tooltip,
   IconButton,
-  alpha,
-  Paper,
-  type SxProps,
-  type Theme,
-} from '@mui/material';
+  type AsProps,
+  Card,
+} from '@chakra-ui/react';
 import { Highlight, themes } from 'prism-react-renderer';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import LibraryAddCheckIcon from '@mui/icons-material/LibraryAddCheck';
+import {
+  MdContentCopy as ContentCopyIcon,
+  MdLibraryAddCheck as LibraryAddCheckIcon,
+} from 'react-icons/md';
+import { alpha } from 'chakra-react-table/src/utils/color.utils';
 
 interface Props {
   children: string;
@@ -18,7 +19,7 @@ interface Props {
   enableCopyButton?: boolean;
   style?: CSSProperties;
   margin?: string;
-  paperSxProps?: SxProps<Theme>;
+  paperSxProps?: AsProps;
 }
 
 export const SampleCodeSnippet = ({ paperSxProps, ...props }: Props) => {
@@ -56,8 +57,7 @@ export const SampleCodeSnippet = ({ paperSxProps, ...props }: Props) => {
   }
 
   return (
-    <Paper
-      elevation={3}
+    <Card
       sx={{
         boxShadow: props.enableCopyButton === false ? 'none' : undefined,
         backgroundImage: 'none',
@@ -86,8 +86,9 @@ export const SampleCodeSnippet = ({ paperSxProps, ...props }: Props) => {
             }}
           >
             {props.enableCopyButton !== false && (
-              <Tooltip arrow title={isCopied ? 'Copied!' : 'Copy Code'}>
+              <Tooltip title={isCopied ? 'Copied!' : 'Copy Code'}>
                 <IconButton
+                  aria-label="Copy Code"
                   sx={{
                     position: 'absolute',
                     top: '0.25rem',
@@ -133,6 +134,6 @@ export const SampleCodeSnippet = ({ paperSxProps, ...props }: Props) => {
           </div>
         )}
       </Highlight>
-    </Paper>
+    </Card>
   );
 };

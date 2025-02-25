@@ -4,7 +4,7 @@ import {
   useMaterialReactTable,
   type MRT_ColumnDef,
   type MRT_RowSelectionState,
-} from 'material-react-table';
+} from 'chakra-react-table';
 
 //data definitions...
 interface Person {

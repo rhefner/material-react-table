@@ -4,7 +4,7 @@ import {
   type MRT_ExpandedState,
   type MRT_ColumnDef,
   useMaterialReactTable,
-} from 'material-react-table';
+} from 'chakra-react-table';
 import { Button } from '@mui/material';
 
 export type Person = {

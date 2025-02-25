@@ -1,4 +1,4 @@
-import { type MRT_TableState } from 'material-react-table';
+import { type MRT_TableState } from 'chakra-react-table';
 
 export type StateOption = {
   defaultValue?: string;

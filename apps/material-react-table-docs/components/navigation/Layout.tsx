@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { Box, useMediaQuery } from '@mui/material';
+import { Box, useMediaQuery } from '@chakra-ui/react';
 import { BreadCrumbs } from './BreadCrumbs';
 import { MiniNav } from './MiniNav';
 import { Footer } from './Footer';
@@ -43,10 +43,10 @@ export const Layout = ({ children }: LayoutProps) => {
         setNavOpen={setNavOpen}
       />
       <Box
-        component="main"
-        sx={(theme) => ({
-          backgroundColor: theme.palette.background.default,
-          color: theme.palette.text.primary,
+        as="main"
+        sx={{
+          backgroundColor: 'gray.50',
+          color: 'gray.900',
           minHeight: '100vh',
           p: `64px ${showMiniNav && isXLDesktop ? '264px' : '32px'} 0 ${
             (navOpen || (isDesktop && !isSandboxOpen)) && !isMobile
@@ -54,7 +54,7 @@ export const Layout = ({ children }: LayoutProps) => {
               : '32px'
           }`,
           transition: 'all 100ms ease-in-out',
-        })}
+        }}
       >
         <Box
           sx={{

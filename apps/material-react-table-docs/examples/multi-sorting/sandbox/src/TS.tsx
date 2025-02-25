@@ -2,9 +2,9 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
   type MRT_ColumnDef,
-} from 'material-react-table';
+} from 'chakra-react-table';
 import { data, type Person } from './makeData';
-import { Button } from '@mui/material';
+import { Button } from '@chakra-ui/react';
 
 const columns: MRT_ColumnDef<Person>[] = [
   {

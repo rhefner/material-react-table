@@ -1,31 +1,35 @@
 import { useState } from 'react';
-import { Tab, Tabs } from '@mui/material';
+import { Tab, TabList, Tabs } from '@chakra-ui/react';
 import { SampleCodeSnippet } from './SampleCodeSnippet';
 
-type Tab = 'npm' | 'pnpm' | 'yarn' | 'bun';
+type TabType = 'npm' | 'pnpm' | 'yarn' | 'bun';
 
 const defaultPackagesString =
-  'material-react-table @mui/material @mui/x-date-pickers @mui/icons-material @emotion/react @emotion/styled';
+  'chakra-react-table @chakra-ui/react @chakra-ui/icons @emotion/react @emotion/styled framer-motion';
 
 export const InstallCommand = ({
   packagesString = defaultPackagesString,
   ...rest
 }) => {
-  const [tab, setTab] = useState<Tab>('npm');
+  const [tab, setTab] = useState<TabType>('npm');
 
   return (
     <>
       <Tabs
-        textColor="secondary"
-        indicatorColor="secondary"
+        colorScheme="teal"
         value={tab}
-        onChange={(_e, newValue) => setTab(newValue)}
+        onChange={(index) => {
+          const tabs: TabType[] = ['npm', 'pnpm', 'yarn', 'bun'];
+          setTab(tabs[index]);
+        }}
         {...rest}
       >
-        <Tab label="NPM" value="npm" />
-        <Tab label="PNPM" value="pnpm" />
-        <Tab label="Yarn" value="yarn" sx={{ textTransform: 'none' }} />
-        <Tab label="Bun" value="bun" sx={{ textTransform: 'none' }} />
+        <TabList>
+          <Tab>NPM</Tab>
+          <Tab>PNPM</Tab>
+          <Tab>Yarn</Tab>
+          <Tab>Bun</Tab>
+        </TabList>
       </Tabs>
       <SampleCodeSnippet
         className="language-bash"

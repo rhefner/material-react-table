@@ -3,7 +3,7 @@ import {
   MaterialReactTable,
   type MRT_ColumnDef,
   type MRT_Icons,
-} from 'material-react-table';
+} from 'chakra-react-table';
 import { data, type Person } from './makeData';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {

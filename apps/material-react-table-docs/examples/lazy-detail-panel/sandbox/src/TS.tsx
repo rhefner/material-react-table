@@ -7,7 +7,7 @@ import {
   type MRT_PaginationState,
   type MRT_SortingState,
   type MRT_Row,
-} from 'material-react-table';
+} from 'chakra-react-table';
 import { Alert, CircularProgress, Stack } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import MinusIcon from '@mui/icons-material/Remove';

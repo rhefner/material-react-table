@@ -1,12 +1,12 @@
 import { useRouter } from 'next/router';
-import { Box, Tab, Tabs } from '@mui/material';
+import { Box, Icon, Tab, TabList, Tabs } from '@chakra-ui/react';
 import BasicExample from '../examples/basic';
 import MinimalExample from '../examples/minimal';
 import AdvancedExample from '../examples/advanced';
 import CustomHeadlessExample from '../examples/custom-headless';
 import { useState } from 'react';
 import Link from 'next/link';
-import LaunchIcon from '@mui/icons-material/Launch';
+import { MdLaunch as LaunchIcon } from 'react-icons/md';
 
 const BasicExamples = ({ isPage = false }) => {
   const { pathname, push } = useRouter();
@@ -27,98 +27,76 @@ const BasicExamples = ({ isPage = false }) => {
               : setActiveTab(newPath as string)
           }
         >
-          <Tab label="Basic" value="basic" />
-          <Tab label="Minimal" value="minimal" />
-          <Tab label="Advanced" value="advanced" />
-          <Tab label="Custom Headless" value="custom-headless" />
-          <Link href="/docs/examples/export-csv" passHref legacyBehavior>
-            <Tab
-              label={
+          <TabList>
+            <Tab>Basic</Tab>
+            <Tab>Minimal</Tab>
+            <Tab>Advanced</Tab>
+            <Tab>Custom Headless</Tab>
+            <Link href="/docs/examples/export-csv" passHref legacyBehavior>
+              <Tab>
                 <Box>
                   Data Export
-                  <LaunchIcon sx={{ fontSize: '1rem' }} />
+                  <Icon as={LaunchIcon} sx={{ fontSize: '1rem' }} />
                 </Box>
-              }
-              value="more"
-            />
-          </Link>
-          <Link href="/docs/examples/column-ordering" passHref legacyBehavior>
-            <Tab
-              label={
+              </Tab>
+            </Link>
+            <Link href="/docs/examples/column-ordering" passHref legacyBehavior>
+              <Tab>
                 <Box>
                   DnD
-                  <LaunchIcon sx={{ fontSize: '1rem' }} />
+                  <Icon as={LaunchIcon} sx={{ fontSize: '1rem' }} />
                 </Box>
-              }
-              value="more"
-            />
-          </Link>
-          <Link href="/docs/examples/editing-crud" passHref legacyBehavior>
-            <Tab
-              label={
+              </Tab>
+            </Link>
+            <Link href="/docs/examples/editing-crud" passHref legacyBehavior>
+              <Tab>
                 <Box>
                   Editing
-                  <LaunchIcon sx={{ fontSize: '1rem' }} />
+                  <Icon as={LaunchIcon} sx={{ fontSize: '1rem' }} />
                 </Box>
-              }
-              value="more"
-            />
-          </Link>
-          <Link href="/docs/examples/filter-variants" passHref legacyBehavior>
-            <Tab
-              label={
+              </Tab>
+            </Link>
+            <Link href="/docs/examples/filter-variants" passHref legacyBehavior>
+              <Tab>
                 <Box>
                   Filtering
-                  <LaunchIcon sx={{ fontSize: '1rem' }} />
+                  <Icon as={LaunchIcon} sx={{ fontSize: '1rem' }} />
                 </Box>
-              }
-              value="more"
-            />
-          </Link>
-          <Link href="/docs/examples/react-query" passHref legacyBehavior>
-            <Tab
-              label={
+              </Tab>
+            </Link>
+            <Link href="/docs/examples/react-query" passHref legacyBehavior>
+              <Tab>
                 <Box>
                   Fetching
-                  <LaunchIcon sx={{ fontSize: '1rem' }} />
+                  <Icon as={LaunchIcon} sx={{ fontSize: '1rem' }} />
                 </Box>
-              }
-              value="more"
-            />
-          </Link>
-          <Link href="/docs/examples/sticky-header" passHref legacyBehavior>
-            <Tab
-              label={
+              </Tab>
+            </Link>
+            <Link href="/docs/examples/sticky-header" passHref legacyBehavior>
+              <Tab>
                 <Box>
                   Pinning
-                  <LaunchIcon sx={{ fontSize: '1rem' }} />
+                  <Icon as={LaunchIcon} sx={{ fontSize: '1rem' }} />
                 </Box>
-              }
-              value="more"
-            />
-          </Link>
-          <Link href="/docs/examples/virtualized" passHref legacyBehavior>
-            <Tab
-              label={
+              </Tab>
+            </Link>
+            <Link href="/docs/examples/virtualized" passHref legacyBehavior>
+              <Tab>
                 <Box>
                   Virtualization
-                  <LaunchIcon sx={{ fontSize: '1rem' }} />
+                  <Icon as={LaunchIcon} sx={{ fontSize: '1rem' }} />
                 </Box>
-              }
-              value="more"
-            />
-          </Link>
-          <Link href="/docs/examples" passHref legacyBehavior>
-            <Tab
-              label={
+              </Tab>
+            </Link>
+            <Link href="/docs/examples" passHref legacyBehavior>
+              <Tab>
                 <Box>
                   More Examples
-                  <LaunchIcon sx={{ fontSize: '1rem' }} />
+                  <Icon as={LaunchIcon} sx={{ fontSize: '1rem' }} />
                 </Box>
-              }
-              value="more"
-            />
-          </Link>
+              </Tab>
+            </Link>
+          </TabList>
         </Tabs>
       </Box>
       <Box>

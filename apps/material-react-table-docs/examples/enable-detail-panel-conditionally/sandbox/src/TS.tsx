@@ -3,7 +3,7 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
   type MRT_ColumnDef,
-} from 'material-react-table';
+} from 'chakra-react-table';
 import { Box, Typography } from '@mui/material';
 import { data, type Person } from './makeData';
 

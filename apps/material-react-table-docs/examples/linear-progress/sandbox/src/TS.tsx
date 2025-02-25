@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
-import { MaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
+import { MaterialReactTable, type MRT_ColumnDef } from 'chakra-react-table';
 import { data, type Person } from './makeData';
-import { Button } from '@mui/material';
+import { Button } from '@chakra-ui/react';
 
 const Example = () => {
   const columns = useMemo<MRT_ColumnDef<Person>[]>(
@@ -45,16 +45,19 @@ const Example = () => {
     <MaterialReactTable
       columns={columns}
       data={data}
-      muiLinearProgressProps={({ isTopToolbar }) => ({
-        color: 'secondary',
-        variant: 'determinate', //if you want to show exact progress value
-        value: progress, //value between 0 and 100
+      muiLinearProgressProps={({
+        isTopToolbar,
+      }: {
+        isTopToolbar: boolean;
+      }) => ({
+        colorScheme: 'purple',
+        value: progress, // value between 0 and 100
         sx: {
-          display: isTopToolbar ? 'block' : 'none', //hide bottom progress bar
+          display: isTopToolbar ? 'block' : 'none', // hide bottom progress bar
         },
       })}
       renderTopToolbarCustomActions={() => (
-        <Button onClick={() => setProgress(0)} variant="contained">
+        <Button onClick={() => setProgress(0)} colorScheme="blue">
           Reset
         </Button>
       )}

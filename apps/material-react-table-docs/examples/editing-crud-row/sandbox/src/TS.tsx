@@ -6,8 +6,8 @@ import {
   type MRT_Row,
   type MRT_TableOptions,
   useMaterialReactTable,
-} from 'material-react-table';
-import { Box, Button, IconButton, Tooltip } from '@mui/material';
+} from 'chakra-react-table';
+import { Box, Button, IconButton, Tooltip } from '@chakra-ui/react';
 import {
   QueryClient,
   QueryClientProvider,
@@ -16,8 +16,7 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { type User, fakeData, usStates } from './makeData';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { FiEdit, FiTrash2 } from 'react-icons/fi';
 
 const Example = () => {
   const [validationErrors, setValidationErrors] = useState<
@@ -171,16 +170,21 @@ const Example = () => {
     onEditingRowCancel: () => setValidationErrors({}),
     onEditingRowSave: handleSaveUser,
     renderRowActions: ({ row, table }) => (
-      <Box sx={{ display: 'flex', gap: '1rem' }}>
-        <Tooltip title="Edit">
-          <IconButton onClick={() => table.setEditingRow(row)}>
-            <EditIcon />
-          </IconButton>
+      <Box display="flex" gap="1rem">
+        <Tooltip label="Edit">
+          <IconButton
+            aria-label="Edit"
+            onClick={() => table.setEditingRow(row)}
+            icon={<FiEdit size={20} />}
+          />
         </Tooltip>
-        <Tooltip title="Delete">
-          <IconButton color="error" onClick={() => openDeleteConfirmModal(row)}>
-            <DeleteIcon />
-          </IconButton>
+        <Tooltip label="Delete">
+          <IconButton
+            aria-label="Delete"
+            colorScheme="red"
+            onClick={() => openDeleteConfirmModal(row)}
+            icon={<FiTrash2 size={20} />}
+          />
         </Tooltip>
       </Box>
     ),

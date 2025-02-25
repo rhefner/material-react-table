@@ -1,11 +1,7 @@
 import { useMemo, useState } from 'react';
-import { MaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
-import { Box, IconButton } from '@mui/material';
-import {
-  Edit as EditIcon,
-  Delete as DeleteIcon,
-  Email as EmailIcon,
-} from '@mui/icons-material';
+import { MaterialReactTable, type MRT_ColumnDef } from 'chakra-react-table';
+import { Box, IconButton } from '@chakra-ui/react';
+import { MdEdit, MdDelete, MdEmail } from 'react-icons/md';
 import { data as initialData, type Person } from './makeData';
 
 export const Example = () => {
@@ -52,34 +48,34 @@ export const Example = () => {
       }}
       enableRowActions
       renderRowActions={({ row, table }) => (
-        <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
+        <Box display="flex" flexWrap="nowrap" gap="8px">
           <IconButton
-            color="primary"
+            colorScheme="blue"
+            aria-label="Email"
+            icon={<MdEmail />}
             onClick={() =>
               window.open(
                 `mailto:kevinvandy@mailinator.com?subject=Hello ${row.original.firstName}!`,
               )
             }
-          >
-            <EmailIcon />
-          </IconButton>
+          />
           <IconButton
-            color="secondary"
+            colorScheme="purple"
+            aria-label="Edit"
+            icon={<MdEdit />}
             onClick={() => {
               table.setEditingRow(row);
             }}
-          >
-            <EditIcon />
-          </IconButton>
+          />
           <IconButton
-            color="error"
+            colorScheme="red"
+            aria-label="Delete"
+            icon={<MdDelete />}
             onClick={() => {
               data.splice(row.index, 1); //assuming simple data table
               setData([...data]);
             }}
-          >
-            <DeleteIcon />
-          </IconButton>
+          />
         </Box>
       )}
     />

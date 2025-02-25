@@ -3,7 +3,7 @@ import {
   useMaterialReactTable,
   type MRT_Row,
   createMRTColumnHelper,
-} from 'material-react-table';
+} from 'chakra-react-table';
 import { Box, Button } from '@mui/material';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { jsPDF } from 'jspdf'; //or use your library of choice here

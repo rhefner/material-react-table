@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import Link from 'next/link';
-import { Box, Link as MuiLink } from '@mui/material';
+import { Box, Link as ChakraLink } from '@chakra-ui/react';
 import { LinkHeading } from '../mdx/LinkHeading';
 import { type RouteItem } from './routes';
 
@@ -13,7 +13,7 @@ export const TableOfContentsListItem = ({
 }) => (
   <li>
     <Link href={item.href} passHref legacyBehavior>
-      <MuiLink
+      <ChakraLink
         sx={{
           color: isFooter ? 'text.secondary' : 'primary.main',
           cursor: 'pointer',
@@ -26,7 +26,7 @@ export const TableOfContentsListItem = ({
         }}
       >
         {item.label}
-      </MuiLink>
+      </ChakraLink>
     </Link>
   </li>
 );

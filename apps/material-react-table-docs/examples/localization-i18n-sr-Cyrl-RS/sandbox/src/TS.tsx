@@ -1,8 +1,8 @@
 //Import Material React Table and its Types
-import { MaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
+import { MaterialReactTable, type MRT_ColumnDef } from 'chakra-react-table';
 
 //Import Material React Table Translations
-import { MRT_Localization_SR_CYRL_RS } from 'material-react-table/locales/sr-Cyrl-RS';
+import { MRT_Localization_SR_CYRL_RS } from 'chakra-react-table/locales/sr-Cyrl-RS';
 
 //mock data
 import { data, type Person } from './makeData';

@@ -15,7 +15,7 @@ import {
   type MRT_ColumnFiltersState,
   type MRT_SortingState,
   type MRT_RowVirtualizer,
-} from 'material-react-table';
+} from 'chakra-react-table';
 import { Typography } from '@mui/material';
 import {
   QueryClient,

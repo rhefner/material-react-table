@@ -1,7 +1,7 @@
 import {
   type MRT_ColumnFiltersState,
   type MRT_SortingState,
-} from 'material-react-table';
+} from 'chakra-react-table';
 import { type NextApiRequest, type NextApiResponse } from 'next';
 
 //This is just a simple mock of a backend API where you would do server-side pagination, filtering, and sorting

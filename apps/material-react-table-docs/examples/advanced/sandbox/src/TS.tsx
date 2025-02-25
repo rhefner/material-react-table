@@ -1,28 +1,28 @@
 import { useMemo } from 'react';
 
-//MRT Imports
+// MRT Imports
 import {
   MaterialReactTable,
   useMaterialReactTable,
   type MRT_ColumnDef,
   MRT_GlobalFilterTextField,
   MRT_ToggleFiltersButton,
-} from 'material-react-table';
+} from 'chakra-react-table';
 
-//Material UI Imports
+// Chakra UI Imports
 import {
   Box,
   Button,
-  ListItemIcon,
   MenuItem,
-  Typography,
-  lighten,
-} from '@mui/material';
+  Text,
+  Image,
+  ChakraProvider,
+} from '@chakra-ui/react';
 
-//Icons Imports
-import { AccountCircle, Send } from '@mui/icons-material';
+// Icons Imports from react-icons
+import { FaUserCircle, FaPaperPlane } from 'react-icons/fa';
 
-//Mock Data
+// Mock Data
 import { data } from './makeData';
 
 export type Employee = {
@@ -40,36 +40,29 @@ const Example = () => {
   const columns = useMemo<MRT_ColumnDef<Employee>[]>(
     () => [
       {
-        id: 'employee', //id used to define `group` column
+        id: 'employee',
         header: 'Employee',
         columns: [
           {
-            accessorFn: (row) => `${row.firstName} ${row.lastName}`, //accessorFn used to join multiple data into a single cell
-            id: 'name', //id is still required when using accessorFn instead of accessorKey
+            accessorFn: (row) => `${row.firstName} ${row.lastName}`,
+            id: 'name',
             header: 'Name',
             size: 250,
             Cell: ({ renderedCellValue, row }) => (
-              <Box
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '1rem',
-                }}
-              >
-                <img
+              <Box display="flex" alignItems="center" gap="1rem">
+                <Image
                   alt="avatar"
-                  height={30}
+                  boxSize="30px"
                   src={row.original.avatar}
                   loading="lazy"
-                  style={{ borderRadius: '50%' }}
+                  borderRadius="full"
                 />
-                {/* using renderedCellValue instead of cell.getValue() preserves filter match highlighting */}
                 <span>{renderedCellValue}</span>
               </Box>
             ),
           },
           {
-            accessorKey: 'email', //accessorKey used to define `data` column. `id` gets set to accessorKey automatically
+            accessorKey: 'email',
             enableClickToCopy: true,
             filterVariant: 'autocomplete',
             header: 'Email',
@@ -83,27 +76,23 @@ const Example = () => {
         columns: [
           {
             accessorKey: 'salary',
-            // filterVariant: 'range', //if not using filter modes feature, use this instead of filterFn
             filterFn: 'between',
             header: 'Salary',
             size: 200,
-            //custom conditional format and styling
             Cell: ({ cell }) => (
               <Box
-                component="span"
-                sx={(theme) => ({
-                  backgroundColor:
-                    cell.getValue<number>() < 50_000
-                      ? theme.palette.error.dark
-                      : cell.getValue<number>() >= 50_000 &&
-                          cell.getValue<number>() < 75_000
-                        ? theme.palette.warning.dark
-                        : theme.palette.success.dark,
-                  borderRadius: '0.25rem',
-                  color: '#fff',
-                  maxWidth: '9ch',
-                  p: '0.25rem',
-                })}
+                as="span"
+                bg={
+                  cell.getValue<number>() < 50000
+                    ? 'red.500'
+                    : cell.getValue<number>() < 75000
+                      ? 'yellow.500'
+                      : 'green.500'
+                }
+                borderRadius="md"
+                color="white"
+                maxW="9ch"
+                p="0.25rem"
               >
                 {cell.getValue<number>()?.toLocaleString?.('en-US', {
                   style: 'currency',
@@ -115,19 +104,21 @@ const Example = () => {
             ),
           },
           {
-            accessorKey: 'jobTitle', //hey a simple column for once
+            accessorKey: 'jobTitle',
             header: 'Job Title',
             size: 350,
           },
           {
-            accessorFn: (row) => new Date(row.startDate), //convert to Date for sorting and filtering
+            accessorFn: (row) => new Date(row.startDate),
             id: 'startDate',
             header: 'Start Date',
             filterVariant: 'date',
             filterFn: 'lessThan',
             sortingFn: 'datetime',
-            Cell: ({ cell }) => cell.getValue<Date>()?.toLocaleDateString(), //render Date as a string
-            Header: ({ column }) => <em>{column.columnDef.header}</em>, //custom header markup
+            Cell: ({ cell }) => cell.getValue<Date>()?.toLocaleDateString(),
+            Header: ({ column }) => (
+              <Text as="em">{column.columnDef.header}</Text>
+            ),
             muiFilterTextFieldProps: {
               sx: {
                 minWidth: '250px',
@@ -142,7 +133,7 @@ const Example = () => {
 
   const table = useMaterialReactTable({
     columns,
-    data, //data must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
+    data,
     enableColumnFilterModes: true,
     enableColumnOrdering: true,
     enableGrouping: true,
@@ -164,36 +155,29 @@ const Example = () => {
       size: 'small',
       variant: 'outlined',
     },
-    muiPaginationProps: {
-      color: 'secondary',
-      rowsPerPageOptions: [10, 20, 30],
-      shape: 'rounded',
-      variant: 'outlined',
-    },
     renderDetailPanel: ({ row }) => (
       <Box
-        sx={{
-          alignItems: 'center',
-          display: 'flex',
-          justifyContent: 'space-around',
-          left: '30px',
-          maxWidth: '1000px',
-          position: 'sticky',
-          width: '100%',
-        }}
+        bg="gray.50"
+        display="flex"
+        alignItems="center"
+        justifyContent="space-around"
+        left="30px"
+        maxW="1000px"
+        position="sticky"
+        width="100%"
       >
-        <img
+        <Image
           alt="avatar"
-          height={200}
+          boxSize="200px"
           src={row.original.avatar}
           loading="lazy"
-          style={{ borderRadius: '50%' }}
+          borderRadius="full"
         />
-        <Box sx={{ textAlign: 'center' }}>
-          <Typography variant="h4">Signature Catch Phrase:</Typography>
-          <Typography variant="h1">
+        <Box textAlign="center">
+          <Text fontSize="2xl">Signature Catch Phrase:</Text>
+          <Text fontSize="4xl">
             &quot;{row.original.signatureCatchPhrase}&quot;
-          </Typography>
+          </Text>
         </Box>
       </Box>
     ),
@@ -204,11 +188,10 @@ const Example = () => {
           // View profile logic...
           closeMenu();
         }}
-        sx={{ m: 0 }}
       >
-        <ListItemIcon>
-          <AccountCircle />
-        </ListItemIcon>
+        <Box as="span" mr="2">
+          <FaUserCircle />
+        </Box>
         View Profile
       </MenuItem>,
       <MenuItem
@@ -217,11 +200,10 @@ const Example = () => {
           // Send email logic...
           closeMenu();
         }}
-        sx={{ m: 0 }}
       >
-        <ListItemIcon>
-          <Send />
-        </ListItemIcon>
+        <Box as="span" mr="2">
+          <FaPaperPlane />
+        </Box>
         Send Email
       </MenuItem>,
     ],
@@ -246,46 +228,41 @@ const Example = () => {
 
       return (
         <Box
-          sx={(theme) => ({
-            backgroundColor: lighten(theme.palette.background.default, 0.05),
-            display: 'flex',
-            gap: '0.5rem',
-            p: '8px',
-            justifyContent: 'space-between',
-          })}
+          bg="gray.50"
+          display="flex"
+          gap="0.5rem"
+          p="8px"
+          justifyContent="space-between"
         >
-          <Box sx={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-            {/* import MRT sub-components */}
+          <Box display="flex" gap="0.5rem" alignItems="center">
             <MRT_GlobalFilterTextField table={table} />
             <MRT_ToggleFiltersButton table={table} />
           </Box>
-          <Box>
-            <Box sx={{ display: 'flex', gap: '0.5rem' }}>
-              <Button
-                color="error"
-                disabled={!table.getIsSomeRowsSelected()}
-                onClick={handleDeactivate}
-                variant="contained"
-              >
-                Deactivate
-              </Button>
-              <Button
-                color="success"
-                disabled={!table.getIsSomeRowsSelected()}
-                onClick={handleActivate}
-                variant="contained"
-              >
-                Activate
-              </Button>
-              <Button
-                color="info"
-                disabled={!table.getIsSomeRowsSelected()}
-                onClick={handleContact}
-                variant="contained"
-              >
-                Contact
-              </Button>
-            </Box>
+          <Box display="flex" gap="0.5rem">
+            <Button
+              colorScheme="red"
+              isDisabled={!table.getIsSomeRowsSelected()}
+              onClick={handleDeactivate}
+              variant="solid"
+            >
+              Deactivate
+            </Button>
+            <Button
+              colorScheme="green"
+              isDisabled={!table.getIsSomeRowsSelected()}
+              onClick={handleActivate}
+              variant="solid"
+            >
+              Activate
+            </Button>
+            <Button
+              colorScheme="blue"
+              isDisabled={!table.getIsSomeRowsSelected()}
+              onClick={handleContact}
+              variant="solid"
+            >
+              Contact
+            </Button>
           </Box>
         </Box>
       );
@@ -295,15 +272,11 @@ const Example = () => {
   return <MaterialReactTable table={table} />;
 };
 
-//Date Picker Imports - these should just be in your Context Provider
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-
-const ExampleWithLocalizationProvider = () => (
-  //App.tsx or AppProviders file
-  <LocalizationProvider dateAdapter={AdapterDayjs}>
+// Wrap the example with ChakraProvider
+const ExampleWithChakraProvider = () => (
+  <ChakraProvider>
     <Example />
-  </LocalizationProvider>
+  </ChakraProvider>
 );
 
-export default ExampleWithLocalizationProvider;
+export default ExampleWithChakraProvider;

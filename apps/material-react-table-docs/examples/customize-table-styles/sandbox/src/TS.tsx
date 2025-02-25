@@ -3,18 +3,27 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
   type MRT_ColumnDef,
-} from 'material-react-table';
+} from 'chakra-react-table';
 import { data, type Person } from './makeData';
-import { darken, lighten, useTheme } from '@mui/material';
+import { useColorMode, useTheme, Theme } from '@chakra-ui/react';
 
 const Example = () => {
-  const theme = useTheme();
+  const theme = useTheme<Theme>();
+  const { colorMode } = useColorMode();
 
   //light or dark green
   const baseBackgroundColor =
-    theme.palette.mode === 'dark'
-      ? 'rgba(3, 44, 43, 1)'
-      : 'rgba(244, 255, 233, 1)';
+    colorMode === 'dark' ? 'rgba(3, 44, 43, 1)' : 'rgba(244, 255, 233, 1)';
+
+  // Calculate color variations (since we can't use polished library directly)
+  const darkened1 =
+    colorMode === 'dark' ? 'rgba(2, 33, 32, 1)' : 'rgba(224, 235, 213, 1)';
+
+  const darkened2 =
+    colorMode === 'dark' ? 'rgba(1, 22, 21, 1)' : 'rgba(204, 215, 193, 1)';
+
+  const lightened1 =
+    colorMode === 'dark' ? 'rgba(4, 55, 54, 1)' : 'rgba(247, 255, 238, 1)';
 
   const columns = useMemo<MRT_ColumnDef<Person>[]>(
     //column definitions...
@@ -63,34 +72,32 @@ const Example = () => {
     enableRowPinning: true,
     enableRowSelection: true,
     muiTablePaperProps: {
-      elevation: 0,
+      boxShadow: 'none',
+      borderRadius: '0',
+    },
+    muiTableBodyCellProps: {
       sx: {
-        borderRadius: '0',
+        '&[data-row-index="odd"]:not([data-selected="true"]):not([data-pinned="true"])':
+          {
+            backgroundColor: darkened1,
+          },
+        '&[data-row-index="odd"]:not([data-selected="true"]):not([data-pinned="true"]):hover':
+          {
+            backgroundColor: darkened2,
+          },
+        '&[data-row-index="even"]:not([data-selected="true"]):not([data-pinned="true"])':
+          {
+            backgroundColor: lightened1,
+          },
+        '&[data-row-index="even"]:not([data-selected="true"]):not([data-pinned="true"]):hover':
+          {
+            backgroundColor: darkened2,
+          },
       },
     },
-    muiTableBodyProps: {
-      sx: (theme) => ({
-        '& tr:nth-of-type(odd):not([data-selected="true"]):not([data-pinned="true"]) > td':
-          {
-            backgroundColor: darken(baseBackgroundColor, 0.1),
-          },
-        '& tr:nth-of-type(odd):not([data-selected="true"]):not([data-pinned="true"]):hover > td':
-          {
-            backgroundColor: darken(baseBackgroundColor, 0.2),
-          },
-        '& tr:nth-of-type(even):not([data-selected="true"]):not([data-pinned="true"]) > td':
-          {
-            backgroundColor: lighten(baseBackgroundColor, 0.1),
-          },
-        '& tr:nth-of-type(even):not([data-selected="true"]):not([data-pinned="true"]):hover > td':
-          {
-            backgroundColor: darken(baseBackgroundColor, 0.2),
-          },
-      }),
-    },
-    mrtTheme: (theme) => ({
+    mrtTheme: () => ({
       baseBackgroundColor: baseBackgroundColor,
-      draggingBorderColor: theme.palette.secondary.main,
+      draggingBorderColor: theme.colors.purple[500],
     }),
   });
 

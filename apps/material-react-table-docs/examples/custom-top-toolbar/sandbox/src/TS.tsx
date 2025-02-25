@@ -5,9 +5,9 @@ import {
   MRT_ToggleDensePaddingButton,
   MRT_ToggleFullScreenButton,
   useMaterialReactTable,
-} from 'material-react-table';
-import { Box, Button, IconButton } from '@mui/material';
-import PrintIcon from '@mui/icons-material/Print';
+} from 'chakra-react-table';
+import { Box, Button, IconButton } from '@chakra-ui/react';
+import { FiPrinter } from 'react-icons/fi';
 import { data, type Person } from './makeData';
 
 const Example = () => {
@@ -42,23 +42,21 @@ const Example = () => {
     positionToolbarAlertBanner: 'bottom', //show selected rows count on bottom toolbar
     //add custom action buttons to top-left of top toolbar
     renderTopToolbarCustomActions: ({ table }) => (
-      <Box sx={{ display: 'flex', gap: '1rem', p: '4px' }}>
+      <Box display="flex" gap="1rem" p="4px">
         <Button
-          color="secondary"
+          colorScheme="purple"
           onClick={() => {
             alert('Create New Account');
           }}
-          variant="contained"
         >
           Create Account
         </Button>
         <Button
-          color="error"
-          disabled={!table.getIsSomeRowsSelected()}
+          colorScheme="red"
+          isDisabled={!table.getIsSomeRowsSelected()}
           onClick={() => {
             alert('Delete Selected Accounts');
           }}
-          variant="contained"
         >
           Delete Selected Accounts
         </Button>
@@ -69,12 +67,12 @@ const Example = () => {
       <Box>
         {/* add custom button to print table  */}
         <IconButton
+          aria-label="Print"
           onClick={() => {
             window.print();
           }}
-        >
-          <PrintIcon />
-        </IconButton>
+          icon={<FiPrinter />}
+        />
         {/* along-side built-in buttons in whatever order you want them */}
         <MRT_ToggleDensePaddingButton table={table} />
         <MRT_ToggleFullScreenButton table={table} />

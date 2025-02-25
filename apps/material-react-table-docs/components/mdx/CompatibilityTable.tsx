@@ -3,7 +3,7 @@ import {
   MRT_ColumnDef,
   MRT_TableContainer,
   useMaterialReactTable,
-} from 'material-react-table';
+} from 'chakra-react-table';
 
 const columns: MRT_ColumnDef<any>[] = [
   {

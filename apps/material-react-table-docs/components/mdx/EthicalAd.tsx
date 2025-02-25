@@ -1,4 +1,4 @@
-import { Box, useTheme } from '@mui/material';
+import { Box, useTheme } from '@chakra-ui/react';
 
 interface Props {
   compact?: boolean;

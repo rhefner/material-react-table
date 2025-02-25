@@ -6,7 +6,7 @@ import {
   type MRT_PaginationState,
   type MRT_SortingState,
   type MRT_ExpandedState,
-} from 'material-react-table';
+} from 'chakra-react-table';
 import {
   QueryClient,
   QueryClientProvider,

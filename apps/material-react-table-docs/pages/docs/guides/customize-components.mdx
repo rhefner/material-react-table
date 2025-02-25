@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import { createContext, ThemeProvider, useTheme } from '@chakra-ui/react';
 import TableOptionsTable from '../../../components/prop-tables/TableOptionsTable';
 import ColumnOptionsTable from '../../../components/prop-tables/ColumnOptionsTable';
 import ThemeExample from '../../../examples/mui-theme';
@@ -292,10 +293,10 @@ function App() {
 Thanks to Material UI allowing you to [nest multiple Theme Providers](https://mui.com/material-ui/customization/theming/#nesting-the-theme), you can change your Material UI Theme just for the `<MaterialReactTable />` component by wrapping a `<ThemeProvider theme={createTheme(...)}>` around just your table. The values in this theme will only effect the `<MaterialReactTable />` component, and not the rest of your site. It will also inherit values from your global theme, so you do not have to redefine everything again. You can just tweak the values you want to change.
 
 ```jsx
-import { createTheme, ThemeProvider } from '@mui/material';
+import { ThemeProvider } from '@chakra-ui/react';
 //in one of your normal components
 return (
-  <ThemeProvider theme={createTheme({...})}>
+  <ThemeProvider theme={{...}}>
     <MaterialReactTable table={table} />
   </ThemeProvider>
 );

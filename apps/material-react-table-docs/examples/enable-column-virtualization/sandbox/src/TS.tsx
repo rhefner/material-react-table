@@ -3,7 +3,7 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
   type MRT_ColumnVirtualizer,
-} from 'material-react-table';
+} from 'chakra-react-table';
 import { fakeColumns, fakeData } from './makeData';
 
 const Example = () => {

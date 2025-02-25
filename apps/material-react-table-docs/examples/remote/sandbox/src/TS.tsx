@@ -6,7 +6,7 @@ import {
   type MRT_ColumnFiltersState,
   type MRT_PaginationState,
   type MRT_SortingState,
-} from 'material-react-table';
+} from 'chakra-react-table';
 
 type UserApiResponse = {
   data: Array<User>;

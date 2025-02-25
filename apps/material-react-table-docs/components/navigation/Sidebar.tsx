@@ -2,18 +2,20 @@ import { useMemo, useState } from 'react';
 import {
   Drawer,
   IconButton,
-  InputAdornment,
+  Input,
+  InputGroup,
+  InputLeftAddon,
+  InputRightAddon,
   List,
-  TextField,
-  Typography,
+  theme,
   useMediaQuery,
-} from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
-import CloseIcon from '@mui/icons-material/Close';
+  Text,
+} from '@chakra-ui/react';
 import { SideBarItems } from './SidebarItems';
 import { RouteItem, routes } from './routes';
 import { matchSorter } from 'match-sorter';
 import { usePlausible } from 'next-plausible';
+import { CloseIcon, SearchIcon } from '@chakra-ui/icons';
 
 interface Props {
   navOpen: boolean;
@@ -69,14 +71,9 @@ export const SideBar = ({ navOpen, setNavOpen }: Props) => {
 
   return (
     <Drawer
-      PaperProps={{ component: 'aside' }}
-      open={navOpen}
+      isOpen={navOpen}
       onClose={() => setNavOpen(false)}
       variant={isMobile ? 'temporary' : 'permanent'}
-      sx={{
-        zIndex: 4,
-        position: 'relative',
-      }}
     >
       <List
         sx={{
@@ -93,67 +90,59 @@ export const SideBar = ({ navOpen, setNavOpen }: Props) => {
           },
         }}
       >
-        <TextField
-          onFocus={() => plausible('page-filter')}
-          placeholder="Find Page"
-          variant="outlined"
-          fullWidth
-          size="small"
-          slotProps={{
-            input: {
-              startAdornment: (
-                <InputAdornment
-                  sx={{
-                    opacity: search ? '1' : '0.5',
-                    transition: 'all .2s',
-                  }}
-                  position="start"
-                >
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-              endAdornment: (
-                <InputAdornment
-                  sx={{
-                    opacity: search ? '1' : '0.5',
-                    transition: 'all .2s',
-                  }}
-                  position="end"
-                >
-                  <IconButton
-                    aria-label="Clear Search"
-                    disabled={!search}
-                    size="small"
-                    onClick={() => setSearch('')}
-                  >
-                    <CloseIcon />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            },
-          }}
-          sx={(theme) => ({
-            backgroundColor: theme.palette.background.paper,
-            mx: '2px',
-            my: '0',
-            p: 0,
-            position: 'sticky',
-            top: '1px',
-            width: 'calc(100% - 4px)',
-            zIndex: 2,
-            '&:hover': {
-              button: {
-                opacity: '1',
+        <InputGroup>
+          <InputLeftAddon
+            sx={{
+              opacity: search ? '1' : '0.5',
+              transition: 'all .2s',
+            }}
+          >
+            <SearchIcon />
+          </InputLeftAddon>
+          <Input
+            onFocus={() => plausible('page-filter')}
+            placeholder="Find Page"
+            variant="outlined"
+            w="full"
+            size="small"
+            sx={{
+              backgroundColor: theme.colors.gray[50],
+              mx: '2px',
+              my: '0',
+              p: 0,
+              position: 'sticky',
+              top: '1px',
+              width: 'calc(100% - 4px)',
+              zIndex: 2,
+              '&:hover': {
+                button: {
+                  opacity: '1',
+                },
               },
-            },
-          })}
-          onChange={(e) => setSearch(e.target.value)}
-          value={search}
-        />
+            }}
+            onChange={(e) => setSearch(e.target.value)}
+            value={search}
+          />
+          <InputRightAddon
+            sx={{
+              opacity: search ? '1' : '0.5',
+              transition: 'all .2s',
+            }}
+          >
+            <IconButton
+              aria-label="Clear Search"
+              disabled={!search}
+              size="small"
+              onClick={() => setSearch('')}
+            >
+              <CloseIcon />
+            </IconButton>
+          </InputRightAddon>
+        </InputGroup>
         {!filteredRoutes.length ? (
-          <Typography sx={{ p: 2, textAlign: 'center' }} color="textSecondary">
+          <Text sx={{ p: 2, textAlign: 'center' }} color="textSecondary">
             No results found for "{search}"
-          </Typography>
+          </Text>
         ) : (
           <SideBarItems
             expandAll={!!search}

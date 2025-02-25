@@ -1,7 +1,7 @@
 import {
   type MRT_ColumnFiltersState,
   type MRT_SortingState,
-} from 'material-react-table';
+} from 'chakra-react-table';
 import { type NextApiRequest, type NextApiResponse } from 'next';
 
 //This is all fake mock code. Don't be inspired by it.

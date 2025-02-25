@@ -4,7 +4,7 @@ import {
   type MRT_ColumnDef,
   type MRT_Row,
   MRT_TableContainer,
-} from 'material-react-table';
+} from 'chakra-react-table';
 import { data as initData, type Person } from './makeData';
 
 const Example = () => {

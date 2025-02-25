@@ -9,13 +9,12 @@
     "start": "vite"
   },
   "dependencies": {
+    "@chakra-ui/react": "^2.9.0",
+    "@chakra-ui/icons": "^2.1.1",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
-    "@mui/icons-material": "^6.4.4",
-    "@mui/material": "^6.4.4",
-    "@mui/x-date-pickers": "^7.26.0",
-    "dayjs": "^1.11.13",
-    "material-react-table": "^3.2.0",
+    "chakra-react-table": "workspace:*",
+    "framer-motion": "^11.0.8",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

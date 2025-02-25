@@ -14,20 +14,20 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>Material React Table V3</title>
+        <title>Chakra React Table V3</title>
         <meta
           name="description"
-          content="Material React Table, a fully featured Material UI V6 implementation of TanStack React Table V8. Written from the ground up in TypeScript."
+          content="Chakra React Table, a fully featured Chakra UI V2 implementation of TanStack React Table V8. Written from the ground up in TypeScript."
         />
         <link
           rel="canonical"
-          href={`https://www.material-react-table.com${pathname}`}
+          href={`https://www.chakra-react-table.com${pathname}`}
         />
         <link rel="icon" href="/mrt_logo.png" />
         <meta property="og:image" content="/mrt_logo.png" />
         <meta
           property="og:url"
-          content={`https://www.material-react-table.com${pathname}`}
+          content={`https://www.chakra-react-table.com${pathname}`}
         />
         {process.env.NODE_ENV === 'production' && (
           <>
@@ -44,7 +44,7 @@ function App({ Component, pageProps }: AppProps) {
         )}
       </Head>
       <PlausibleProvider
-        domain="material-react-table.com"
+        domain="chakra-react-table.com"
         enabled={process.env.NODE_ENV === 'production'}
       >
         <ThemeContextProvider>

@@ -1,4 +1,4 @@
-import { type MRT_Cell } from 'material-react-table';
+import { type MRT_Cell } from 'chakra-react-table';
 
 export interface CellInstanceAPI {
   cellInstanceAPI: keyof MRT_Cell<CellInstanceAPI>;

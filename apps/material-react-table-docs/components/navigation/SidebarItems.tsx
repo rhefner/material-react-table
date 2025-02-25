@@ -1,11 +1,18 @@
 import { Fragment, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { alpha, ListItemButton, useMediaQuery, Box } from '@mui/material';
-import LaunchIcon from '@mui/icons-material/Launch';
+import {
+  ListItem,
+  useMediaQuery,
+  Box,
+  Icon,
+  theme,
+  useColorMode,
+} from '@chakra-ui/react';
 import { type RouteItem } from './routes';
 import highlightWords from 'highlight-words';
-
+import { MdLaunch as LaunchIcon } from 'react-icons/md';
+import { alpha } from 'chakra-react-table/src/utils/color.utils';
 interface Props {
   depth?: number;
   expandAll?: boolean;
@@ -25,6 +32,7 @@ export const SideBarItems = ({
   setSearch,
   search,
 }: Props) => {
+  const { colorMode } = useColorMode();
   const { pathname } = useRouter();
   const isMobile = useMediaQuery('(max-width: 900px)');
 
@@ -42,15 +50,7 @@ export const SideBarItems = ({
   return (
     <>
       {routes.map(
-        ({
-          href,
-          items,
-          label,
-          divider,
-          external,
-          secondaryItems,
-          keywords,
-        }) => {
+        ({ href, items, label, external, secondaryItems, keywords }) => {
           const secondaryHrefs = secondaryItems?.map((i) => i.href);
 
           const isSelected = pathname === href;
@@ -67,9 +67,7 @@ export const SideBarItems = ({
           return (
             <Fragment key={label}>
               <Link href={href} target={external ? '_blank' : undefined}>
-                <ListItemButton
-                  divider={divider}
-                  selected={isSelected && !isSelectedParent}
+                <ListItem
                   ref={(node) =>
                     selectedItemRef(node, isSelected && !isSelectedParent)
                   }
@@ -81,18 +79,18 @@ export const SideBarItems = ({
                       e.currentTarget.parentElement?.click();
                     }
                   }}
-                  sx={(theme) => ({
+                  sx={{
                     color: isSecondary
-                      ? theme.palette.mode === 'dark'
-                        ? theme.palette.secondary.light
-                        : theme.palette.secondary.dark
+                      ? colorMode === 'dark'
+                        ? theme.colors.gray[400]
+                        : theme.colors.gray[700]
                       : !items
-                        ? theme.palette.mode === 'dark'
-                          ? theme.palette.primary.main
-                          : theme.palette.primary.dark
+                        ? colorMode === 'dark'
+                          ? theme.colors.gray[900]
+                          : theme.colors.gray[700]
                         : depth === 1
-                          ? theme.palette.text.primary
-                          : theme.palette.text.secondary,
+                          ? theme.colors.gray[900]
+                          : theme.colors.gray[700],
                     fontSize:
                       !items && !isSelectedParent
                         ? '0.9rem'
@@ -109,9 +107,9 @@ export const SideBarItems = ({
                     padding: '0',
                     whiteSpace: 'nowrap',
                     '&:hover': {
-                      backgroundColor: alpha(theme.palette.primary.main, 0.1),
+                      backgroundColor: alpha(theme.colors.blue[500], 0.1),
                     },
-                  })}
+                  }}
                 >
                   <Box
                     sx={{
@@ -124,10 +122,14 @@ export const SideBarItems = ({
                       search={search}
                     />
                     {external && (
-                      <LaunchIcon fontSize="small" sx={{ m: '-0.25rem 4px' }} />
+                      <Icon
+                        as={LaunchIcon}
+                        fontSize="small"
+                        sx={{ m: '-0.25rem 4px' }}
+                      />
                     )}
                   </Box>
-                </ListItemButton>
+                </ListItem>
               </Link>
               {(items || willBeSecondary) && (
                 <SideBarItems
@@ -155,6 +157,7 @@ const HighlightedText = ({
   search: string;
   label: string;
 }) => {
+  const { colorMode } = useColorMode();
   const chunks = highlightWords?.({
     matchExactly: false,
     query: search,
@@ -166,19 +169,19 @@ const HighlightedText = ({
         {chunks?.map(({ key, match, text }) => (
           <Box
             aria-hidden="true"
-            component="span"
+            as="span"
             key={key}
             sx={
               match
-                ? (theme) => ({
-                    backgroundColor: theme.palette.warning.light,
+                ? {
+                    backgroundColor: theme.colors.yellow[300],
                     borderRadius: '2px',
-                    color: (theme) =>
-                      theme.palette.mode === 'dark'
-                        ? theme.palette.common.black
-                        : theme.palette.common.white,
+                    color:
+                      colorMode === 'dark'
+                        ? theme.colors.gray[900]
+                        : theme.colors.gray[700],
                     padding: '2px 1px',
-                  })
+                  }
                 : undefined
             }
           >
@@ -201,7 +204,7 @@ const HighlightedKeywords = ({
   if (!keywords?.length || !search) return null;
   return (
     <Box
-      component="div"
+      as="div"
       sx={{
         display: 'block',
         mt: '12px',

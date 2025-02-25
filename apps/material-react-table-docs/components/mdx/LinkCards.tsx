@@ -1,5 +1,6 @@
-import { alpha, Box, Card, Typography, Link } from '@mui/material';
+import { Box, Card, Link, Text, theme } from '@chakra-ui/react';
 import Image from 'next/image';
+import { alpha } from 'chakra-react-table/src/utils/color.utils';
 
 const cardData = [
   {
@@ -37,9 +38,9 @@ export const LinkCards = () => {
         textAlign: 'center',
       }}
     >
-      <Typography sx={{ p: '1rem' }} variant="h3">
+      <Text sx={{ p: '1rem' }} variant="h3">
         Useful Links
-      </Typography>
+      </Text>
       <Box
         sx={{
           display: 'flex',
@@ -57,11 +58,10 @@ export const LinkCards = () => {
             sx={{ textDecoration: 'none' }}
           >
             <Card
-              elevation={4}
-              sx={(theme) => ({
+              sx={{
                 alignItems: 'center',
                 borderRadius: '0.5rem',
-                color: theme.palette.primary.dark,
+                color: theme.colors.blue[500],
                 cursor: 'pointer',
                 display: 'flex',
                 flexDirection: 'column',
@@ -73,7 +73,7 @@ export const LinkCards = () => {
                 width: '9.5rem',
                 '&:hover': {
                   boxShadow: `1px 4px 8px ${alpha(
-                    theme.palette.primary.dark,
+                    theme.colors.blue[500],
                     0.5,
                   )}`,
                   '& img': {
@@ -81,10 +81,10 @@ export const LinkCards = () => {
                     transition: 'transform 150ms ease-in-out',
                   },
                 },
-              })}
+              }}
             >
               <Image src={cd.image} alt={cd.text} width={60} height={60} />
-              <Typography>{cd.text}</Typography>
+              <Text>{cd.text}</Text>
             </Card>
           </Link>
         ))}

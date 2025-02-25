@@ -1,9 +1,7 @@
 import { useMemo } from 'react';
-import {
-  MaterialReactTable,
-  useMaterialReactTable,
-} from 'material-react-table';
-import { MRT_Localization_ES } from 'material-react-table/locales/es';
+import { MaterialReactTable, useMaterialReactTable } from 'chakra-react-table';
+import { MRT_Localization_ES } from 'chakra-react-table/locales/es';
+import { Box } from '@chakra-ui/react';
 
 //nested data is ok, see accessorKeys in ColumnDef below
 const data = [
@@ -93,7 +91,11 @@ const Example = () => {
     localization: MRT_Localization_ES,
   });
 
-  return <MaterialReactTable table={table} />;
+  return (
+    <Box p={4}>
+      <MaterialReactTable table={table} />
+    </Box>
+  );
 };
 
 export default Example;

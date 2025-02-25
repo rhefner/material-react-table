@@ -5,7 +5,7 @@ import {
   type MRT_ColumnDef,
   type MRT_SortingState,
   type MRT_RowVirtualizer,
-} from 'material-react-table';
+} from 'chakra-react-table';
 import { makeData, type Person } from './makeData';
 
 const Example = () => {

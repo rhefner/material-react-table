@@ -1,27 +1,20 @@
 import { useEffect, useRef } from 'react';
-import Link from 'next/link';
+import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { usePlausible } from 'next-plausible';
 import {
-  AppBar,
   Box,
+  Flex,
   IconButton,
-  Toolbar,
+  Text,
   Tooltip,
-  Typography,
   useMediaQuery,
-  useTheme,
   Select,
-  MenuItem,
-  ThemeProvider,
-  createTheme,
-} from '@mui/material';
-import DarkModeIcon from '@mui/icons-material/DarkMode';
-import GitHubIcon from '@mui/icons-material/GitHub';
+  useColorMode,
+  useColorModeValue,
+} from '@chakra-ui/react';
+import { MoonIcon, SunIcon, HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import Image from 'next/image';
-import LightModeIcon from '@mui/icons-material/LightMode';
-import MenuIcon from '@mui/icons-material/Menu';
-import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import { useThemeContext } from '../../styles/ThemeContext';
 import docsearch from '@docsearch/js';
 import '@docsearch/css';
@@ -35,11 +28,13 @@ export const TopBar = ({ navOpen, setNavOpen }: Props) => {
   const isMounted = useRef(false);
   const { pathname } = useRouter();
   const plausible = usePlausible();
-  const theme = useTheme();
-  const isMobile = useMediaQuery('(max-width: 600px)');
-  const isTablet = useMediaQuery('(max-width: 900px)');
-  const isDesktop = useMediaQuery('(min-width: 1500px)');
-  const isXLDesktop = useMediaQuery('(min-width: 1800px)');
+  const [isMobile] = useMediaQuery('(max-width: 600px)');
+  const [isTablet] = useMediaQuery('(max-width: 900px)');
+  const [isDesktop] = useMediaQuery('(min-width: 1500px)');
+  const [isXLDesktop] = useMediaQuery('(min-width: 1800px)');
+  const { colorMode } = useColorMode();
+  const bgColor = useColorModeValue('teal.500', 'teal.700');
+  const textColor = useColorModeValue('white', 'gray.100');
 
   const { isLightTheme, setIsLightTheme } = useThemeContext();
 
@@ -48,7 +43,7 @@ export const TopBar = ({ navOpen, setNavOpen }: Props) => {
       docsearch({
         appId: '1W9SWN5ZAH',
         apiKey: '680b219eaef484622046bf76cef8544a',
-        indexName: 'material-react-table',
+        indexName: 'chakra-react-table',
         container: '#docsearch',
       });
     }
@@ -64,23 +59,16 @@ export const TopBar = ({ navOpen, setNavOpen }: Props) => {
       }
     }
     isMounted.current = true;
-  }, [
-    isXLDesktop,
-    isTablet,
-    isDesktop,
-    isMobile,
-    pathname,
-    theme.palette.mode,
-  ]);
+  }, [isXLDesktop, isTablet, isDesktop, isMobile, pathname, colorMode]);
 
   return (
     <>
       <style global jsx>
         {`
           :root {
-            --docsearch-primary-color: #1565c0;
-            --docsearch-highlight-color: #1565c0;
-            --docsearch-logo-color: #1565c0;
+            --docsearch-primary-color: #319795;
+            --docsearch-highlight-color: #319795;
+            --docsearch-logo-color: #319795;
             ${!isLightTheme
               ? `--docsearch-container-background: rgba(11, 11, 11, 0.8);
          --docsearch-footer-background: #222;
@@ -97,169 +85,148 @@ export const TopBar = ({ navOpen, setNavOpen }: Props) => {
           }
         `}
       </style>
-      <AppBar sx={{ opacity: 0.95, zIndex: 5 }} position="fixed">
-        <Toolbar
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            p: '2px 8px',
-          }}
-          disableGutters
-          variant="dense"
-        >
-          <Box sx={{ display: 'flex' }}>
+      <Box
+        as="header"
+        position="fixed"
+        width="100%"
+        zIndex={5}
+        bg={bgColor}
+        opacity={0.95}
+      >
+        <Flex justify="space-between" align="center" p="2px 8px" height="48px">
+          <Flex align="center">
             {!isDesktop && (
               <IconButton
-                sx={{
-                  color: '#fff',
-                  height: '3rem',
-                  width: '3rem',
-                }}
+                color={textColor}
+                height="3rem"
+                width="3rem"
                 aria-label="Open nav menu"
+                icon={navOpen ? <CloseIcon /> : <HamburgerIcon />}
                 onClick={() => setNavOpen(!navOpen)}
-              >
-                {navOpen ? (
-                  <MenuOpenIcon color="inherit" />
-                ) : (
-                  <MenuIcon color="inherit" />
-                )}
-              </IconButton>
+                variant="ghost"
+              />
             )}
-            <Link href="/" passHref legacyBehavior>
-              <Typography
-                sx={{
-                  alignItems: 'center',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  fontSize: isTablet ? '1.6rem' : '1.5rem',
-                  gap: '1rem',
-                }}
-                variant="h1"
+            <NextLink href="/" passHref legacyBehavior>
+              <Text
+                as="a"
+                display="flex"
+                alignItems="center"
+                cursor="pointer"
+                fontSize={isTablet ? '1.6rem' : '1.5rem'}
+                gap="1rem"
+                fontWeight="bold"
+                color={textColor}
               >
                 <Image
-                  alt="MRT logo"
+                  alt="CRT logo"
                   src="/mrt_logo.svg"
                   height={isTablet ? 35 : 40}
                   width={isTablet ? 35 : 40}
                 />
-                {!isMobile && 'Material React Table'}
-              </Typography>
-            </Link>
-            <ThemeProvider
-              theme={createTheme({ ...theme, palette: { mode: 'dark' } })}
+                {!isMobile && 'Chakra React Table'}
+              </Text>
+            </NextLink>
+            <Select
+              onFocus={() => plausible('version-select')}
+              value="v3"
+              size="sm"
+              ml="8px"
+              height="30px"
+              width="80px"
+              bg="teal.600"
+              color={textColor}
+              borderColor="teal.400"
             >
-              <Select
-                onOpen={() => plausible('version-select')}
-                MenuProps={{ disableScrollLock: true }}
-                value="v3"
-                size="small"
-                sx={{ m: '8px', height: '30px' }}
-              >
-                <Link
-                  legacyBehavior
-                  href={`https://v1.material-react-table.com/${pathname}`}
+              <option value="v1">
+                <NextLink
+                  href={`https://v1.chakra-react-table.com/${pathname}`}
+                  passHref
                 >
-                  <MenuItem sx={{ m: 0 }} value="v1">
-                    V1
-                  </MenuItem>
-                </Link>
-                <Link
-                  legacyBehavior
-                  href={`https://v2.material-react-table.com/${pathname}`}
+                  V1
+                </NextLink>
+              </option>
+              <option value="v2">
+                <NextLink
+                  href={`https://v2.chakra-react-table.com/${pathname}`}
+                  passHref
                 >
-                  <MenuItem sx={{ m: 0 }} value="v2">
-                    V2
-                  </MenuItem>
-                </Link>
-                <MenuItem sx={{ m: 0 }} value="v3">
-                  V3
-                </MenuItem>
-              </Select>
-            </ThemeProvider>
-          </Box>
+                  V2
+                </NextLink>
+              </option>
+              <option value="v3">V3</option>
+            </Select>
+          </Flex>
           <Box
             onClick={() => plausible('open-search')}
             id="docsearch"
-            sx={{
-              display: 'grid',
-              width: isDesktop ? '400px' : !isTablet ? '250px' : undefined,
-            }}
+            display="grid"
+            width={isDesktop ? '400px' : !isTablet ? '250px' : undefined}
           />
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.25rem',
-            }}
-          >
-            <Tooltip arrow title="Github">
-              <a
-                href="https://github.com/KevinVandy/material-react-table"
+          <Flex align="center" gap="0.25rem">
+            <Tooltip label="Github">
+              <IconButton
+                as="a"
+                href="https://github.com/KevinVandy/chakra-react-table"
                 rel="noopener"
                 target="_blank"
-              >
-                <IconButton
-                  sx={{
-                    color: '#fff',
-                    height: '3rem',
-                    width: '3rem',
-                  }}
-                  aria-label="Github"
-                  size="small"
-                >
-                  <GitHubIcon />
-                </IconButton>
-              </a>
+                color={textColor}
+                height="3rem"
+                width="3rem"
+                aria-label="Github"
+                size="sm"
+                variant="ghost"
+                icon={
+                  <Image
+                    alt="GitHub"
+                    height={20}
+                    width={20}
+                    src="/github-mark-white.svg"
+                  />
+                }
+              />
             </Tooltip>
-            <Tooltip arrow title="Discord">
-              <a
+            <Tooltip label="Discord">
+              <IconButton
+                as="a"
                 href="https://discord.gg/5wqyRx6fnm"
                 rel="noopener"
                 target="_blank"
-              >
-                <IconButton
-                  sx={{
-                    color: '#fff',
-                    height: '3rem',
-                    width: '3rem',
-                  }}
-                  aria-label="Discord"
-                  size="small"
-                >
-                  <img
+                color={textColor}
+                height="3rem"
+                width="3rem"
+                aria-label="Discord"
+                size="sm"
+                variant="ghost"
+                icon={
+                  <Image
                     alt="Discord"
                     height={20}
+                    width={20}
                     style={{
                       padding: '-3px',
                       borderRadius: '50%',
                     }}
                     src="/Discord-Logo-White.svg"
                   />
-                </IconButton>
-              </a>
+                }
+              />
             </Tooltip>
-            <Tooltip arrow title="Toggle Light/Dark Mode">
+            <Tooltip label="Toggle Light/Dark Mode">
               <IconButton
-                sx={{
-                  color: '#fff',
-                  height: '3rem',
-                  width: '3rem',
-                }}
+                color={textColor}
+                height="3rem"
+                width="3rem"
                 aria-label="Toggle Light/Dark Mode"
+                icon={isLightTheme ? <MoonIcon /> : <SunIcon />}
                 onClick={() => {
                   setIsLightTheme(!isLightTheme);
-                  plausible(
-                    `toggle-theme-${isLightTheme ? 'dark' : 'light'}-mode`,
-                  );
                 }}
-                size="small"
-              >
-                {isLightTheme ? <LightModeIcon /> : <DarkModeIcon />}
-              </IconButton>
+                variant="ghost"
+              />
             </Tooltip>
-          </Box>
-        </Toolbar>
-      </AppBar>
+          </Flex>
+        </Flex>
+      </Box>
     </>
   );
 };
