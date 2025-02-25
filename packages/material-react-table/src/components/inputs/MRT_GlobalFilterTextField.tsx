@@ -6,19 +6,28 @@ import {
   useRef,
   useState,
 } from 'react';
-import Collapse from '@mui/material/Collapse';
-import IconButton from '@mui/material/IconButton';
-import InputAdornment from '@mui/material/InputAdornment';
-import TextField, { type TextFieldProps } from '@mui/material/TextField';
-import Tooltip from '@mui/material/Tooltip';
-import { debounce } from '@mui/material/utils';
+import {
+  Box,
+  Collapse,
+  IconButton,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  InputRightElement,
+  Tooltip,
+  type InputProps,
+} from '@chakra-ui/react';
+import { debounce } from '../../utils/common.utils';
 import { type MRT_RowData, type MRT_TableInstance } from '../../types';
 import { parseFromValuesOrFunc } from '../../utils/utils';
 import { MRT_FilterOptionMenu } from '../menus/MRT_FilterOptionMenu';
 
 export interface MRT_GlobalFilterTextFieldProps<TData extends MRT_RowData>
-  extends TextFieldProps<'standard'> {
+  extends Omit<InputProps, 'size'> {
   table: MRT_TableInstance<TData>;
+  ref?:
+    | React.RefObject<HTMLInputElement>
+    | ((node: HTMLInputElement | null) => void);
 }
 
 export const MRT_GlobalFilterTextField = <TData extends MRT_RowData>({
@@ -57,7 +66,7 @@ export const MRT_GlobalFilterTextField = <TData extends MRT_RowData>({
       },
       manualFiltering ? 500 : 250,
     ),
-    [],
+    [manualFiltering, setGlobalFilter],
   );
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -88,76 +97,74 @@ export const MRT_GlobalFilterTextField = <TData extends MRT_RowData>({
   return (
     <Collapse
       in={showGlobalFilter}
-      mountOnEnter
-      orientation="horizontal"
-      unmountOnExit
+      animateOpacity
+      style={{ display: showGlobalFilter ? 'block' : 'none' }}
     >
-      <TextField
-        inputProps={{
-          autoComplete: 'off',
-          ...textFieldProps.inputProps,
-        }}
-        onChange={handleChange}
-        placeholder={localization.search}
-        size="small"
-        value={searchValue ?? ''}
-        variant="outlined"
-        {...textFieldProps}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <Tooltip title={localization.clearSearch ?? ''}>
-                <span>
-                  <IconButton
-                    aria-label={localization.clearSearch}
-                    disabled={!searchValue?.length}
-                    onClick={handleClear}
-                    size="small"
-                  >
-                    <CloseIcon />
-                  </IconButton>
-                </span>
-              </Tooltip>
-            </InputAdornment>
-          ),
-          startAdornment: enableGlobalFilterModes ? (
-            <InputAdornment position="start">
-              <Tooltip title={localization.changeSearchMode}>
+      <Box position="relative">
+        <InputGroup size="md">
+          {enableGlobalFilterModes ? (
+            <InputLeftElement>
+              <Tooltip
+                label={localization.changeSearchMode}
+                placement="top"
+                hasArrow
+              >
                 <IconButton
                   aria-label={localization.changeSearchMode}
+                  icon={<SearchIcon />}
                   onClick={handleGlobalFilterMenuOpen}
-                  size="small"
-                  sx={{ height: '1.75rem', width: '1.75rem' }}
-                >
-                  <SearchIcon />
-                </IconButton>
+                  size="sm"
+                  variant="ghost"
+                />
               </Tooltip>
-            </InputAdornment>
+            </InputLeftElement>
           ) : (
-            <SearchIcon style={{ marginRight: '4px' }} />
-          ),
-          ...textFieldProps.InputProps,
-          sx: (theme) => ({
-            mb: 0,
-            ...(parseFromValuesOrFunc(
-              textFieldProps?.InputProps?.sx,
-              theme,
-            ) as any),
-          }),
-        }}
-        inputRef={(inputRef) => {
-          searchInputRef.current = inputRef;
-          if (textFieldProps?.inputRef) {
-            textFieldProps.inputRef = inputRef;
-          }
-        }}
-      />
-      <MRT_FilterOptionMenu
-        anchorEl={anchorEl}
-        onSelect={handleClear}
-        setAnchorEl={setAnchorEl}
-        table={table}
-      />
+            <InputLeftElement>
+              <SearchIcon />
+            </InputLeftElement>
+          )}
+          <Input
+            autoComplete="off"
+            onChange={handleChange}
+            placeholder={localization.search}
+            value={searchValue ?? ''}
+            {...textFieldProps}
+            ref={(inputRef) => {
+              if (inputRef) {
+                // @ts-ignore
+                searchInputRef.current = inputRef;
+                if (textFieldProps?.ref) {
+                  (textFieldProps.ref as any)(inputRef);
+                }
+              }
+            }}
+          />
+          {searchValue?.length > 0 && (
+            <InputRightElement>
+              <Tooltip
+                label={localization.clearSearch}
+                placement="top"
+                hasArrow
+              >
+                <IconButton
+                  aria-label={localization.clearSearch}
+                  icon={<CloseIcon />}
+                  onClick={handleClear}
+                  size="sm"
+                  variant="ghost"
+                  isDisabled={!searchValue?.length}
+                />
+              </Tooltip>
+            </InputRightElement>
+          )}
+        </InputGroup>
+        <MRT_FilterOptionMenu
+          anchorEl={anchorEl}
+          onSelect={handleClear}
+          setAnchorEl={setAnchorEl}
+          table={table}
+        />
+      </Box>
     </Collapse>
   );
 };

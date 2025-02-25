@@ -1,7 +1,13 @@
 import { memo, useMemo } from 'react';
 import { type VirtualItem } from '@tanstack/react-virtual';
-import TableBody, { type TableBodyProps } from '@mui/material/TableBody';
-import Typography from '@mui/material/Typography';
+import {
+  Tbody,
+  type TableBodyProps,
+  Text,
+  useTheme,
+  type Theme,
+  type SystemStyleObject,
+} from '@chakra-ui/react';
 import { MRT_TableBodyRow, Memo_MRT_TableBodyRow } from './MRT_TableBodyRow';
 import { useMRT_RowVirtualizer } from '../../hooks/useMRT_RowVirtualizer';
 import { useMRT_Rows } from '../../hooks/useMRT_Rows';
@@ -24,6 +30,8 @@ export const MRT_TableBody = <TData extends MRT_RowData>({
   table,
   ...rest
 }: MRT_TableBodyProps<TData>) => {
+  const theme = useTheme<Theme>();
+
   const {
     getBottomRows,
     getIsSomeRowsPinned,
@@ -76,20 +84,53 @@ export const MRT_TableBody = <TData extends MRT_RowData>({
     table,
   };
 
+  // Generate base styles without the parseFromValuesOrFunc result
+  const topBodySx: SystemStyleObject = {
+    display: layoutMode?.startsWith('grid') ? 'grid' : undefined,
+    position: 'sticky',
+    top: tableHeadHeight - 1,
+    zIndex: 1,
+  };
+
+  // Add any custom styles from props if they exist
+  const parsedTopSx = parseFromValuesOrFunc(tableBodyProps?.sx, theme);
+  if (parsedTopSx) {
+    Object.assign(topBodySx, parsedTopSx);
+  }
+
+  // Generate base styles for main body
+  const mainBodySx: SystemStyleObject = {
+    display: layoutMode?.startsWith('grid') ? 'grid' : undefined,
+    height: rowVirtualizer ? `${rowVirtualizer.getTotalSize()}px` : undefined,
+    minHeight: !rows.length ? '100px' : undefined,
+    position: 'relative',
+  };
+
+  // Add any custom styles from props if they exist
+  const parsedMainSx = parseFromValuesOrFunc(tableBodyProps?.sx, theme);
+  if (parsedMainSx) {
+    Object.assign(mainBodySx, parsedMainSx);
+  }
+
+  // Generate base styles for bottom body
+  const bottomBodySx: SystemStyleObject = {
+    bottom: tableFooterHeight - 1,
+    display: layoutMode?.startsWith('grid') ? 'grid' : undefined,
+    position: 'sticky',
+    zIndex: 1,
+  };
+
+  // Add any custom styles from props if they exist
+  const parsedBottomSx = parseFromValuesOrFunc(tableBodyProps?.sx, theme);
+  if (parsedBottomSx) {
+    Object.assign(bottomBodySx, parsedBottomSx);
+  }
+
   return (
     <>
       {!rowPinningDisplayMode?.includes('sticky') &&
         getIsSomeRowsPinned('top') && (
-          <TableBody
-            {...tableBodyProps}
-            sx={(theme) => ({
-              display: layoutMode?.startsWith('grid') ? 'grid' : undefined,
-              position: 'sticky',
-              top: tableHeadHeight - 1,
-              zIndex: 1,
-              ...(parseFromValuesOrFunc(tableBodyProps?.sx, theme) as any),
-            })}
-          >
+          <Tbody {...tableBodyProps} sx={topBodySx}>
             {getTopRows().map((row, staticRowIndex) => {
               const props = {
                 ...commonRowProps,
@@ -102,20 +143,9 @@ export const MRT_TableBody = <TData extends MRT_RowData>({
                 <MRT_TableBodyRow key={row.id} {...props} />
               );
             })}
-          </TableBody>
+          </Tbody>
         )}
-      <TableBody
-        {...tableBodyProps}
-        sx={(theme) => ({
-          display: layoutMode?.startsWith('grid') ? 'grid' : undefined,
-          height: rowVirtualizer
-            ? `${rowVirtualizer.getTotalSize()}px`
-            : undefined,
-          minHeight: !rows.length ? '100px' : undefined,
-          position: 'relative',
-          ...(parseFromValuesOrFunc(tableBodyProps?.sx, theme) as any),
-        })}
-      >
+      <Tbody {...tableBodyProps} sx={mainBodySx}>
         {tableBodyProps?.children ??
           (!rows.length ? (
             <tr
@@ -130,9 +160,9 @@ export const MRT_TableBody = <TData extends MRT_RowData>({
                 }}
               >
                 {renderEmptyRowsFallback?.({ table }) ?? (
-                  <Typography
+                  <Text
                     sx={{
-                      color: 'text.secondary',
+                      color: 'gray.500',
                       fontStyle: 'italic',
                       maxWidth: `min(100vw, ${
                         tablePaperRef.current?.clientWidth ?? 360
@@ -145,7 +175,7 @@ export const MRT_TableBody = <TData extends MRT_RowData>({
                     {globalFilter || columnFilters.length
                       ? localization.noResultsFound
                       : localization.noRecordsToDisplay}
-                  </Typography>
+                  </Text>
                 )}
               </td>
             </tr>
@@ -184,19 +214,10 @@ export const MRT_TableBody = <TData extends MRT_RowData>({
               })}
             </>
           ))}
-      </TableBody>
+      </Tbody>
       {!rowPinningDisplayMode?.includes('sticky') &&
         getIsSomeRowsPinned('bottom') && (
-          <TableBody
-            {...tableBodyProps}
-            sx={(theme) => ({
-              bottom: tableFooterHeight - 1,
-              display: layoutMode?.startsWith('grid') ? 'grid' : undefined,
-              position: 'sticky',
-              zIndex: 1,
-              ...(parseFromValuesOrFunc(tableBodyProps?.sx, theme) as any),
-            })}
-          >
+          <Tbody {...tableBodyProps} sx={bottomBodySx}>
             {getBottomRows().map((row, staticRowIndex) => {
               const props = {
                 ...commonRowProps,
@@ -209,7 +230,7 @@ export const MRT_TableBody = <TData extends MRT_RowData>({
                 <MRT_TableBodyRow key={row.id} {...props} />
               );
             })}
-          </TableBody>
+          </Tbody>
         )}
     </>
   );

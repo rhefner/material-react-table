@@ -23,6 +23,7 @@ export * from './hooks/useMRT_TableOptions';
 
 //components
 export * from './components/MaterialReactTable';
+export * from './components/custom';
 //body components
 export * from './components/body/MRT_TableBody';
 export * from './components/body/MRT_TableBodyCell';
@@ -51,7 +52,6 @@ export * from './components/footer/MRT_TableFooterCell';
 export * from './components/footer/MRT_TableFooterRow';
 //head components
 export * from './components/head/MRT_TableHead';
-export * from './components/head/MRT_TableHeadCell';
 export * from './components/head/MRT_TableHeadCellColumnActionsButton';
 export * from './components/head/MRT_TableHeadCellFilterContainer';
 export * from './components/head/MRT_TableHeadCellFilterLabel';
@@ -89,3 +89,6 @@ export * from './components/toolbar/MRT_ToolbarAlertBanner';
 export * from './components/toolbar/MRT_ToolbarDropZone';
 export * from './components/toolbar/MRT_ToolbarInternalButtons';
 export * from './components/toolbar/MRT_TopToolbar';
+
+// Icons
+export { MRT_Default_Icons } from './icons';

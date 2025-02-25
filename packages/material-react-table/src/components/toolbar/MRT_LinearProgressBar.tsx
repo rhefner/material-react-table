@@ -1,12 +1,9 @@
-import Collapse from '@mui/material/Collapse';
-import LinearProgress, {
-  type LinearProgressProps,
-} from '@mui/material/LinearProgress';
+import { Collapse, Progress, type ProgressProps } from '@chakra-ui/react';
 import { type MRT_RowData, type MRT_TableInstance } from '../../types';
 import { parseFromValuesOrFunc } from '../../utils/utils';
 
 export interface MRT_LinearProgressBarProps<TData extends MRT_RowData>
-  extends LinearProgressProps {
+  extends ProgressProps {
   isTopToolbar: boolean;
   table: MRT_TableInstance<TData>;
 }
@@ -33,19 +30,20 @@ export const MRT_LinearProgressBar = <TData extends MRT_RowData>({
   return (
     <Collapse
       in={showProgressBars !== false && (showProgressBars || isSaving)}
-      mountOnEnter
-      sx={{
+      unmountOnExit
+      style={{
         bottom: isTopToolbar ? 0 : undefined,
         position: 'absolute',
         top: !isTopToolbar ? 0 : undefined,
         width: '100%',
       }}
-      unmountOnExit
     >
-      <LinearProgress
+      <Progress
         aria-busy="true"
         aria-label="Loading"
-        sx={{ position: 'relative' }}
+        isIndeterminate
+        size="xs"
+        style={{ position: 'relative' }}
         {...linearProgressProps}
       />
     </Collapse>

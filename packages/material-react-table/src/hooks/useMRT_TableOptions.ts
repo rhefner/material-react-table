@@ -10,7 +10,6 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
 } from '@tanstack/react-table';
-import { useTheme } from '@mui/material/styles';
 import { MRT_AggregationFns } from '../fns/aggregationFns';
 import { MRT_FilterFns } from '../fns/filterFns';
 import { MRT_SortingFns } from '../fns/sortingFns';
@@ -22,6 +21,7 @@ import {
   type MRT_TableOptions,
 } from '../types';
 import { getMRTTheme } from '../utils/style.utils';
+import { useTheme, type Theme } from '../hooks/custom/useTheme';
 
 export const MRT_DefaultColumn = {
   filterVariant: 'text',
@@ -114,7 +114,7 @@ export const useMRT_TableOptions: <TData extends MRT_RowData>(
   sortingFns,
   ...rest
 }: MRT_TableOptions<TData>) => {
-  const theme = useTheme();
+  const theme = useTheme<Theme>();
 
   icons = useMemo(() => ({ ...MRT_Default_Icons, ...icons }), [icons]);
   localization = useMemo(

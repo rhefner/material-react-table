@@ -1,8 +1,5 @@
 import { useMemo, useState } from 'react';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
-import Menu, { type MenuProps } from '@mui/material/Menu';
+import { Box, Button, Divider, Menu, type MenuProps } from '@chakra-ui/react';
 import { MRT_ShowHideColumnsMenuItems } from './MRT_ShowHideColumnsMenuItems';
 import {
   type MRT_Column,
@@ -94,32 +91,30 @@ export const MRT_ShowHideColumnsMenu = <TData extends MRT_RowData>({
     null,
   );
 
+  if (!anchorEl) return null;
+
   return (
-    <Menu
-      MenuListProps={{
-        dense: density === 'compact',
-        sx: {
-          backgroundColor: menuBackgroundColor,
-        },
-      }}
-      anchorEl={anchorEl}
-      disableScrollLock
-      onClose={() => setAnchorEl(null)}
-      open={!!anchorEl}
+    <Box
+      position="absolute"
+      zIndex={1000}
+      top={anchorEl.getBoundingClientRect().bottom}
+      left={anchorEl.getBoundingClientRect().left}
+      bg={menuBackgroundColor}
+      borderRadius="md"
+      boxShadow="md"
+      maxHeight="calc(var(--chakra-vh, 1vh) * 70)"
+      maxWidth="340px"
+      minWidth="200px"
+      overflowY="auto"
       {...rest}
     >
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          p: '0.5rem',
-          pt: 0,
-        }}
-      >
+      <Box display="flex" justifyContent="space-between" p="0.5rem" pt={0}>
         {enableHiding && (
           <Button
-            disabled={!getIsSomeColumnsVisible()}
+            isDisabled={!getIsSomeColumnsVisible()}
             onClick={() => handleToggleAllColumns(false)}
+            size="sm"
+            variant="ghost"
           >
             {localization.hideAll}
           </Button>
@@ -131,40 +126,48 @@ export const MRT_ShowHideColumnsMenu = <TData extends MRT_RowData>({
                 getDefaultColumnOrderIds(table.options, true),
               )
             }
-            disabled={!hasColumnOrderChanged}
+            isDisabled={!hasColumnOrderChanged}
+            size="sm"
+            variant="ghost"
           >
             {localization.resetOrder}
           </Button>
         )}
         {enableColumnPinning && (
           <Button
-            disabled={!getIsSomeColumnsPinned()}
+            isDisabled={!getIsSomeColumnsPinned()}
             onClick={() => table.resetColumnPinning(true)}
+            size="sm"
+            variant="ghost"
           >
             {localization.unpinAll}
           </Button>
         )}
         {enableHiding && (
           <Button
-            disabled={getIsAllColumnsVisible()}
+            isDisabled={getIsAllColumnsVisible()}
             onClick={() => handleToggleAllColumns(true)}
+            size="sm"
+            variant="ghost"
           >
             {localization.showAll}
           </Button>
         )}
       </Box>
       <Divider />
-      {allColumns.map((column, index) => (
-        <MRT_ShowHideColumnsMenuItems
-          allColumns={allColumns}
-          column={column}
-          hoveredColumn={hoveredColumn}
-          isNestedColumns={isNestedColumns}
-          key={`${index}-${column.id}`}
-          setHoveredColumn={setHoveredColumn}
-          table={table}
-        />
-      ))}
-    </Menu>
+      <Menu>
+        {allColumns.map((column, index) => (
+          <MRT_ShowHideColumnsMenuItems
+            allColumns={allColumns}
+            column={column}
+            hoveredColumn={hoveredColumn}
+            isNestedColumns={isNestedColumns}
+            key={`${index}-${column.id}`}
+            setHoveredColumn={setHoveredColumn}
+            table={table}
+          />
+        ))}
+      </Menu>
+    </Box>
   );
 };

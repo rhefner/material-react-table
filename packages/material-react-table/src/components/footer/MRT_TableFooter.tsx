@@ -1,4 +1,10 @@
-import TableFooter, { type TableFooterProps } from '@mui/material/TableFooter';
+import {
+  Tfoot,
+  useTheme,
+  useColorMode,
+  type TableFooterProps as ChakraTableFooterProps,
+  type Theme,
+} from '@chakra-ui/react';
 import { MRT_TableFooterRow } from './MRT_TableFooterRow';
 import {
   type MRT_ColumnVirtualizer,
@@ -8,7 +14,7 @@ import {
 import { parseFromValuesOrFunc } from '../../utils/utils';
 
 export interface MRT_TableFooterProps<TData extends MRT_RowData>
-  extends TableFooterProps {
+  extends ChakraTableFooterProps {
   columnVirtualizer?: MRT_ColumnVirtualizer;
   table: MRT_TableInstance<TData>;
 }
@@ -18,6 +24,8 @@ export const MRT_TableFooter = <TData extends MRT_RowData>({
   table,
   ...rest
 }: MRT_TableFooterProps<TData>) => {
+  const theme = useTheme<Theme>();
+  const { colorMode } = useColorMode();
   const {
     getState,
     options: { enableStickyFooter, layoutMode, muiTableFooterProps },
@@ -51,29 +59,42 @@ export const MRT_TableFooter = <TData extends MRT_RowData>({
     return null;
   }
 
+  // Filter out properties that might cause issues with Chakra UI components
+  const safeFooterProps = { ...tableFooterProps };
+  delete (safeFooterProps as any).sx;
+  // Don't remove ref props, handle them properly instead
+
   return (
-    <TableFooter
-      {...tableFooterProps}
-      ref={(ref: HTMLTableSectionElement) => {
-        tableFooterRef.current = ref;
-        if (tableFooterProps?.ref) {
-          // @ts-expect-error
-          tableFooterProps.ref.current = ref;
+    <Tfoot
+      {...safeFooterProps}
+      ref={(node) => {
+        if (node) {
+          // @ts-ignore
+          tableFooterRef.current = node;
+          // Handle ref properly if it exists
+          const footerPropsWithRef = tableFooterProps as any;
+          if (footerPropsWithRef.ref) {
+            if (typeof footerPropsWithRef.ref === 'function') {
+              footerPropsWithRef.ref(node);
+            } else if (footerPropsWithRef.ref.hasOwnProperty('current')) {
+              footerPropsWithRef.ref.current = node;
+            }
+          }
         }
       }}
-      sx={(theme) => ({
+      sx={{
         bottom: stickFooter ? 0 : undefined,
         display: layoutMode?.startsWith('grid') ? 'grid' : undefined,
         opacity: stickFooter ? 0.97 : undefined,
         outline: stickFooter
-          ? theme.palette.mode === 'light'
-            ? `1px solid ${theme.palette.grey[300]}`
-            : `1px solid ${theme.palette.grey[700]}`
+          ? colorMode === 'light'
+            ? '1px solid var(--chakra-colors-gray-300)'
+            : '1px solid var(--chakra-colors-gray-700)'
           : undefined,
         position: stickFooter ? 'sticky' : 'relative',
         zIndex: stickFooter ? 1 : undefined,
         ...(parseFromValuesOrFunc(tableFooterProps?.sx, theme) as any),
-      })}
+      }}
     >
       {footerGroups.map((footerGroup) => (
         <MRT_TableFooterRow
@@ -83,6 +104,6 @@ export const MRT_TableFooter = <TData extends MRT_RowData>({
           table={table}
         />
       ))}
-    </TableFooter>
+    </Tfoot>
   );
 };

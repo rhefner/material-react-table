@@ -1,40 +1,49 @@
-import Box from '@mui/material/Box';
-import IconButton from '@mui/material/IconButton';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import Pagination, { type PaginationProps } from '@mui/material/Pagination';
-import PaginationItem from '@mui/material/PaginationItem';
-import Select, { type SelectProps } from '@mui/material/Select';
-import Tooltip from '@mui/material/Tooltip';
-import Typography from '@mui/material/Typography';
-import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import {
+  Box,
+  Button,
+  Flex,
+  FormLabel,
+  HStack,
+  IconButton,
+  Select,
+  Text,
+  Tooltip,
+  useBreakpointValue,
+  useTheme,
+  type BoxProps,
+  type FlexProps,
+  type SelectProps,
+  type Theme,
+  type ThemeTypings,
+} from '@chakra-ui/react';
 import { type MRT_RowData, type MRT_TableInstance } from '../../types';
-import { flipIconStyles, getCommonTooltipProps } from '../../utils/style.utils';
+import { getCommonTooltipProps } from '../../utils/style.utils';
 import { parseFromValuesOrFunc } from '../../utils/utils';
 
 const defaultRowsPerPage = [5, 10, 15, 20, 25, 30, 50, 100];
 
 export interface MRT_TablePaginationProps<TData extends MRT_RowData>
   extends Partial<
-    PaginationProps & {
+    BoxProps & {
       SelectProps?: Partial<SelectProps>;
       disabled?: boolean;
       rowsPerPageOptions?: { label: string; value: number }[] | number[];
       showRowsPerPage?: boolean;
+      showFirstButton?: boolean;
+      showLastButton?: boolean;
     }
   > {
-  position?: 'bottom' | 'top';
+  paginationPosition?: 'bottom' | 'top';
   table: MRT_TableInstance<TData>;
 }
 
 export const MRT_TablePagination = <TData extends MRT_RowData>({
-  position = 'bottom',
+  paginationPosition = 'bottom',
   table,
   ...rest
 }: MRT_TablePaginationProps<TData>) => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery('(max-width: 720px)');
+  const chakraTheme = useTheme<Theme>();
+  const isMobile = useBreakpointValue({ base: true, md: false });
 
   const {
     getState,
@@ -77,52 +86,47 @@ export const MRT_TablePagination = <TData extends MRT_RowData>({
   const disableBack = pageIndex <= 0 || disabled;
   const disableNext = lastRowIndex >= totalRowCount || disabled;
 
-  if (isMobile && SelectProps?.native !== false) {
-    SelectProps.native = true;
-  }
+  const size: ThemeTypings['components']['Button']['sizes'] = isMobile
+    ? 'sm'
+    : 'md';
 
   const tooltipProps = getCommonTooltipProps();
 
   return (
     <Box
       className="MuiTablePagination-root"
-      sx={{
-        alignItems: 'center',
-        display: 'flex',
-        flexWrap: 'wrap',
-        gap: '8px',
-        justifyContent: { md: 'space-between', sm: 'center' },
-        justifySelf: 'flex-end',
-        mt:
-          position === 'top' && enableToolbarInternalActions
-            ? '3rem'
-            : undefined,
-        position: 'relative',
-        px: '8px',
-        py: '12px',
-        zIndex: 2,
-      }}
+      display="flex"
+      alignItems="center"
+      flexWrap="wrap"
+      gap="8px"
+      justifyContent={{ base: 'center', md: 'space-between' }}
+      justifySelf="flex-end"
+      mt={
+        paginationPosition === 'top' && enableToolbarInternalActions
+          ? '3rem'
+          : undefined
+      }
+      position="relative"
+      px="8px"
+      py="12px"
+      zIndex={2}
+      {...restPaginationProps}
     >
       {showRowsPerPage && (
-        <Box sx={{ alignItems: 'center', display: 'flex', gap: '8px' }}>
-          <InputLabel htmlFor={`mrt-rows-per-page-${id}`} sx={{ mb: 0 }}>
+        <Flex alignItems="center" gap="8px">
+          <FormLabel htmlFor={`mrt-rows-per-page-${id}`} mb={0}>
             {localization.rowsPerPage}
-          </InputLabel>
+          </FormLabel>
           <Select
-            MenuProps={{ disableScrollLock: true }}
-            disableUnderline
-            disabled={disabled}
-            inputProps={{
-              'aria-label': localization.rowsPerPage,
-              id: `mrt-rows-per-page-${id}`,
-            }}
-            label={localization.rowsPerPage}
+            id={`mrt-rows-per-page-${id}`}
+            aria-label={localization.rowsPerPage}
+            isDisabled={disabled}
             onChange={(event) =>
               table.setPageSize(+(event.target.value as any))
             }
-            sx={{ mb: 0 }}
-            value={pageSize}
-            variant="standard"
+            value={pageSize.toString()}
+            size={size}
+            variant="outline"
             {...SelectProps}
           >
             {rowsPerPageOptions.map((option) => {
@@ -130,110 +134,114 @@ export const MRT_TablePagination = <TData extends MRT_RowData>({
               const label =
                 typeof option !== 'number' ? option.label : `${option}`;
               return (
-                SelectProps?.children ??
-                (SelectProps?.native ? (
-                  <option key={value} value={value}>
-                    {label}
-                  </option>
-                ) : (
-                  <MenuItem key={value} sx={{ m: 0 }} value={value}>
-                    {label}
-                  </MenuItem>
-                ))
+                <option key={value} value={value}>
+                  {label}
+                </option>
               );
             })}
           </Select>
-        </Box>
+        </Flex>
       )}
       {paginationDisplayMode === 'pages' ? (
-        <Pagination
-          count={numberOfPages}
-          disabled={disabled}
-          onChange={(_e, newPageIndex) => table.setPageIndex(newPageIndex - 1)}
-          page={pageIndex + 1}
-          renderItem={(item) => (
-            <PaginationItem
-              slots={{
-                first: FirstPageIcon,
-                last: LastPageIcon,
-                next: ChevronRightIcon,
-                previous: ChevronLeftIcon,
-              }}
-              {...item}
-            />
-          )}
-          showFirstButton={showFirstButton}
-          showLastButton={showLastButton}
-          {...restPaginationProps}
-        />
+        <Flex justifyContent="center">
+          <HStack spacing={1}>
+            {showFirstButton && (
+              <IconButton
+                aria-label={localization.goToFirstPage}
+                icon={<FirstPageIcon />}
+                isDisabled={disableBack || disabled}
+                onClick={() => table.firstPage()}
+                size={size}
+                variant="ghost"
+              />
+            )}
+            {Array.from({ length: numberOfPages }).map((_, index) => (
+              <Button
+                key={index}
+                aria-label={`Go to page ${index + 1}`}
+                isDisabled={disabled}
+                onClick={() => table.setPageIndex(index)}
+                size={size}
+                variant={pageIndex === index ? 'solid' : 'ghost'}
+              >
+                {index + 1}
+              </Button>
+            ))}
+            {showLastButton && (
+              <IconButton
+                aria-label={localization.goToLastPage}
+                icon={<LastPageIcon />}
+                isDisabled={disableNext || disabled}
+                onClick={() => table.lastPage()}
+                size={size}
+                variant="ghost"
+              />
+            )}
+          </HStack>
+        </Flex>
       ) : paginationDisplayMode === 'default' ? (
         <>
-          <Typography
-            align="center"
-            component="span"
-            sx={{ m: '0 4px', minWidth: '8ch' }}
-            variant="body2"
-          >{`${
+          <Text textAlign="center" fontSize="sm" mx="4px" minWidth="8ch">{`${
             lastRowIndex === 0
               ? 0
               : (firstRowIndex + 1).toLocaleString(localization.language)
           }-${lastRowIndex.toLocaleString(localization.language)} ${
             localization.of
-          } ${totalRowCount.toLocaleString(localization.language)}`}</Typography>
-          <Box gap="xs">
+          } ${totalRowCount.toLocaleString(localization.language)}`}</Text>
+          <HStack spacing={1}>
             {showFirstButton && (
-              <Tooltip {...tooltipProps} title={localization.goToFirstPage}>
+              <Tooltip {...tooltipProps} label={localization.goToFirstPage}>
                 <span>
                   <IconButton
                     aria-label={localization.goToFirstPage}
-                    disabled={disableBack}
+                    icon={<FirstPageIcon />}
+                    isDisabled={disableBack}
                     onClick={() => table.firstPage()}
-                    size="small"
-                  >
-                    <FirstPageIcon {...flipIconStyles(theme)} />
-                  </IconButton>
+                    size={size}
+                    variant="ghost"
+                  />
                 </span>
               </Tooltip>
             )}
-            <Tooltip {...tooltipProps} title={localization.goToPreviousPage}>
+            <Tooltip {...tooltipProps} label={localization.goToPreviousPage}>
               <span>
                 <IconButton
                   aria-label={localization.goToPreviousPage}
-                  disabled={disableBack}
+                  icon={<ChevronLeftIcon />}
+                  isDisabled={disableBack}
                   onClick={() => table.previousPage()}
-                  size="small"
-                >
-                  <ChevronLeftIcon {...flipIconStyles(theme)} />
-                </IconButton>
+                  size={size}
+                  variant="ghost"
+                />
               </span>
             </Tooltip>
-            <Tooltip {...tooltipProps} title={localization.goToNextPage}>
+            <Tooltip {...tooltipProps} label={localization.goToNextPage}>
               <span>
                 <IconButton
                   aria-label={localization.goToNextPage}
-                  disabled={disableNext}
+                  icon={<ChevronRightIcon />}
+                  isDisabled={disableNext}
                   onClick={() => table.nextPage()}
-                  size="small"
-                >
-                  <ChevronRightIcon {...flipIconStyles(theme)} />
-                </IconButton>
+                  size={size}
+                  variant="ghost"
+                />
               </span>
             </Tooltip>
             {showLastButton && (
-              <Tooltip {...tooltipProps} title={localization.goToLastPage}>
+              <Tooltip {...tooltipProps} label={localization.goToLastPage}>
                 <span>
                   <IconButton
                     aria-label={localization.goToLastPage}
-                    disabled={disableNext}
+                    icon={<LastPageIcon />}
+                    isDisabled={disableNext}
                     onClick={() => table.lastPage()}
-                    size="small"
-                  >
-                    <LastPageIcon {...flipIconStyles(theme)} />
-                  </IconButton>
+                    size={size}
+                    variant="ghost"
+                  />
                 </span>
               </Tooltip>
             )}
-          </Box>
+          </HStack>
         </>
       ) : null}
     </Box>

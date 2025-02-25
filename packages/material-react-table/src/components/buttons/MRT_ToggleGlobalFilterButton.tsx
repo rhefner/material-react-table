@@ -1,10 +1,10 @@
-import IconButton, { type IconButtonProps } from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
+import { IconButton, Tooltip, Icon } from '@chakra-ui/react';
 import { type MRT_RowData, type MRT_TableInstance } from '../../types';
 
-export interface MRT_ToggleGlobalFilterButtonProps<TData extends MRT_RowData>
-  extends IconButtonProps {
+export interface MRT_ToggleGlobalFilterButtonProps<TData extends MRT_RowData> {
   table: MRT_TableInstance<TData>;
+  title?: string;
+  'aria-label'?: string;
 }
 
 export const MRT_ToggleGlobalFilterButton = <TData extends MRT_RowData>({
@@ -28,17 +28,24 @@ export const MRT_ToggleGlobalFilterButton = <TData extends MRT_RowData>({
     queueMicrotask(() => searchInputRef.current?.focus());
   };
 
+  const tooltipLabel = rest?.title ?? localization.showHideSearch;
+  const ariaLabel = rest?.['aria-label'] ?? tooltipLabel;
+
   return (
-    <Tooltip title={rest?.title ?? localization.showHideSearch}>
+    <Tooltip label={tooltipLabel}>
       <IconButton
-        aria-label={rest?.title ?? localization.showHideSearch}
-        disabled={!!globalFilter}
+        aria-label={ariaLabel}
+        isActive={showGlobalFilter}
         onClick={handleToggleSearch}
         {...rest}
-        title={undefined}
-      >
-        {showGlobalFilter ? <SearchOffIcon /> : <SearchIcon />}
-      </IconButton>
+        icon={
+          showGlobalFilter ? (
+            <Icon as={SearchIcon} />
+          ) : (
+            <Icon as={SearchOffIcon} />
+          )
+        }
+      />
     </Tooltip>
   );
 };

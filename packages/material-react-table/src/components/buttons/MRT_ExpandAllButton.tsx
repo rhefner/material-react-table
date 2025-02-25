@@ -1,5 +1,11 @@
-import IconButton, { type IconButtonProps } from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
+import {
+  Icon,
+  IconButton,
+  Tooltip,
+  useTheme,
+  type IconButtonProps,
+  type Theme,
+} from '@chakra-ui/react';
 import { type MRT_RowData, type MRT_TableInstance } from '../../types';
 import { getCommonTooltipProps } from '../../utils/style.utils';
 import { parseFromValuesOrFunc } from '../../utils/utils';
@@ -27,6 +33,7 @@ export const MRT_ExpandAllButton = <TData extends MRT_RowData>({
     toggleAllRowsExpanded,
   } = table;
   const { density, isLoading } = getState();
+  const theme = useTheme<Theme>();
 
   const iconButtonProps = {
     ...parseFromValuesOrFunc(muiExpandAllButtonProps, {
@@ -40,29 +47,35 @@ export const MRT_ExpandAllButton = <TData extends MRT_RowData>({
   return (
     <Tooltip
       {...getCommonTooltipProps()}
-      title={
+      label={
         iconButtonProps?.title ??
         (isAllRowsExpanded ? localization.collapseAll : localization.expandAll)
       }
     >
       <span>
         <IconButton
-          aria-label={localization.expandAll}
-          disabled={
+          {...iconButtonProps}
+          aria-label={
+            iconButtonProps['aria-label'] ??
+            (isAllRowsExpanded
+              ? localization.collapseAll
+              : localization.expandAll)
+          }
+          isDisabled={
             isLoading || (!renderDetailPanel && !getCanSomeRowsExpand())
           }
           onClick={() => toggleAllRowsExpanded(!isAllRowsExpanded)}
-          {...iconButtonProps}
-          sx={(theme) => ({
+          sx={{
             height: density === 'compact' ? '1.75rem' : '2.25rem',
             mt: density !== 'compact' ? '-0.25rem' : undefined,
             width: density === 'compact' ? '1.75rem' : '2.25rem',
             ...(parseFromValuesOrFunc(iconButtonProps?.sx, theme) as any),
-          })}
+          }}
           title={undefined}
         >
           {iconButtonProps?.children ?? (
-            <KeyboardDoubleArrowDownIcon
+            <Icon
+              as={KeyboardDoubleArrowDownIcon}
               style={{
                 transform: `rotate(${
                   isAllRowsExpanded ? -180 : getIsSomeRowsExpanded() ? -90 : 0

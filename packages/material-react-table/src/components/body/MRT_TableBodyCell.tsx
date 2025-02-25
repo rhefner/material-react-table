@@ -2,14 +2,19 @@ import {
   type DragEvent,
   type MouseEvent,
   type RefObject,
+  type ReactNode,
   memo,
   useEffect,
   useMemo,
   useState,
 } from 'react';
-import Skeleton from '@mui/material/Skeleton';
-import TableCell, { type TableCellProps } from '@mui/material/TableCell';
-import { useTheme } from '@mui/material/styles';
+import {
+  Td,
+  type TableCellProps,
+  Skeleton,
+  useColorMode,
+  type SystemStyleObject,
+} from '@chakra-ui/react';
 import { MRT_TableBodyCellValue } from './MRT_TableBodyCellValue';
 import {
   type MRT_Cell,
@@ -25,7 +30,7 @@ import { getCommonMRTCellStyles } from '../../utils/style.utils';
 import { parseFromValuesOrFunc } from '../../utils/utils';
 import { MRT_CopyButton } from '../buttons/MRT_CopyButton';
 import { MRT_EditCellTextField } from '../inputs/MRT_EditCellTextField';
-
+import { useTheme, type Theme } from '../../hooks/custom/useTheme';
 export interface MRT_TableBodyCellProps<TData extends MRT_RowData>
   extends TableCellProps {
   cell: MRT_Cell<TData>;
@@ -45,7 +50,9 @@ export const MRT_TableBodyCell = <TData extends MRT_RowData>({
   table,
   ...rest
 }: MRT_TableBodyCellProps<TData>) => {
-  const theme = useTheme();
+  const { colorMode } = useColorMode();
+  const theme = useTheme<Theme>();
+
   const {
     getState,
     options: {
@@ -124,7 +131,7 @@ export const MRT_TableBodyCell = <TData extends MRT_RowData>({
     const borderStyle = showResizeBorder
       ? `2px solid ${draggingBorderColor} !important`
       : isDraggingColumn || isDraggingRow
-        ? `1px dashed ${theme.palette.grey[500]} !important`
+        ? `1px dashed ${colorMode === 'dark' ? 'white' : 'black'} !important`
         : isHoveredColumn || isHoveredRow || isResizingColumn
           ? `2px dashed ${draggingBorderColor} !important`
           : undefined;
@@ -228,6 +235,7 @@ export const MRT_TableBodyCell = <TData extends MRT_RowData>({
     if (isRightClickable) {
       e.preventDefault();
       table.setActionCell(cell);
+      // @ts-ignore
       table.refs.actionCellRef.current = e.currentTarget;
     }
   };
@@ -242,9 +250,113 @@ export const MRT_TableBodyCell = <TData extends MRT_RowData>({
     });
   };
 
+  // Build the cell styles using proper typing
+  const baseCellStyles: Record<string, any> = {
+    alignItems: layoutMode?.startsWith('grid') ? 'center' : undefined,
+    cursor: isRightClickable
+      ? 'context-menu'
+      : isEditable && editDisplayMode === 'cell'
+        ? 'pointer'
+        : 'inherit',
+    outlineOffset: '-1px',
+    overflow: 'hidden',
+    p:
+      density === 'compact'
+        ? columnDefType === 'display'
+          ? '0 0.5rem'
+          : '0.5rem'
+        : density === 'comfortable'
+          ? columnDefType === 'display'
+            ? '0.5rem 0.75rem'
+            : '1rem'
+          : columnDefType === 'display'
+            ? '1rem 1.25rem'
+            : '1.5rem',
+    textOverflow: columnDefType !== 'display' ? 'ellipsis' : undefined,
+    whiteSpace:
+      row.getIsPinned() || density === 'compact' ? 'nowrap' : 'normal',
+    ...getCommonMRTCellStyles({
+      column,
+      table,
+      tableCellProps,
+      theme,
+    }),
+    ...draggingBorders,
+  };
+
+  // Add hover styles
+  baseCellStyles['&:hover'] = {
+    outline:
+      actionCell?.id === cell.id ||
+      (editDisplayMode === 'cell' && isEditable) ||
+      (editDisplayMode === 'table' && (isCreating || isEditing))
+        ? `1px solid ${theme.colors.gray[500]}`
+        : undefined,
+    textOverflow: 'clip',
+  };
+
+  if (actionCell?.id === cell.id) {
+    baseCellStyles.outline = `1px solid ${theme.colors.gray[500]}`;
+  }
+
+  // Add any custom styles from tableCellProps.sx
+  const customSx = parseFromValuesOrFunc(tableCellProps.sx, theme);
+  if (customSx) {
+    Object.assign(baseCellStyles, customSx);
+  }
+
+  // Cell content rendering
+  let cellContent;
+  if (cell.getIsPlaceholder()) {
+    cellContent =
+      columnDef.PlaceholderCell?.({ cell, column, row, table }) ?? null;
+  } else if (showSkeletons !== false && (isLoading || showSkeletons)) {
+    cellContent = (
+      <Skeleton height={20} width={skeletonWidth} {...skeletonProps} />
+    );
+  } else if (
+    columnDefType === 'display' &&
+    (['mrt-row-expand', 'mrt-row-numbers', 'mrt-row-select'].includes(
+      column.id,
+    ) ||
+      !row.getIsGrouped())
+  ) {
+    cellContent = columnDef.Cell?.({
+      cell,
+      column,
+      renderedCellValue: cell.renderValue() as any,
+      row,
+      rowRef,
+      staticColumnIndex,
+      staticRowIndex,
+      table,
+    });
+  } else if (isCreating || isEditing) {
+    cellContent = <MRT_EditCellTextField cell={cell} table={table} />;
+  } else {
+    if (showClickToCopyButton && columnDef.enableClickToCopy !== false) {
+      cellContent = (
+        <>
+          <MRT_CopyButton cell={cell} table={table} />
+          <MRT_TableBodyCellValue {...cellValueProps} />
+        </>
+      );
+    } else {
+      cellContent = <MRT_TableBodyCellValue {...cellValueProps} />;
+    }
+  }
+
+  // Add grouped row count if needed
+  if (cell.getIsGrouped() && !columnDef.GroupedCell) {
+    cellContent = (
+      <>
+        {cellContent} ({row.subRows?.length})
+      </>
+    );
+  }
+
   return (
-    <TableCell
-      align={theme.direction === 'rtl' ? 'right' : 'left'}
+    <Td
       data-index={staticColumnIndex}
       data-pinned={!!isColumnPinned || undefined}
       tabIndex={enableKeyboardShortcuts ? 0 : undefined}
@@ -254,94 +366,10 @@ export const MRT_TableBodyCell = <TData extends MRT_RowData>({
       onDoubleClick={handleDoubleClick}
       onDragEnter={handleDragEnter}
       onDragOver={handleDragOver}
-      sx={(theme) => ({
-        '&:hover': {
-          outline:
-            actionCell?.id === cell.id ||
-            (editDisplayMode === 'cell' && isEditable) ||
-            (editDisplayMode === 'table' && (isCreating || isEditing))
-              ? `1px solid ${theme.palette.grey[500]}`
-              : undefined,
-          textOverflow: 'clip',
-        },
-        alignItems: layoutMode?.startsWith('grid') ? 'center' : undefined,
-        cursor: isRightClickable
-          ? 'context-menu'
-          : isEditable && editDisplayMode === 'cell'
-            ? 'pointer'
-            : 'inherit',
-        outline:
-          actionCell?.id === cell.id
-            ? `1px solid ${theme.palette.grey[500]}`
-            : undefined,
-        outlineOffset: '-1px',
-        overflow: 'hidden',
-        p:
-          density === 'compact'
-            ? columnDefType === 'display'
-              ? '0 0.5rem'
-              : '0.5rem'
-            : density === 'comfortable'
-              ? columnDefType === 'display'
-                ? '0.5rem 0.75rem'
-                : '1rem'
-              : columnDefType === 'display'
-                ? '1rem 1.25rem'
-                : '1.5rem',
-
-        textOverflow: columnDefType !== 'display' ? 'ellipsis' : undefined,
-        whiteSpace:
-          row.getIsPinned() || density === 'compact' ? 'nowrap' : 'normal',
-        ...getCommonMRTCellStyles({
-          column,
-          table,
-          tableCellProps,
-          theme,
-        }),
-        ...draggingBorders,
-      })}
+      sx={baseCellStyles as SystemStyleObject}
     >
-      {tableCellProps.children ?? (
-        <>
-          {cell.getIsPlaceholder() ? (
-            (columnDef.PlaceholderCell?.({ cell, column, row, table }) ?? null)
-          ) : showSkeletons !== false && (isLoading || showSkeletons) ? (
-            <Skeleton
-              animation="wave"
-              height={20}
-              width={skeletonWidth}
-              {...skeletonProps}
-            />
-          ) : columnDefType === 'display' &&
-            (['mrt-row-expand', 'mrt-row-numbers', 'mrt-row-select'].includes(
-              column.id,
-            ) ||
-              !row.getIsGrouped()) ? (
-            columnDef.Cell?.({
-              cell,
-              column,
-              renderedCellValue: cell.renderValue() as any,
-              row,
-              rowRef,
-              staticColumnIndex,
-              staticRowIndex,
-              table,
-            })
-          ) : isCreating || isEditing ? (
-            <MRT_EditCellTextField cell={cell} table={table} />
-          ) : showClickToCopyButton && columnDef.enableClickToCopy !== false ? (
-            <MRT_CopyButton cell={cell} table={table}>
-              <MRT_TableBodyCellValue {...cellValueProps} />
-            </MRT_CopyButton>
-          ) : (
-            <MRT_TableBodyCellValue {...cellValueProps} />
-          )}
-          {cell.getIsGrouped() && !columnDef.GroupedCell && (
-            <> ({row.subRows?.length})</>
-          )}
-        </>
-      )}
-    </TableCell>
+      {tableCellProps.children ?? cellContent}
+    </Td>
   );
 };
 

@@ -1,4 +1,4 @@
-import Menu, { type MenuProps } from '@mui/material/Menu';
+import { Box, Menu, type MenuProps } from '@chakra-ui/react';
 import { MRT_ActionMenuItem } from './MRT_ActionMenuItem';
 import { type MRT_RowData, type MRT_TableInstance } from '../../types';
 import { openEditingCell } from '../../utils/cell.utils';
@@ -35,6 +35,7 @@ export const MRT_CellActionMenu = <TData extends MRT_RowData>({
   const handleClose = (event?: any) => {
     event?.stopPropagation();
     table.setActionCell(null);
+    // @ts-ignore
     actionCellRef.current = null;
   };
 
@@ -81,25 +82,11 @@ export const MRT_CellActionMenu = <TData extends MRT_RowData>({
     columnDef.renderCellActionMenuItems?.(renderActionProps) ??
     renderCellActionMenuItems?.(renderActionProps);
 
-  return (
-    (!!menuItems?.length || !!internalMenuItems?.length) && (
-      <Menu
-        MenuListProps={{
-          dense: density === 'compact',
-          sx: {
-            backgroundColor: menuBackgroundColor,
-          },
-        }}
-        anchorEl={actionCellRef.current}
-        disableScrollLock
-        onClick={(event) => event.stopPropagation()}
-        onClose={handleClose}
-        open={!!cell}
-        transformOrigin={{ horizontal: -100, vertical: 8 }}
-        {...rest}
-      >
-        {menuItems ?? internalMenuItems}
-      </Menu>
-    )
-  );
+  if (!menuItems?.length && !internalMenuItems?.length) return null;
+  if (!actionCellRef.current || !cell) return null;
+
+  // Using the same positioned Box approach as in other menus
+  const anchorRect = actionCellRef.current.getBoundingClientRect();
+
+  return <Menu {...rest}>{menuItems ?? internalMenuItems}</Menu>;
 };

@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import Typography from '@mui/material/Typography';
+import Text from '@mui/material/Text';
 import {
   type MRT_ColumnDef,
   MRT_ToggleFullScreenButton,
@@ -113,7 +113,7 @@ export const TableTitle = () => (
     data={data}
     enableRowSelection
     renderTopToolbarCustomActions={() => {
-      return <Typography variant="h4">Table Title</Typography>;
+      return <Text variant="h4">Table Title</Text>;
     }}
   />
 );

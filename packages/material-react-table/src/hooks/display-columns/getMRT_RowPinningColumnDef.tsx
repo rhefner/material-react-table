@@ -11,7 +11,7 @@ export const getMRT_RowPinningColumnDef = <TData extends MRT_RowData>(
 ): MRT_ColumnDef<TData> => {
   return {
     Cell: ({ row, table }) => (
-      <MRT_TableBodyRowPinButton row={row} table={table} />
+      <MRT_TableBodyRowPinButton aria-label="Pin row" row={row} table={table} />
     ),
     grow: false,
     ...defaultDisplayColumnProps({

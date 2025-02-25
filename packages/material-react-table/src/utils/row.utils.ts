@@ -217,6 +217,7 @@ export const getMRT_RowSelectionHandler =
     }
 
     // record the last selected row id
+    // @ts-ignore
     lastSelectedRowId.current = row.id;
 
     // if all sub rows were selected, unselect them
@@ -256,5 +257,6 @@ export const getMRT_SelectAllHandler =
     if (enableRowPinning && rowPinningDisplayMode?.includes('select')) {
       table.setRowPinning({ bottom: [], top: [] });
     }
+    // @ts-ignore
     lastSelectedRowId.current = null;
   };

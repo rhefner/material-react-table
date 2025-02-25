@@ -1,6 +1,5 @@
 import { type MouseEvent, useState } from 'react';
-import IconButton, { type IconButtonProps } from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
+import { IconButton, type IconButtonProps, Tooltip } from '@chakra-ui/react';
 import {
   type MRT_Header,
   type MRT_RowData,
@@ -12,9 +11,10 @@ import { MRT_ColumnActionMenu } from '../menus/MRT_ColumnActionMenu';
 
 export interface MRT_TableHeadCellColumnActionsButtonProps<
   TData extends MRT_RowData,
-> extends IconButtonProps {
+> extends Omit<IconButtonProps, 'aria-label'> {
   header: MRT_Header<TData>;
   table: MRT_TableInstance<TData>;
+  'aria-label'?: string;
 }
 
 export const MRT_TableHeadCellColumnActionsButton = <
@@ -54,34 +54,37 @@ export const MRT_TableHeadCellColumnActionsButton = <
     ...rest,
   };
 
+  // Remove props that Chakra doesn't support or handles differently
+  const safeIconButtonProps = { ...iconButtonProps };
+  delete (safeIconButtonProps as any).title;
+
   return (
     <>
       <Tooltip
         {...getCommonTooltipProps('top')}
-        title={iconButtonProps?.title ?? localization.columnActions}
+        label={iconButtonProps?.title ?? localization.columnActions}
       >
         <IconButton
-          aria-label={localization.columnActions}
+          aria-label={
+            iconButtonProps?.['aria-label'] ?? localization.columnActions
+          }
           onClick={handleClick}
-          size="small"
-          {...iconButtonProps}
-          sx={(theme) => ({
-            '&:hover': {
-              opacity: 1,
-            },
-            height: '2rem',
-            m: '-8px -4px',
-            opacity: 0.3,
-            transition: 'all 150ms',
-            width: '2rem',
-            ...(parseFromValuesOrFunc(iconButtonProps?.sx, theme) as any),
-          })}
-          title={undefined}
-        >
-          {iconButtonProps?.children ?? (
-            <MoreVertIcon style={{ transform: 'scale(0.9)' }} />
-          )}
-        </IconButton>
+          size="sm"
+          height="2rem"
+          width="2rem"
+          m="-8px -4px"
+          opacity={0.3}
+          transition="all 150ms"
+          _hover={{
+            opacity: 1,
+          }}
+          {...safeIconButtonProps}
+          icon={
+            safeIconButtonProps?.icon ?? (
+              <MoreVertIcon style={{ transform: 'scale(0.9)' }} />
+            )
+          }
+        />
       </Tooltip>
       {anchorEl && (
         <MRT_ColumnActionMenu

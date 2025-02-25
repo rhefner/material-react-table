@@ -1,0 +1,75 @@
+# Chakra React Table Project Context
+
+## Acronyms
+
+- MRT: Material React Table
+- CRT: Chakra React Table
+- CUI: Chakra UI
+- MUI: Material UI
+- TRT: TanStack React Table
+
+## Overview
+
+Converting MRT to CRT, a fully featured CUI V2 implementation of TRT V8 based off of MUI (MUI) version
+
+## Objectives
+
+1. Replace MUI with CUI v2
+2. Replace @mui/icons-material with react-icons (primarily using react-icons/md)
+3. Maintain compatibility with upstream MRT repository that will continue to be developed but will always use MUI
+4. Preserve file structure and component naming conventions
+
+## Migration Strategy
+
+1. Keep MRT\_ prefix for existing files to maintain upstream compatibility
+2. Use CRT\_ prefix for new Chakra-specific components
+3. Preserve component APIs and behavior
+4. Maintain original variable names (e.g., muiSkeletonProps) for easier Git merges
+
+## Current Status
+
+Found in migration-plan.md
+
+## Remaining Tasks
+
+1. Complete @mui/\* import replacements with @chakra-ui equivalents
+2. Implement custom date picker components (replacing @mui/x-date-pickers)
+3. More in migration-plan.md
+
+## Important Guidelines
+
+1. Preserve file structure
+2. Keep original variable names
+3. Use CUI's styling system
+4. Maintain backward compatibility
+5. Follow existing component mapping for consistency
+
+## Component Mapping
+
+MUI → CUI
+
+- Box → Box
+- Chip → Tag
+- Paper → Card
+- Etc..
+
+## File Naming Convention
+
+- Existing files: Keep MRT\_ prefix
+- New files: Use CRT\_ prefix
+- Location: Maintain current directory structure
+
+## Testing Strategy
+
+1. Maintain existing functionality
+2. Ensure proper styling and responsiveness
+3. Verify all table features work as expected
+4. Test backward compatibility
+
+## Response Guidelines
+
+1. Always reference full file paths
+2. Wrap code snippets in `<augment_code_snippet>` tags with appropriate mode
+3. Use backticks for referencing code elements
+4. Be concise and direct in responses
+5. Focus on CUI implementation while maintaining compatibility

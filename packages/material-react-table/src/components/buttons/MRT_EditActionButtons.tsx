@@ -1,8 +1,14 @@
-import Box, { type BoxProps } from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import CircularProgress from '@mui/material/CircularProgress';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Icon,
+  IconButton,
+  Tooltip,
+  useTheme,
+  type BoxProps,
+  type Theme,
+} from '@chakra-ui/react';
 import {
   type MRT_Row,
   type MRT_RowData,
@@ -83,49 +89,58 @@ export const MRT_EditActionButtons = <TData extends MRT_RowData>({
     }
   };
 
+  const theme = useTheme<Theme>();
+
   return (
     <Box
       onClick={(e) => e.stopPropagation()}
-      sx={(theme) => ({
+      sx={{
         display: 'flex',
         gap: '0.75rem',
         ...(parseFromValuesOrFunc(rest?.sx, theme) as any),
-      })}
+      }}
     >
       {variant === 'icon' ? (
         <>
-          <Tooltip title={localization.cancel}>
+          <Tooltip label={localization.cancel}>
             <IconButton aria-label={localization.cancel} onClick={handleCancel}>
-              <CancelIcon />
+              <Icon as={CancelIcon} />
             </IconButton>
           </Tooltip>
           {((isCreating && onCreatingRowSave) ||
             (isEditing && onEditingRowSave)) && (
-            <Tooltip title={localization.save}>
+            <Tooltip label={localization.save}>
               <IconButton
                 aria-label={localization.save}
-                color="info"
-                disabled={isSaving}
+                colorScheme="blue"
+                isDisabled={isSaving}
                 onClick={handleSubmitRow}
               >
-                {isSaving ? <CircularProgress size={18} /> : <SaveIcon />}
+                {isSaving ? (
+                  <CircularProgress size="18px" />
+                ) : (
+                  <Icon as={SaveIcon} />
+                )}
               </IconButton>
             </Tooltip>
           )}
         </>
       ) : (
         <>
-          <Button onClick={handleCancel} sx={{ minWidth: '100px' }}>
+          <Button onClick={handleCancel} minW="100px">
             {localization.cancel}
           </Button>
           <Button
-            disabled={isSaving}
+            isDisabled={isSaving}
             onClick={handleSubmitRow}
-            sx={{ minWidth: '100px' }}
-            variant="contained"
+            minW="100px"
+            colorScheme="blue"
           >
-            {isSaving && <CircularProgress color="inherit" size={18} />}
-            {localization.save}
+            {isSaving ? (
+              <CircularProgress size="18px" color="white" />
+            ) : (
+              localization.save
+            )}
           </Button>
         </>
       )}

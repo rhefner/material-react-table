@@ -1,6 +1,11 @@
 import { type MouseEvent, useState } from 'react';
-import Button, { type ButtonProps } from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
+import {
+  Button,
+  type ButtonProps,
+  type Theme,
+  Tooltip,
+  useTheme,
+} from '@chakra-ui/react';
 import {
   type MRT_Cell,
   type MRT_RowData,
@@ -20,6 +25,7 @@ export const MRT_CopyButton = <TData extends MRT_RowData>({
   table,
   ...rest
 }: MRT_CopyButtonProps<TData>) => {
+  const theme = useTheme<Theme>();
   const {
     options: { localization, muiCopyButtonProps },
   } = table;
@@ -54,18 +60,18 @@ export const MRT_CopyButton = <TData extends MRT_RowData>({
   return (
     <Tooltip
       {...getCommonTooltipProps('top')}
-      title={
+      label={
         buttonProps?.title ??
         (copied ? localization.copiedToClipboard : localization.clickToCopy)
       }
+      placement="top"
     >
       <Button
         onClick={(e) => handleCopy(e, cell.getValue())}
-        size="small"
-        type="button"
-        variant="text"
+        size="sm"
+        variant="unstyled"
         {...buttonProps}
-        sx={(theme) => ({
+        sx={{
           backgroundColor: 'transparent',
           border: 'none',
           color: 'inherit',
@@ -79,7 +85,7 @@ export const MRT_CopyButton = <TData extends MRT_RowData>({
           textAlign: 'inherit',
           textTransform: 'inherit',
           ...(parseFromValuesOrFunc(buttonProps?.sx, theme) as any),
-        })}
+        }}
         title={undefined}
       />
     </Tooltip>

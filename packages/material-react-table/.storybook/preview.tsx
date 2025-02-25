@@ -3,7 +3,7 @@ import { addons } from '@storybook/preview-api';
 import { Preview } from '@storybook/react';
 import { useDarkMode, DARK_MODE_EVENT_NAME } from 'storybook-dark-mode';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Typography from '@mui/material/Typography';
+import Text from '@mui/material/Text';
 import Link from '@mui/material/Link';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -62,7 +62,7 @@ const preview: Preview = {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Typography
+            <Text
               sx={{
                 pb: '0.5rem',
                 color: useDarkMode() ? '#fff' : '#666',
@@ -77,8 +77,8 @@ const preview: Preview = {
               >
                 here.
               </Link>
-            </Typography>
-            <Typography
+            </Text>
+            <Text
               variant="subtitle2"
               sx={{
                 pb: '1rem',
@@ -92,7 +92,7 @@ const preview: Preview = {
               >
                 here on GitHub.
               </Link>
-            </Typography>
+            </Text>
             <Story {...context} />
           </LocalizationProvider>
         </ThemeProvider>

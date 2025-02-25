@@ -1,9 +1,14 @@
-import IconButton, { type IconButtonProps } from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
+import {
+  IconButton,
+  Tooltip,
+  type IconButtonProps,
+  Icon,
+} from '@chakra-ui/react';
 import { type MRT_RowData, type MRT_TableInstance } from '../../types';
 
 export interface MRT_ToggleFiltersButtonProps<TData extends MRT_RowData>
-  extends IconButtonProps {
+  extends Omit<IconButtonProps, 'aria-label'> {
+  'aria-label'?: string;
   table: MRT_TableInstance<TData>;
 }
 
@@ -25,16 +30,24 @@ export const MRT_ToggleFiltersButton = <TData extends MRT_RowData>({
     setShowColumnFilters(!showColumnFilters);
   };
 
+  const { 'aria-label': ariaLabel, title, ...restProps } = rest;
+  const tooltipLabel = title ?? localization.showHideFilters;
+  const finalAriaLabel = ariaLabel ?? tooltipLabel;
+
   return (
-    <Tooltip title={rest?.title ?? localization.showHideFilters}>
+    <Tooltip label={tooltipLabel}>
       <IconButton
-        aria-label={localization.showHideFilters}
+        aria-label={finalAriaLabel}
         onClick={handleToggleShowFilters}
-        {...rest}
-        title={undefined}
-      >
-        {showColumnFilters ? <FilterListOffIcon /> : <FilterListIcon />}
-      </IconButton>
+        {...restProps}
+        icon={
+          showColumnFilters ? (
+            <Icon as={FilterListOffIcon} />
+          ) : (
+            <Icon as={FilterListIcon} />
+          )
+        }
+      />
     </Tooltip>
   );
 };

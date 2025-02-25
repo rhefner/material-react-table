@@ -1,8 +1,13 @@
 import { type DragEvent, useEffect } from 'react';
-import Box, { type BoxProps } from '@mui/material/Box';
-import Fade from '@mui/material/Fade';
-import Typography from '@mui/material/Typography';
-import { alpha } from '@mui/material/styles';
+import {
+  Box,
+  Fade,
+  Text,
+  useColorModeValue,
+  useTheme,
+  type BoxProps,
+  type Theme,
+} from '@chakra-ui/react';
 import { type MRT_RowData, type MRT_TableInstance } from '../../types';
 import { parseFromValuesOrFunc } from '../../utils/utils';
 
@@ -15,6 +20,7 @@ export const MRT_ToolbarDropZone = <TData extends MRT_RowData>({
   table,
   ...rest
 }: MRT_ToolbarDropZoneProps<TData>) => {
+  const theme = useTheme<Theme>();
   const {
     getState,
     options: { enableGrouping, localization },
@@ -44,21 +50,27 @@ export const MRT_ToolbarDropZone = <TData extends MRT_RowData>({
     }
   }, [enableGrouping, draggingColumn, grouping]);
 
+  // Filter out properties that might cause issues with Chakra UI components
+  const safeBoxProps = { ...rest };
+  delete (safeBoxProps as any).sx;
+
+  const bgColor = useColorModeValue('blue.100', 'blue.800');
+  const bgColorHovered = useColorModeValue('blue.200', 'blue.700');
+  const borderColor = useColorModeValue('blue.500', 'blue.300');
+
   return (
     <Fade in={showToolbarDropZone}>
       <Box
         className="Mui-ToolbarDropZone"
         onDragEnter={handleDragEnter}
         onDragOver={handleDragOver}
-        {...rest}
-        sx={(theme) => ({
+        {...safeBoxProps}
+        sx={{
           alignItems: 'center',
           backdropFilter: 'blur(4px)',
-          backgroundColor: alpha(
-            theme.palette.info.main,
-            hoveredColumn?.id === 'drop-zone' ? 0.2 : 0.1,
-          ),
-          border: `dashed ${theme.palette.info.main} 2px`,
+          backgroundColor:
+            hoveredColumn?.id === 'drop-zone' ? bgColorHovered : bgColor,
+          border: `dashed ${borderColor} 2px`,
           boxSizing: 'border-box',
           display: 'flex',
           height: '100%',
@@ -67,14 +79,14 @@ export const MRT_ToolbarDropZone = <TData extends MRT_RowData>({
           width: '100%',
           zIndex: 4,
           ...(parseFromValuesOrFunc(rest?.sx, theme) as any),
-        })}
+        }}
       >
-        <Typography fontStyle="italic">
+        <Text fontStyle="italic">
           {localization.dropToGroupBy.replace(
             '{column}',
             draggingColumn?.columnDef?.header ?? '',
           )}
-        </Typography>
+        </Text>
       </Box>
     </Fade>
   );

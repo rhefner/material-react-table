@@ -12,6 +12,7 @@ export const getMRT_RowActionsColumnDef = <TData extends MRT_RowData>(
   return {
     Cell: ({ cell, row, staticRowIndex, table }) => (
       <MRT_ToggleRowActionMenuButton
+        aria-label="Row actions"
         cell={cell}
         row={row}
         staticRowIndex={staticRowIndex}

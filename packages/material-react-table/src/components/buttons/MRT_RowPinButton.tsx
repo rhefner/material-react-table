@@ -1,7 +1,12 @@
 import { type MouseEvent, useState } from 'react';
 import { type RowPinningPosition } from '@tanstack/react-table';
-import IconButton, { type IconButtonProps } from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
+import {
+  IconButton,
+  Tooltip,
+  useTheme,
+  type IconButtonProps,
+  type Theme,
+} from '@chakra-ui/react';
 import {
   type MRT_Row,
   type MRT_RowData,
@@ -23,6 +28,7 @@ export const MRT_RowPinButton = <TData extends MRT_RowData>({
   table,
   ...rest
 }: MRT_RowPinButtonProps<TData>) => {
+  const theme = useTheme<Theme>();
   const {
     options: {
       icons: { CloseIcon, PushPinIcon },
@@ -44,23 +50,23 @@ export const MRT_RowPinButton = <TData extends MRT_RowData>({
   return (
     <Tooltip
       {...getCommonTooltipProps()}
-      open={tooltipOpened}
-      title={isPinned ? localization.unpin : localization.pin}
+      isOpen={tooltipOpened}
+      label={isPinned ? localization.unpin : localization.pin}
     >
       <IconButton
-        aria-label={localization.pin}
         onBlur={() => setTooltipOpened(false)}
         onClick={handleTogglePin}
         onFocus={() => setTooltipOpened(true)}
         onMouseEnter={() => setTooltipOpened(true)}
         onMouseLeave={() => setTooltipOpened(false)}
-        size="small"
+        size="sm"
         {...rest}
-        sx={(theme) => ({
+        aria-label={rest?.['aria-label'] ?? localization.pin}
+        sx={{
           height: '24px',
           width: '24px',
-          ...(parseFromValuesOrFunc(rest?.sx, theme) as any),
-        })}
+          ...(parseFromValuesOrFunc(rest.sx, theme) as any),
+        }}
       >
         {isPinned ? (
           <CloseIcon />

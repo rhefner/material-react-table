@@ -1,13 +1,11 @@
-import { type DragEvent, memo, useMemo, useRef } from 'react';
+import { type DragEvent, memo, useMemo, useRef, type ReactNode } from 'react';
 import { type VirtualItem } from '@tanstack/react-virtual';
-import TableRow, { type TableRowProps } from '@mui/material/TableRow';
 import {
-  type Theme,
-  alpha,
-  darken,
-  lighten,
-  useTheme,
-} from '@mui/material/styles';
+  Tr,
+  type TableRowProps,
+  useColorModeValue,
+  type SystemStyleObject,
+} from '@chakra-ui/react';
 import { MRT_TableBodyCell, Memo_MRT_TableBodyCell } from './MRT_TableBodyCell';
 import { MRT_TableDetailPanel } from './MRT_TableDetailPanel';
 import {
@@ -25,7 +23,7 @@ import {
   getCommonPinnedCellStyles,
 } from '../../utils/style.utils';
 import { parseFromValuesOrFunc } from '../../utils/utils';
-
+import { useTheme, type Theme } from '../../hooks/custom/useTheme';
 export interface MRT_TableBodyRowProps<TData extends MRT_RowData>
   extends TableRowProps {
   columnVirtualizer?: MRT_ColumnVirtualizer;
@@ -49,7 +47,9 @@ export const MRT_TableBodyRow = <TData extends MRT_RowData>({
   virtualRow,
   ...rest
 }: MRT_TableBodyRowProps<TData>) => {
-  const theme = useTheme();
+  const theme = useTheme<Theme>();
+  const lightModeColor = useColorModeValue('gray.100', 'gray.700');
+  const darkModeColor = useColorModeValue('gray.200', 'gray.600');
 
   const {
     getState,
@@ -123,14 +123,14 @@ export const MRT_TableBodyRow = <TData extends MRT_RowData>({
   const tableFooterHeight =
     (enableStickyFooter && tableFooterRef.current?.clientHeight) || 0;
 
-  const sx = parseFromValuesOrFunc(tableRowProps?.sx, theme as any);
+  const parsedSx = parseFromValuesOrFunc(tableRowProps?.sx, lightModeColor);
 
   const defaultRowHeight =
     density === 'compact' ? 37 : density === 'comfortable' ? 53 : 69;
 
   const customRowHeight =
-    // @ts-expect-error
-    parseInt(tableRowProps?.style?.height ?? sx?.height, 10) || undefined;
+    parseInt(String(tableRowProps?.style?.height ?? parsedSx?.height), 10) ||
+    undefined;
 
   const rowHeight = customRowHeight || defaultRowHeight;
 
@@ -152,18 +152,73 @@ export const MRT_TableBodyRow = <TData extends MRT_RowData>({
       ? pinnedRowBackgroundColor
       : undefined;
 
-  const cellHighlightColorHover =
-    tableRowProps?.hover !== false
-      ? isRowSelected
-        ? cellHighlightColor
-        : theme.palette.mode === 'dark'
-          ? `${lighten(baseBackgroundColor, 0.3)}`
-          : `${darken(baseBackgroundColor, 0.3)}`
-      : undefined;
+  // Build the final style object with proper typing
+  const rowStyles: Record<string, any> = {
+    backgroundColor: `${baseBackgroundColor} !important`,
+    bottom:
+      !virtualRow && bottomPinnedIndex !== undefined && isRowPinned
+        ? `${
+            bottomPinnedIndex * rowHeight +
+            (enableStickyFooter ? tableFooterHeight - 1 : 0)
+          }px`
+        : undefined,
+    boxSizing: 'border-box',
+    display: layoutMode?.startsWith('grid') ? 'flex' : undefined,
+    opacity: isRowPinned ? 0.97 : isDraggingRow || isHoveredRow ? 0.5 : 1,
+    position: virtualRow
+      ? 'absolute'
+      : rowPinningDisplayMode?.includes('sticky') && isRowPinned
+        ? 'sticky'
+        : 'relative',
+    top: virtualRow
+      ? 0
+      : topPinnedIndex !== undefined && isRowPinned
+        ? `${
+            topPinnedIndex * rowHeight +
+            (enableStickyHeader || isFullScreen ? tableHeadHeight - 1 : 0)
+          }px`
+        : undefined,
+    transition: virtualRow ? 'none' : 'all 150ms ease-in-out',
+    width: '100%',
+    zIndex: rowPinningDisplayMode?.includes('sticky') && isRowPinned ? 2 : 0,
+  };
+
+  // Add cell styling
+  rowStyles.td = getCommonPinnedCellStyles({ table, theme });
+
+  // Add highlight effect for selected/pinned cells
+  if (cellHighlightColor) {
+    rowStyles['td:after'] = {
+      backgroundColor: cellHighlightColor,
+      ...commonCellBeforeAfterStyles,
+    };
+  }
+
+  // Add hover effect - always add unless specifically disabled by user
+  // We can detect this in various ways but one simple approach is to check
+  // if user has provided _hover as part of their styles and respect that
+  const userProvidedHoverStyles =
+    typeof parsedSx === 'object' && parsedSx && '_hover' in parsedSx;
+
+  if (!userProvidedHoverStyles) {
+    // Only add our hover styles if the user hasn't specified their own
+    const hoverColor = isRowSelected ? cellHighlightColor : darkModeColor;
+    if (hoverColor) {
+      rowStyles['&:hover td:after'] = {
+        backgroundColor: hoverColor,
+        ...commonCellBeforeAfterStyles,
+      };
+    }
+  }
+
+  // Add any other styles from parsedSx if they exist
+  if (parsedSx) {
+    Object.assign(rowStyles, parsedSx);
+  }
 
   return (
     <>
-      <TableRow
+      <Tr
         data-index={renderDetailPanel ? staticRowIndex * 2 : staticRowIndex}
         data-pinned={!!isRowPinned || undefined}
         data-selected={isRowSelected || undefined}
@@ -183,52 +238,7 @@ export const MRT_TableBodyRow = <TData extends MRT_RowData>({
             : undefined,
           ...tableRowProps?.style,
         }}
-        sx={(theme: Theme) => ({
-          '&:hover td:after': cellHighlightColorHover
-            ? {
-                backgroundColor: alpha(cellHighlightColorHover, 0.3),
-                ...commonCellBeforeAfterStyles,
-              }
-            : undefined,
-          backgroundColor: `${baseBackgroundColor} !important`,
-          bottom:
-            !virtualRow && bottomPinnedIndex !== undefined && isRowPinned
-              ? `${
-                  bottomPinnedIndex * rowHeight +
-                  (enableStickyFooter ? tableFooterHeight - 1 : 0)
-                }px`
-              : undefined,
-          boxSizing: 'border-box',
-          display: layoutMode?.startsWith('grid') ? 'flex' : undefined,
-          opacity: isRowPinned ? 0.97 : isDraggingRow || isHoveredRow ? 0.5 : 1,
-          position: virtualRow
-            ? 'absolute'
-            : rowPinningDisplayMode?.includes('sticky') && isRowPinned
-              ? 'sticky'
-              : 'relative',
-          td: {
-            ...getCommonPinnedCellStyles({ table, theme }),
-          },
-          'td:after': cellHighlightColor
-            ? {
-                backgroundColor: cellHighlightColor,
-                ...commonCellBeforeAfterStyles,
-              }
-            : undefined,
-          top: virtualRow
-            ? 0
-            : topPinnedIndex !== undefined && isRowPinned
-              ? `${
-                  topPinnedIndex * rowHeight +
-                  (enableStickyHeader || isFullScreen ? tableHeadHeight - 1 : 0)
-                }px`
-              : undefined,
-          transition: virtualRow ? 'none' : 'all 150ms ease-in-out',
-          width: '100%',
-          zIndex:
-            rowPinningDisplayMode?.includes('sticky') && isRowPinned ? 2 : 0,
-          ...(sx as any),
-        })}
+        sx={rowStyles as SystemStyleObject}
       >
         {virtualPaddingLeft ? (
           <td style={{ display: 'flex', width: virtualPaddingLeft }} />
@@ -266,7 +276,7 @@ export const MRT_TableBodyRow = <TData extends MRT_RowData>({
         {virtualPaddingRight ? (
           <td style={{ display: 'flex', width: virtualPaddingRight }} />
         ) : null}
-      </TableRow>
+      </Tr>
       {renderDetailPanel && !row.getIsGrouped() && (
         <MRT_TableDetailPanel
           parentRowRef={rowRef}

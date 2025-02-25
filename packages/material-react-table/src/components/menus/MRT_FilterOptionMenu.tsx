@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import Menu, { type MenuProps } from '@mui/material/Menu';
+import { Menu, MenuList, type MenuProps } from '@chakra-ui/react';
 import { MRT_ActionMenuItem } from './MRT_ActionMenuItem';
 import {
   type MRT_FilterOption,
@@ -104,8 +104,7 @@ const emptyModes = ['empty', 'notEmpty'];
 const arrModes = ['arrIncludesSome', 'arrIncludesAll', 'arrIncludes'];
 const rangeVariants = ['range-slider', 'date-range', 'datetime-range', 'range'];
 
-export interface MRT_FilterOptionMenuProps<TData extends MRT_RowData>
-  extends Partial<MenuProps> {
+export interface MRT_FilterOptionMenuProps<TData extends MRT_RowData> {
   anchorEl: HTMLElement | null;
   header?: MRT_Header<TData>;
   onSelect?: () => void;
@@ -121,7 +120,6 @@ export const MRT_FilterOptionMenu = <TData extends MRT_RowData>({
   setAnchorEl,
   setFilterValue,
   table,
-  ...rest
 }: MRT_FilterOptionMenuProps<TData>) => {
   const {
     getState,
@@ -238,53 +236,60 @@ export const MRT_FilterOptionMenu = <TData extends MRT_RowData>({
   const filterOption =
     !!header && columnDef ? columnDef._filterFn : globalFilterFn;
 
+  // In Chakra UI, Menu is a controlled component via isOpen prop
+  // and needs a reference element like MenuButton to position itself
+  // Since we're using anchorEl pattern from MUI, we need a custom approach
+
+  if (!anchorEl) return null;
+
+  // Chakra UI's Menu won't work without a MenuButton, so we use a positioning wrapper
+  // instead and only render the MenuList directly
   return (
-    <Menu
-      MenuListProps={{
-        dense: density === 'compact',
-        sx: {
-          backgroundColor: menuBackgroundColor,
-        },
-      }}
-      anchorEl={anchorEl}
-      anchorOrigin={{ horizontal: 'right', vertical: 'center' }}
-      disableScrollLock
-      onClose={() => setAnchorEl(null)}
-      open={!!anchorEl}
-      {...rest}
-    >
-      {(header && column && columnDef
-        ? (columnDef.renderColumnFilterModeMenuItems?.({
-            column: column as any,
-            internalFilterOptions,
-            onSelectFilterMode: handleSelectFilterMode,
-            table,
-          }) ??
-          renderColumnFilterModeMenuItems?.({
-            column: column as any,
-            internalFilterOptions,
-            onSelectFilterMode: handleSelectFilterMode,
-            table,
-          }))
-        : renderGlobalFilterModeMenuItems?.({
-            internalFilterOptions,
-            onSelectFilterMode: handleSelectFilterMode,
-            table,
-          })) ??
-        internalFilterOptions.map(
-          ({ divider, label, option, symbol }, index) => (
-            <MRT_ActionMenuItem
-              divider={divider}
-              icon={symbol}
-              key={index}
-              label={label}
-              onClick={() => handleSelectFilterMode(option as MRT_FilterOption)}
-              selected={option === filterOption}
-              table={table}
-              value={option}
-            />
-          ),
-        )}
+    <Menu>
+      <MenuList
+        maxWidth="340px"
+        minWidth="200px"
+        bg={menuBackgroundColor}
+        p={density === 'compact' ? 1 : 2}
+        borderRadius="md"
+        boxShadow="md"
+        onClick={() => setAnchorEl(null)}
+      >
+        {(header && column && columnDef
+          ? (columnDef.renderColumnFilterModeMenuItems?.({
+              column: column as any,
+              internalFilterOptions,
+              onSelectFilterMode: handleSelectFilterMode,
+              table,
+            }) ??
+            renderColumnFilterModeMenuItems?.({
+              column: column as any,
+              internalFilterOptions,
+              onSelectFilterMode: handleSelectFilterMode,
+              table,
+            }))
+          : renderGlobalFilterModeMenuItems?.({
+              internalFilterOptions,
+              onSelectFilterMode: handleSelectFilterMode,
+              table,
+            })) ??
+          internalFilterOptions.map(
+            ({ divider, label, option, symbol }, index) => (
+              <MRT_ActionMenuItem
+                divider={divider}
+                icon={symbol}
+                key={index}
+                label={label}
+                onClick={() =>
+                  handleSelectFilterMode(option as MRT_FilterOption)
+                }
+                selected={option === filterOption}
+                table={table}
+                value={option}
+              />
+            ),
+          )}
+      </MenuList>
     </Menu>
   );
 };

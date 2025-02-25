@@ -1,11 +1,16 @@
 import { Fragment, useMemo } from 'react';
-import Alert, { type AlertProps } from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Chip from '@mui/material/Chip';
-import Collapse from '@mui/material/Collapse';
-import Stack from '@mui/material/Stack';
+import {
+  Alert,
+  AlertTitle,
+  Box,
+  Button,
+  Collapse,
+  Stack,
+  Tag,
+  type AlertProps,
+  type Theme,
+  useTheme,
+} from '@chakra-ui/react';
 import { type MRT_RowData, type MRT_TableInstance } from '../../types';
 import { getMRT_SelectAllHandler } from '../../utils/row.utils';
 import { parseFromValuesOrFunc } from '../../utils/utils';
@@ -22,6 +27,7 @@ export const MRT_ToolbarAlertBanner = <TData extends MRT_RowData>({
   table,
   ...rest
 }: MRT_ToolbarAlertBannerProps<TData>) => {
+  const theme = useTheme<Theme>();
   const {
     getFilteredSelectedRowModel,
     getCoreRowModel,
@@ -48,9 +54,20 @@ export const MRT_ToolbarAlertBanner = <TData extends MRT_RowData>({
     ...rest,
   };
 
+  // Remove properties that might cause issues with Chakra UI's Alert component
+  const safeAlertProps = { ...alertProps };
+  delete (safeAlertProps as any).sx;
+  delete (safeAlertProps as any).color;
+  delete (safeAlertProps as any).icon;
+
   const chipProps = parseFromValuesOrFunc(muiToolbarAlertBannerChipProps, {
     table,
   });
+
+  // Convert MUI chip props to Chakra Tag props
+  const safeChipProps = { ...chipProps };
+  delete (safeChipProps as any).label;
+  delete (safeChipProps as any).sx;
 
   const totalRowCount = rowCount ?? getCoreRowModel().rows.length;
 
@@ -63,16 +80,22 @@ export const MRT_ToolbarAlertBanner = <TData extends MRT_RowData>({
   );
   const selectedAlert =
     selectedRowCount > 0 ? (
-      <Stack alignItems="center" direction="row" gap="16px">
+      <Stack direction="row" align="center" spacing="16px">
         {localization.selectedCountOfRowCountRowsSelected
-          ?.replace('{selectedCount}', selectedRowCount.toLocaleString(localization.language))
-          ?.replace('{rowCount}', totalRowCount.toLocaleString(localization.language))}
+          ?.replace(
+            '{selectedCount}',
+            selectedRowCount.toLocaleString(localization.language),
+          )
+          ?.replace(
+            '{rowCount}',
+            totalRowCount.toLocaleString(localization.language),
+          )}
         <Button
           onClick={(event) =>
             getMRT_SelectAllHandler({ table })(event, false, true)
           }
-          size="small"
-          sx={{ p: '2px' }}
+          size="sm"
+          p="2px"
         >
           {localization.clearSelection}
         </Button>
@@ -86,11 +109,13 @@ export const MRT_ToolbarAlertBanner = <TData extends MRT_RowData>({
         {grouping.map((columnId, index) => (
           <Fragment key={`${index}-${columnId}`}>
             {index > 0 ? localization.thenBy : ''}
-            <Chip
-              label={table.getColumn(columnId).columnDef.header}
-              onDelete={() => table.getColumn(columnId).toggleGrouping()}
-              {...chipProps}
-            />
+            <Tag
+              size="md"
+              {...safeChipProps}
+              onClose={() => table.getColumn(columnId).toggleGrouping()}
+            >
+              {table.getColumn(columnId).columnDef.header}
+            </Tag>
           </Fragment>
         ))}
       </span>
@@ -99,19 +124,13 @@ export const MRT_ToolbarAlertBanner = <TData extends MRT_RowData>({
   return (
     <Collapse
       in={showAlertBanner || !!selectedAlert || !!groupedAlert}
-      timeout={stackAlertBanner ? 200 : 0}
+      animateOpacity
     >
       <Alert
-        color="info"
-        icon={false}
-        {...alertProps}
-        sx={(theme) => ({
-          '& .MuiAlert-message': {
-            maxWidth: `calc(${
-              tablePaperRef.current?.clientWidth ?? 360
-            }px - 1rem)`,
-            width: '100%',
-          },
+        status="info"
+        variant="subtle"
+        {...safeAlertProps}
+        sx={{
           borderRadius: 0,
           fontSize: '1rem',
           left: 0,
@@ -127,7 +146,7 @@ export const MRT_ToolbarAlertBanner = <TData extends MRT_RowData>({
           width: '100%',
           zIndex: 2,
           ...(parseFromValuesOrFunc(alertProps?.sx, theme) as any),
-        })}
+        }}
       >
         {renderToolbarAlertBannerContent?.({
           groupedAlert,
@@ -137,22 +156,21 @@ export const MRT_ToolbarAlertBanner = <TData extends MRT_RowData>({
           <>
             {alertProps?.title && <AlertTitle>{alertProps.title}</AlertTitle>}
             <Stack
-              sx={{
-                p:
-                  positionToolbarAlertBanner !== 'head-overlay'
-                    ? '0.5rem 1rem'
-                    : density === 'spacious'
-                      ? '0.75rem 1.25rem'
-                      : density === 'comfortable'
-                        ? '0.5rem 0.75rem'
-                        : '0.25rem 0.5rem',
-              }}
+              p={
+                positionToolbarAlertBanner !== 'head-overlay'
+                  ? '0.5rem 1rem'
+                  : density === 'spacious'
+                    ? '0.75rem 1.25rem'
+                    : density === 'comfortable'
+                      ? '0.5rem 0.75rem'
+                      : '0.25rem 0.5rem'
+              }
             >
               {alertProps?.children}
               {alertProps?.children && (selectedAlert || groupedAlert) && (
                 <br />
               )}
-              <Box sx={{ display: 'flex' }}>
+              <Box display="flex">
                 {enableRowSelection &&
                   enableSelectAll &&
                   positionToolbarAlertBanner === 'head-overlay' && (

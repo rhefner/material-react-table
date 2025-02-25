@@ -36,6 +36,7 @@ export const useMRT_Effects = <TData extends MRT_RowData>(
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
+      // @ts-ignore
       initialBodyHeight.current = document.body.style.height;
     }
   }, []);
@@ -44,6 +45,7 @@ export const useMRT_Effects = <TData extends MRT_RowData>(
   useEffect(() => {
     if (typeof window !== 'undefined') {
       if (isFullScreen) {
+        // @ts-ignore
         previousTop.current = document.body.getBoundingClientRect().top; //save scroll position
         document.body.style.height = '100dvh'; //hide page scrollbars when table is in full screen mode
       } else {

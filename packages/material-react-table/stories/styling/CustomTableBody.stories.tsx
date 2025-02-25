@@ -1,4 +1,4 @@
-import Typography from '@mui/material/Typography';
+import Text from '@mui/material/Text';
 import { type MRT_ColumnDef, MaterialReactTable } from '../../src';
 import { faker } from '@faker-js/faker';
 import { type Meta } from '@storybook/react';
@@ -59,8 +59,6 @@ export const CustomEmptyRowsJSX = () => (
   <MaterialReactTable
     columns={columns}
     data={[]}
-    renderEmptyRowsFallback={() => (
-      <Typography>OMG THERE ARE NO ROWS 😳</Typography>
-    )}
+    renderEmptyRowsFallback={() => <Text>OMG THERE ARE NO ROWS 😳</Text>}
   />
 );
