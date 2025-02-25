@@ -4,13 +4,12 @@ import {
   useMaterialReactTable,
   type MRT_ColumnDef,
 } from 'chakra-react-table';
-import { useTheme } from '@mui/material/styles';
-import { LineChart } from '@mui/x-charts/LineChart';
+import { useTheme, useColorMode, Box } from '@chakra-ui/react';
 import { data, type Person } from './makeData';
 
 const Example = () => {
   const theme = useTheme();
-
+  const { colorMode } = useColorMode();
   const columns = useMemo<MRT_ColumnDef<Person>[]>(
     //column definitions...
     () => [
@@ -44,42 +43,43 @@ const Example = () => {
       sx: {
         '.Mui-TableBodyCell-DetailPanel': {
           backgroundColor:
-            theme.palette.mode === 'dark'
-              ? theme.palette.grey[900]
-              : theme.palette.grey[100],
+            colorMode === 'dark'
+              ? theme.colors.gray[900]
+              : theme.colors.gray[100],
         },
       },
     },
     renderDetailPanel: ({ row }) => (
-      <LineChart
-        xAxis={[
-          {
-            data: row.original.gamesPlayed,
-            label: 'Games Played',
-            valueFormatter: (value) => `#${value}`,
-            tickLabelInterval: (value) => value % 1 === 0,
-          },
-        ]}
-        yAxis={[{ min: 0, max: 60 }]}
-        series={[
-          {
-            color: theme.palette.primary.dark,
-            data: row.original.points,
-            label: 'Points',
-          },
-          {
-            color: theme.palette.secondary.main,
-            data: row.original.assists,
-            label: 'Assists',
-          },
-          {
-            color: theme.palette.error.main,
-            data: row.original.turnovers,
-            label: 'Turnovers',
-          },
-        ]}
-        height={250}
-      />
+      <Box>TBD</Box>
+      // <LineChart
+      //   xAxis={[
+      //     {
+      //       data: row.original.gamesPlayed,
+      //       label: 'Games Played',
+      //       valueFormatter: (value) => `#${value}`,
+      //       tickLabelInterval: (value) => value % 1 === 0,
+      //     },
+      //   ]}
+      //   yAxis={[{ min: 0, max: 60 }]}
+      //   series={[
+      //     {
+      //       color: theme.colors.blue['500'],
+      //       data: row.original.points,
+      //       label: 'Points',
+      //     },
+      //     {
+      //       color: theme.colors.gray['500'],
+      //       data: row.original.assists,
+      //       label: 'Assists',
+      //     },
+      //     {
+      //       color: theme.colors.red['500'],
+      //       data: row.original.turnovers,
+      //       label: 'Turnovers',
+      //     },
+      //   ]}
+      //   height={250}
+      // />
     ),
   });
 

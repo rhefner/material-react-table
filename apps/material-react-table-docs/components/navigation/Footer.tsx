@@ -8,7 +8,7 @@ import {
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { EditIcon } from '@chakra-ui/icons';
+import { MdEdit as EditIcon } from 'react-icons/md';
 import TableOfContentsList from './TableOfContentsList';
 import { routes } from './routes';
 import { EthicalAd } from '../mdx/EthicalAd';
@@ -79,18 +79,6 @@ export const Footer = () => {
         </Link>
       </Text>
       <EthicalAd id="footer" text />
-      <Text mt="2rem" textAlign="center" fontSize="sm">
-        <Link
-          color="purple.400"
-          target="_blank"
-          href={`https://plausible.io/chakra-react-table.com?${new URLSearchParams(
-            { page: pathname },
-          ).toString()}`}
-        >
-          Plausible Analytics
-        </Link>{' '}
-        for this page
-      </Text>
       <Box
         boxShadow="md"
         borderRadius="8px"

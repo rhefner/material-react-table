@@ -5,6 +5,7 @@ import {
   type MRT_ColumnDef,
 } from 'chakra-react-table';
 import { citiesList, data, type Person, usStateList } from './makeData';
+import { ChakraProvider } from '@chakra-ui/react';
 
 const Example = () => {
   const columns = useMemo<MRT_ColumnDef<Person>[]>(
@@ -39,7 +40,7 @@ const Example = () => {
           max: 200_000, //custom max (as opposed to faceted max)
           min: 30_000, //custom min (as opposed to faceted min)
           step: 10_000,
-          valueLabelFormat: (value) =>
+          valueLabelFormat: (value: number) =>
             value.toLocaleString('en-US', {
               style: 'currency',
               currency: 'USD',
@@ -102,15 +103,12 @@ const Example = () => {
   return <MaterialReactTable table={table} />;
 };
 
-//Date Picker Imports - these should just be in your Context Provider
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-
-const ExampleWithLocalizationProvider = () => (
-  //App.tsx or AppProviders file
-  <LocalizationProvider dateAdapter={AdapterDayjs}>
+const ExampleWithChakraProvider = () => (
+  // In Chakra React Table, date pickers are handled internally
+  // No need for a separate date adapter or provider
+  <ChakraProvider>
     <Example />
-  </LocalizationProvider>
+  </ChakraProvider>
 );
 
-export default ExampleWithLocalizationProvider;
+export default ExampleWithChakraProvider;

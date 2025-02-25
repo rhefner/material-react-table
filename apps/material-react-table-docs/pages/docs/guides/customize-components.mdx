@@ -168,7 +168,7 @@ const table = useMaterialReactTable({
   muiTableHeadCellProps: {
     //no useTheme hook needed, just use the `sx` prop with the theme callback
     sx: (theme) => ({
-      color: theme.palette.text.secondary,
+      color: theme.colors.gray['500'],
     }),
   },
 });
@@ -319,19 +319,19 @@ Here is the default `mrtTheme` object used internally if not overridden:
 ```jsx
 const baseBackgroundColor =
   themeOverrides?.baseBackgroundColor ??
-  (theme.palette.mode === 'dark'
-    ? lighten(theme.palette.background.default, 0.05)
-    : theme.palette.background.default);
+  (colorMode === 'dark'
+    ? lighten(theme.colors.gray['900'], 0.05)
+    : theme.colors.gray['900']);
 return {
   baseBackgroundColor,
-  draggingBorderColor: theme.palette.primary.main,
+  draggingBorderColor: theme.colors.blue['500'],
   matchHighlightColor:
-    theme.palette.mode === 'dark'
-      ? darken(theme.palette.warning.dark, 0.25)
-      : lighten(theme.palette.warning.light, 0.5),
+    colorMode === 'dark'
+      ? darken(theme.colors.yellow['800'], 0.25)
+      : lighten(theme.colors.yellow['300'], 0.5),
   menuBackgroundColor: lighten(baseBackgroundColor, 0.07),
-  pinnedRowBackgroundColor: alpha(theme.palette.primary.main, 0.1),
-  selectedRowBackgroundColor: alpha(theme.palette.primary.main, 0.2),
+  pinnedRowBackgroundColor: alpha(theme.colors.blue['500'], 0.1),
+  selectedRowBackgroundColor: alpha(theme.colors.blue['500'], 0.2),
 };
 ```
 

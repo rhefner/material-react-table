@@ -8,7 +8,18 @@ import {
   type MRT_TableOptions,
   useMaterialReactTable,
 } from 'chakra-react-table';
-import {Box, Button, DialogActions, DialogContent, DialogTitle, IconButton, Tooltip, } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  IconButton,
+  Tooltip,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+} from '@chakra-ui/react';
 import {
   QueryClient,
   QueryClientProvider,
@@ -174,40 +185,43 @@ const Example = () => {
     //optionally customize modal content
     renderCreateRowDialogContent: ({ table, row, internalEditComponents }) => (
       <>
-        <DialogTitle variant="h3">Create New User</DialogTitle>
-        <DialogContent
-          display={'flex'} flexDirection={'column'} gap={'1rem'}
-        >
+        <ModalHeader fontSize="xl">Create New User</ModalHeader>
+        <ModalBody display="flex" flexDirection="column" gap="4">
           {internalEditComponents} {/* or render custom edit components here */}
-        </DialogContent>
-        <DialogActions>
+        </ModalBody>
+        <ModalFooter>
           <MRT_EditActionButtons variant="text" table={table} row={row} />
-        </DialogActions>
+        </ModalFooter>
       </>
     ),
     //optionally customize modal content
     renderEditRowDialogContent: ({ table, row, internalEditComponents }) => (
       <>
-        <DialogTitle variant="h3">Edit User</DialogTitle>
-        <DialogContent
-          display={'flex'} flexDirection={'column'} gap={'1.5rem'}
-        >
+        <ModalHeader fontSize="xl">Edit User</ModalHeader>
+        <ModalBody display="flex" flexDirection="column" gap="6">
           {internalEditComponents} {/* or render custom edit components here */}
-        </DialogContent>
-        <DialogActions>
+        </ModalBody>
+        <ModalFooter>
           <MRT_EditActionButtons variant="text" table={table} row={row} />
-        </DialogActions>
+        </ModalFooter>
       </>
     ),
     renderRowActions: ({ row, table }) => (
-      <Box display={'flex'} gap={'1rem'}>
-        <Tooltip title="Edit">
-          <IconButton onClick={() => table.setEditingRow(row)}>
+      <Box display="flex" gap="3">
+        <Tooltip label="Edit">
+          <IconButton
+            aria-label="Edit"
+            onClick={() => table.setEditingRow(row)}
+          >
             <EditIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title="Delete">
-          <IconButton colorScheme="red" onClick={() => openDeleteConfirmModal(row)}>
+        <Tooltip label="Delete">
+          <IconButton
+            aria-label="Delete"
+            colorScheme="red"
+            onClick={() => openDeleteConfirmModal(row)}
+          >
             <DeleteIcon />
           </IconButton>
         </Tooltip>

@@ -7,7 +7,15 @@ import {
   type MRT_TableOptions,
   useMaterialReactTable,
 } from 'chakra-react-table';
-import {Box, Button, IconButton, Tooltip, darken, lighten, } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Icon,
+  IconButton,
+  theme,
+  Tooltip,
+  useColorMode,
+} from '@chakra-ui/react';
 import {
   QueryClient,
   QueryClientProvider,
@@ -19,8 +27,10 @@ import { type User, fakeData, usStates } from './makeData';
 import { MdPersonAddAlt as PersonAddAltIcon } from 'react-icons/md';
 import { MdEdit as EditIcon } from 'react-icons/md';
 import { MdDelete as DeleteIcon } from 'react-icons/md';
+import { alpha } from 'chakra-react-table/src/utils/color.utils';
 
 const Example = () => {
+  const { colorMode } = useColorMode();
   const [creatingRowIndex, setCreatingRowIndex] = useState<
     number | undefined
   >();
@@ -161,7 +171,7 @@ const Example = () => {
     enableEditing: true,
     enableExpanding: true,
     positionCreatingRow: creatingRowIndex, //index where new row is inserted before
-    getRowId: (row) => row.id,
+    getRowId: (row: User) => row.id,
     muiToolbarAlertBannerProps: isLoadingUsersError
       ? {
           color: 'error',
@@ -173,16 +183,15 @@ const Example = () => {
         minHeight: '500px',
       },
     },
-    muiTableBodyRowProps: ({ row }) => ({
-      //conditional styling based on row depth
-      sx: (theme) => ({
+    muiTableBodyRowProps: ({ row }: { row: MRT_Row<User> }) => ({
+      sx: {
         td: {
-          backgroundColor: darken(
-            lighten(theme.palette.background.paper, 0.1),
-            row.depth * (theme.palette.mode === 'dark' ? 0.2 : 0.1),
+          backgroundColor: alpha(
+            theme.colors.gray[100],
+            row.depth * (colorMode === 'dark' ? 0.2 : 0.1),
           ),
         },
-      }),
+      },
     }),
     onCreatingRowCancel: () => setValidationErrors({}),
     onCreatingRowSave: handleCreateUser,
@@ -191,17 +200,25 @@ const Example = () => {
     renderRowActions: ({ row, staticRowIndex, table }) => (
       <Box display={'flex'} gap={'1rem'}>
         <Tooltip title="Edit">
-          <IconButton onClick={() => table.setEditingRow(row)}>
+          <IconButton
+            aria-label="Edit"
+            onClick={() => table.setEditingRow(row)}
+          >
             <EditIcon />
           </IconButton>
         </Tooltip>
         <Tooltip title="Delete">
-          <IconButton colorScheme="red" onClick={() => openDeleteConfirmModal(row)}>
+          <IconButton
+            aria-label="Delete"
+            colorScheme="red"
+            onClick={() => openDeleteConfirmModal(row)}
+          >
             <DeleteIcon />
           </IconButton>
         </Tooltip>
         <Tooltip title="Add Subordinate">
           <IconButton
+            aria-label="Add Subordinate"
             onClick={() => {
               setCreatingRowIndex((staticRowIndex || 0) + 1);
               table.setCreatingRow(
@@ -229,7 +246,7 @@ const Example = () => {
     ),
     renderTopToolbarCustomActions: ({ table }) => (
       <Button
-        startIcon={<PersonAddAltIcon />}
+        leftIcon={<Icon as={PersonAddAltIcon} />}
         colorScheme="blue"
         onClick={() => {
           setCreatingRowIndex(table.getRowModel().rows.length); //create new row at bottom of table

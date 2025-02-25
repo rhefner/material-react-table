@@ -2,7 +2,7 @@
 import { MaterialReactTable, type MRT_ColumnDef } from 'chakra-react-table';
 
 //Import Material React Table Translations
-import { MRT_Localization_ES } from 'chakra-react-table/locales/es';
+import { MRT_Localization_ES } from 'chakra-react-table/src/locales/es';
 
 //mock data
 import { data, type Person } from './makeData';
@@ -44,17 +44,15 @@ const Example = () => {
 };
 
 //App.tsx or similar
-import { createTheme, ThemeProvider, useTheme } from '@mui/material';
-import { esES } from '@mui/material/locale';
+import { ChakraProvider } from '@chakra-ui/react';
 
-const ExampleWithThemeProvider = () => {
-  const theme = useTheme(); //replace with your theme/createTheme
+const ExampleWithChakraProvider = () => {
   return (
-    //Setting Material UI locale as best practice to result in better accessibility
-    <ThemeProvider theme={createTheme(theme, esES)}>
+    //Using Chakra's theming system
+    <ChakraProvider>
       <Example />
-    </ThemeProvider>
+    </ChakraProvider>
   );
 };
 
-export default ExampleWithThemeProvider;
+export default ExampleWithChakraProvider;

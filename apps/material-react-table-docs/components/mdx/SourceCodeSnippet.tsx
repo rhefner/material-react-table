@@ -21,6 +21,7 @@ import {
   Switch,
   InputGroup,
   Card,
+  useColorMode,
 } from '@chakra-ui/react';
 import {
   MdCode as CodeIcon,
@@ -52,6 +53,7 @@ export const SourceCodeSnippet = ({
 }: Props) => {
   const plausible = usePlausible();
   const theme = useTheme();
+  const { colorMode } = useColorMode();
   const {
     isLightTheme,
     setIsLightTheme,
@@ -357,9 +359,7 @@ export const SourceCodeSnippet = ({
               code={typeScriptCode ?? ''}
               language={'tsx'}
               theme={
-                theme.palette.mode === 'dark'
-                  ? themes.oceanicNext
-                  : themes.nightOwlLight
+                colorMode === 'dark' ? themes.oceanicNext : themes.nightOwlLight
               }
             >
               {({ className, style, tokens, getLineProps, getTokenProps }) => (
@@ -432,7 +432,7 @@ export const SourceCodeSnippet = ({
                             style={{
                               paddingRight: '2ch',
                               paddingLeft: `${4 - String(i + 1).length}ch`,
-                              color: theme.palette.text.secondary,
+                              color: theme.colors.gray['500'],
                               userSelect: 'none',
                             }}
                           >

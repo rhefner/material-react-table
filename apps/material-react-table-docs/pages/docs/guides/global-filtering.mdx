@@ -227,7 +227,7 @@ return <MaterialReactTable table={table} />;
 
 ### Filter Match Highlighting
 
-Filter match highlighting is a new featured enabled by default that will highlight text in the table body cells that matches the current search query with a shade of the <Box component="span" color="warning.main">`theme.palette.warning.main`</Box> color.
+Filter match highlighting is a new featured enabled by default that will highlight text in the table body cells that matches the current search query with a shade of the <Box component="span" color="warning.main">`theme.colors.yellow['500']`</Box> color.
 
 If you are using a custom `Cell` render override for a column, you will need to use the `renderedCellValue` table option instead of `cell.getValue()` to preserve the filter match highlighting.
 

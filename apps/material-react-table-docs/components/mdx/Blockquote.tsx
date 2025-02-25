@@ -8,11 +8,11 @@ export const Blockquote = (props) => {
     <blockquote
       style={{
         borderLeft: `solid 8px ${alpha(
-          darken(theme.palette.secondary.main, 0.2),
+          darken(theme.colors.gray['500'], 0.2),
           0.6,
         )}`,
         padding: '0.5rem 1rem',
-        backgroundColor: alpha(theme.palette.primary.main, 0.05),
+        backgroundColor: alpha(theme.colors.blue['500'], 0.05),
         borderRadius: '4px',
         margin: isMobile ? '1rem' : '3rem',
       }}

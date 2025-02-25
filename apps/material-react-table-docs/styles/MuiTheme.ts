@@ -1,4 +1,5 @@
-import { createTheme, darken } from '@mui/material';
+import { extendTheme } from '@chakra-ui/react';
+import { darken } from 'chakra-react-table/src/utils/color.utils';
 
 export const theme = ({
   isLightTheme,
@@ -9,7 +10,7 @@ export const theme = ({
   primaryColor?: string;
   secondaryColor: string;
 }) =>
-  createTheme({
+  extendTheme({
     palette: {
       mode: isLightTheme ? 'light' : 'dark',
       ...(primaryColor ? { primary: { main: primaryColor } } : {}),

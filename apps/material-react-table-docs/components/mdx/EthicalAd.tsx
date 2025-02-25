@@ -15,7 +15,7 @@ export const EthicalAd = ({ compact, id, sticky, text, vertical }: Props) => {
 
   return (
     <Box
-      className={`${theme.palette.mode} ${
+      className={`${colorMode} ${
         vertical ? 'vertical' : 'horizontal'
       } raised bordered`}
       data-ea-keywords="javascript|typescript|react|opensource|frontend|accessibility|material"

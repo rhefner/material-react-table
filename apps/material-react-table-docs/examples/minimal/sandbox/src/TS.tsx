@@ -44,7 +44,7 @@ export const Example = () => {
     enablePagination: false,
     enableSorting: false,
     mrtTheme: (theme) => ({
-      baseBackgroundColor: theme.palette.background.default, //change default background color
+      baseBackgroundColor: theme.colors.gray['900'], //change default background color
     }),
     muiTableBodyRowProps: { hover: false },
     muiTableProps: {

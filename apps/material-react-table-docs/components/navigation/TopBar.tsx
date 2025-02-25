@@ -13,7 +13,12 @@ import {
   useColorMode,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { MoonIcon, SunIcon, HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
+import {
+  MdDarkMode as MoonIcon,
+  MdLightMode as SunIcon,
+  MdMenu as HamburgerIcon,
+  MdClose as CloseIcon,
+} from 'react-icons/md';
 import Image from 'next/image';
 import { useThemeContext } from '../../styles/ThemeContext';
 import docsearch from '@docsearch/js';
@@ -93,7 +98,12 @@ export const TopBar = ({ navOpen, setNavOpen }: Props) => {
         bg={bgColor}
         opacity={0.95}
       >
-        <Flex justify="space-between" textAlign="center" p="2px 8px" height="48px">
+        <Flex
+          justify="space-between"
+          textAlign="center"
+          p="2px 8px"
+          height="48px"
+        >
           <Flex textAlign="center">
             {!isDesktop && (
               <IconButton
@@ -138,18 +148,12 @@ export const TopBar = ({ navOpen, setNavOpen }: Props) => {
               borderColor="teal.400"
             >
               <option value="v1">
-                <NextLink
-                  href={`https://v1.chakra-react-table.com/${pathname}`}
-                  passHref
-                >
+                <NextLink href={`http://localhost/${pathname}`} passHref>
                   V1
                 </NextLink>
               </option>
               <option value="v2">
-                <NextLink
-                  href={`https://v2.chakra-react-table.com/${pathname}`}
-                  passHref
-                >
+                <NextLink href={`http://localhost/${pathname}`} passHref>
                   V2
                 </NextLink>
               </option>

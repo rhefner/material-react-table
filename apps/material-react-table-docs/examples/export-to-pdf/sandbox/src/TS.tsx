@@ -4,7 +4,7 @@ import {
   type MRT_Row,
   createMRTColumnHelper,
 } from 'chakra-react-table';
-import {Box, Button} from '@chakra-ui/react';
+import { Box, Button } from '@chakra-ui/react';
 import { MdFileDownload as FileDownloadIcon } from 'react-icons/md';
 import { jsPDF } from 'jspdf'; //or use your library of choice here
 import autoTable from 'jspdf-autotable';
@@ -60,34 +60,32 @@ const Example = () => {
     paginationDisplayMode: 'pages',
     positionToolbarAlertBanner: 'bottom',
     renderTopToolbarCustomActions: ({ table }) => (
-      <Box
-        display={'flex'} gap={'16px'} padding={'8px'} flexWrap={'wrap'} ={undefined}
-      >
+      <Box display="flex" gap="4" p="2" flexWrap="wrap">
         <Button
-          disabled={table.getPrePaginationRowModel().rows.length === 0}
-          //export all rows, including from the next page, (still respects filtering and sorting)
+          leftIcon={<FileDownloadIcon />}
+          isDisabled={table.getPrePaginationRowModel().rows.length === 0}
           onClick={() =>
             handleExportRows(table.getPrePaginationRowModel().rows)
           }
-          startIcon={<FileDownloadIcon />}
+          colorScheme="blue"
         >
           Export All Rows
         </Button>
         <Button
-          disabled={table.getRowModel().rows.length === 0}
-          //export all rows as seen on the screen (respects pagination, sorting, filtering, etc.)
+          leftIcon={<FileDownloadIcon />}
+          isDisabled={table.getRowModel().rows.length === 0}
           onClick={() => handleExportRows(table.getRowModel().rows)}
-          startIcon={<FileDownloadIcon />}
+          colorScheme="blue"
         >
           Export Page Rows
         </Button>
         <Button
-          disabled={
+          leftIcon={<FileDownloadIcon />}
+          isDisabled={
             !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
           }
-          //only export selected rows
           onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
-          startIcon={<FileDownloadIcon />}
+          colorScheme="blue"
         >
           Export Selected Rows
         </Button>

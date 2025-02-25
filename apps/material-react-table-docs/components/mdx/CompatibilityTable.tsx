@@ -96,7 +96,7 @@ export const CompatibilityTable = () => {
             ? 'bold'
             : 'normal',
           color: row.original.mrtVersion.includes('This Version')
-            ? `${theme.palette.primary.main}`
+            ? `${theme.colors.blue['500']}`
             : 'inherit',
         }),
       }),

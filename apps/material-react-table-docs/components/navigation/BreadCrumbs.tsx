@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
-import { ArrowBackIcon } from '@chakra-ui/icons';
+import { MdArrowBack as ArrowBackIcon } from 'react-icons/md';
 
 export const BreadCrumbs = () => {
   const { route, back } = useRouter();
@@ -44,7 +44,7 @@ export const BreadCrumbs = () => {
         link === '/'
           ? 'Home'
           : link.split('/').pop()?.replaceAll('-', ' ') || '',
-      item: `https://www.chakra-react-table.com${link}`,
+      item: `http://localhost${link}`,
     })),
   };
 

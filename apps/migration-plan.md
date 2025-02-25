@@ -99,7 +99,7 @@ For each example directory:
    - "@mui/material": "^6.4.4",
    - "@mui/icons-material": "^6.4.4",
    - "@mui/x-date-pickers": "^7.26.0",
-   - "material-react-table": "workspace:*",
+   - "chakra-react-table": "workspace:*",
    + "@chakra-ui/react": "^2.8.2",
    + "@chakra-ui/icons": "^2.1.1",
    + "react-icons": "^5.0.1",

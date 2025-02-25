@@ -1,6 +1,16 @@
 import Link from 'next/link';
-import {alpha, Box, Button, darken, Stack, Text, Link as MuiLink, Alert, AlertTitle, } from '@chakra-ui/react';
-import {ArrowForwardIos} from 'react-icons/md';
+import {
+  Box,
+  Button,
+  Stack,
+  Text,
+  Link as MuiLink,
+  Alert,
+  AlertTitle,
+  theme,
+  Icon,
+} from '@chakra-ui/react';
+import { MdArrowForwardIos as ArrowForwardIos } from 'react-icons/md';
 import { HomeCards } from '../components/mdx/HomeCards';
 import { LinkCards } from '../components/mdx/LinkCards';
 import { StatBadges } from '../components/mdx/StatBadges';
@@ -11,21 +21,22 @@ import { FeatureTable } from '../components/mdx/FeatureTable';
 import { Contributors } from '../components/mdx/Contributors';
 import { InstallCommand } from '../components/mdx/InstallCommand';
 import BasicExamples from '../example-groups/BasicExamples';
+import { alpha, darken } from 'chakra-react-table/src/utils/color.utils';
 
 const HomePage = () => {
   return (
     <>
       <Stack sx={{ maxWidth: '1200px', m: 'auto' }}>
-        <Alert severity="success" variant="outline" sx={{}}>
+        <Alert status="success" variant="outline" sx={{}}>
           <AlertTitle>
             Material React Table V3 was released September 5th, 2024!
           </AlertTitle>
-          <Typography>Upgrade to MRT V3 and Material UI V6 Today!</Typography>
+          <Text>Upgrade to MRT V3 and Material UI V6 Today!</Text>
           <MuiLink href="/docs/getting-started/migrating-to-v3">
             View the V3 Migration Guide here.
           </MuiLink>
         </Alert>
-        <Typography
+        <Text
           sx={{
             textAlign: 'center',
             fontSize: {
@@ -50,16 +61,16 @@ const HomePage = () => {
           Welcome To
           <br />
           <Box
-            sx={(theme) => ({
-              background: `-webkit-linear-gradient(left, ${theme.palette.primary.dark}, ${theme.palette.secondary.main})`,
+            sx={{
+              background: `-webkit-linear-gradient(left, ${theme.colors.blue['300']}, ${theme.colors.gray['500']})`,
               display: 'inline',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
-            })}
+            }}
           >
             Material&nbsp;React&nbsp;Table
             <Box
-              component="sup"
+              as="sup"
               sx={{
                 fontSize: {
                   xs: '1rem',
@@ -72,8 +83,8 @@ const HomePage = () => {
               V3
             </Box>
           </Box>
-        </Typography>
-        <Typography
+        </Text>
+        <Text
           color="text.secondary"
           sx={{
             fontSize: {
@@ -93,7 +104,7 @@ const HomePage = () => {
           <Link href="https://mui.com/" passHref legacyBehavior>
             <MuiLink
               sx={{
-                color: (theme) => theme.palette.primary.dark,
+                color: theme.colors.gray['500'],
                 textDecoration: 'none',
                 '&:hover': { textDecoration: 'underline' },
               }}
@@ -106,7 +117,7 @@ const HomePage = () => {
           and&nbsp;
           <Link href="https://tanstack.com/table/v8" passHref legacyBehavior>
             <MuiLink
-              color="secondary.main"
+              color={theme.colors.gray['500']}
               sx={{
                 textDecoration: 'none',
                 '&:hover': { textDecoration: 'underline' },
@@ -117,7 +128,7 @@ const HomePage = () => {
               TanStack&nbsp;Table<sup>V8</sup>
             </MuiLink>
           </Link>
-        </Typography>
+        </Text>
         <StatBadges />
         <Box
           sx={{
@@ -140,8 +151,8 @@ const HomePage = () => {
         >
           <Link href="/docs/getting-started/install" passHref>
             <Button
-              endIcon={<ArrowForwardIos />}
-              fullWidth
+              rightIcon={<Icon as={ArrowForwardIos} />}
+              w="full"
               size="large"
               colorScheme="blue"
             >
@@ -150,19 +161,19 @@ const HomePage = () => {
           </Link>
           <Link href="/docs/api" passHref>
             <Button
-              endIcon={<ArrowForwardIos />}
-              fullWidth
+              rightIcon={<Icon as={ArrowForwardIos} />}
+              w="full"
               size="large"
-              sx={(theme) => ({
-                backgroundColor: alpha(theme.palette.primary.main, 0.1),
-                color: theme.palette.primary.dark,
+              sx={{
+                backgroundColor: alpha(theme.colors.blue['300'], 0.1),
+                color: theme.colors.blue['300'],
                 '&:hover': {
                   backgroundColor: alpha(
-                    darken(theme.palette.primary.main, 0.1),
+                    darken(theme.colors.blue['300'], 0.1),
                     0.2,
                   ),
                 },
-              })}
+              }}
               colorScheme="blue"
             >
               API
@@ -170,19 +181,19 @@ const HomePage = () => {
           </Link>
           <Link href="/docs/examples" passHref>
             <Button
-              endIcon={<ArrowForwardIos />}
-              fullWidth
+              rightIcon={<Icon as={ArrowForwardIos} />}
+              w="full"
               size="large"
-              sx={(theme) => ({
-                backgroundColor: alpha(theme.palette.primary.main, 0.1),
-                color: theme.palette.primary.dark,
+              sx={{
+                backgroundColor: alpha(theme.colors.blue['300'], 0.1),
+                color: theme.colors.blue['300'],
                 '&:hover': {
                   backgroundColor: alpha(
-                    darken(theme.palette.primary.main, 0.1),
+                    darken(theme.colors.blue['300'], 0.1),
                     0.2,
                   ),
                 },
-              })}
+              }}
               colorScheme="blue"
             >
               Examples
@@ -190,19 +201,19 @@ const HomePage = () => {
           </Link>
           <Link href="/docs/guides" passHref>
             <Button
-              endIcon={<ArrowForwardIos />}
-              fullWidth
+              rightIcon={<Icon as={ArrowForwardIos} />}
+              w="full"
               size="large"
-              sx={(theme) => ({
-                backgroundColor: alpha(theme.palette.primary.main, 0.1),
-                color: theme.palette.primary.dark,
+              sx={{
+                backgroundColor: alpha(theme.colors.blue['300'], 0.1),
+                color: theme.colors.blue['300'],
                 '&:hover': {
                   backgroundColor: alpha(
-                    darken(theme.palette.primary.main, 0.1),
+                    darken(theme.colors.blue['300'], 0.1),
                     0.2,
                   ),
                 },
-              })}
+              }}
               colorScheme="blue"
             >
               Guides
@@ -213,9 +224,9 @@ const HomePage = () => {
           <InstallCommand centered variant="fullWidth" />
         </Box>
         <HomeCards />
-        <Typography my="2rem" textAlign="center" variant="h3">
+        <Text my="2rem" textAlign="center" variant="h3">
           Popular Docs
-        </Typography>
+        </Text>
         <Box
           sx={{
             display: 'grid',
@@ -245,11 +256,11 @@ const HomePage = () => {
           <GuideCard title="Selection" href="docs/guides/row-selection" />
         </Box>
       </Stack>
-      <Typography my="2rem" textAlign="center" variant="h3">
+      <Text my="2rem" textAlign="center" variant="h3">
         Examples To Get You Started
-      </Typography>
+      </Text>
       <BasicExamples />
-      <Typography
+      <Text
         sx={{
           textAlign: 'center',
           mt: '5rem',
@@ -259,17 +270,17 @@ const HomePage = () => {
       >
         Is{' '}
         <Box
-          sx={(theme) => ({
-            background: `-webkit-linear-gradient(left, ${theme.palette.primary.dark}, ${theme.palette.secondary.main})`,
+          sx={{
+            background: `-webkit-linear-gradient(left, ${theme.colors.blue['300']}, ${theme.colors.blue['500']})`,
             display: 'inline',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
-          })}
+          }}
         >
           &lt;MaterialReactTable&nbsp;/&gt;
         </Box>{' '}
         Right For Your Project?
-      </Typography>
+      </Text>
       <LinkHeading
         color="text.secondary"
         sx={{
@@ -292,9 +303,9 @@ const HomePage = () => {
         Feature Comparison
       </LinkHeading>
       <FeatureTable />
-      <Typography component="p" variant="subtitle2" sx={{ mt: '1rem' }}>
+      <Text as="p" variant="subtitle2" sx={{ mt: '1rem' }}>
         *If you see any inaccuracies in this table, PRs are welcome!
-      </Typography>
+      </Text>
       <LinkHeading mt="4rem" textAlign="center" variant="h3">
         Maintainers and Contributors
       </LinkHeading>

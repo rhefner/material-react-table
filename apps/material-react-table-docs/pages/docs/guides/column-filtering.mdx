@@ -368,7 +368,7 @@ If you need custom filter components that are much more complex than text-boxes 
 
 ### Filter Match Highlighting
 
-Filter Match Highlighting is a new featured enabled by default that will highlight text in the table body cells that matches the current filter query with a shade of the <Box component="span" color="warning.main">`theme.palette.warning.main`</Box> color.
+Filter Match Highlighting is a new featured enabled by default that will highlight text in the table body cells that matches the current filter query with a shade of the <Box component="span" color="warning.main">`theme.colors.yellow['500']`</Box> color.
 
 Filter Match Highlighting will only work on columns with the default `text` filter variant. Also, if you are using a custom `Cell` render override for a column, you will need to use the `renderedCellValue` table option instead of `cell.getValue()` in order to preserve the filter match highlighting.
 

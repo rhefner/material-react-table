@@ -46,9 +46,7 @@ const Example = () => {
     muiTableBodyCellProps: {
       sx: (theme) => ({
         backgroundColor:
-          theme.palette.mode === 'dark'
-            ? theme.palette.grey[900]
-            : theme.palette.grey[50],
+          colorMode === 'dark' ? theme.colors.gray[900] : theme.colors.gray[50],
       }),
     },
   });

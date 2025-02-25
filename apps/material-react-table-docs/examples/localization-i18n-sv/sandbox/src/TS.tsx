@@ -44,14 +44,13 @@ const Example = () => {
 };
 
 //App.tsx or similar
-import { createTheme, ThemeProvider, useTheme } from '@mui/material';
-import { svSE } from '@mui/material/locale';
+import { ThemeProvider, useTheme } from '@chakra-ui/react';
 
 const ExampleWithThemeProvider = () => {
   const theme = useTheme(); //replace with your theme/createTheme
   return (
     //Setting Material UI locale as best practice to result in better accessibility
-    <ThemeProvider theme={createTheme(theme, svSE)}>
+    <ThemeProvider theme={theme}>
       <Example />
     </ThemeProvider>
   );

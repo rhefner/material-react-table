@@ -5,7 +5,12 @@ import {
   type MRT_TableOptions,
   type MRT_ColumnDef,
 } from 'chakra-react-table';
-import {Link as MuiLink, Text, useMediaQuery, useTheme, } from '@chakra-ui/react';
+import {
+  Link as MuiLink,
+  Text,
+  useMediaQuery,
+  useTheme,
+} from '@chakra-ui/react';
 import { SampleCodeSnippet } from '../mdx/SampleCodeSnippet';
 import { type TableOption, tableOptions } from './tableOptions';
 
@@ -29,7 +34,7 @@ const TableOptionsTable = ({ onlyOptions }: Props) => {
         }),
         Cell: ({ renderedCellValue, row }) =>
           row.original?.required ? (
-            <strong style={{ color: theme.palette.primary.dark }}>
+            <strong style={{ color: theme.colors.blue['500'] }}>
               {renderedCellValue}*
             </strong>
           ) : (

@@ -47,8 +47,7 @@ const Example = () => {
 };
 
 //App.tsx or similar
-import { createTheme, ThemeProvider, useTheme } from '@mui/material';
-import { arSA } from '@mui/material/locale';
+import { ThemeProvider, useTheme } from '@chakra-ui/react';
 
 const ExampleWithThemeProvider = () => {
   const theme = useTheme(); //replace with your theme/createTheme

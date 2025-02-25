@@ -7,7 +7,7 @@ import {
   MRT_ExpandAllButton,
 } from 'chakra-react-table';
 import { data, type Person } from './makeData';
-import {Box, Stack} from '@chakra-ui/react';
+import { Box, Stack } from '@chakra-ui/react';
 
 const Example = () => {
   const columns = useMemo<MRT_ColumnDef<Person>[]>(
@@ -62,9 +62,9 @@ const Example = () => {
           sx: (theme) => ({
             color:
               row.depth === 0
-                ? theme.palette.primary.main
+                ? theme.colors.blue['500']
                 : row.depth === 1
-                  ? theme.palette.secondary.main
+                  ? theme.colors.gray['500']
                   : undefined,
           }),
         }),

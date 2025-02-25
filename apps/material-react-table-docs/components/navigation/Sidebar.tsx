@@ -15,7 +15,7 @@ import { SideBarItems } from './SidebarItems';
 import { RouteItem, routes } from './routes';
 import { matchSorter } from 'match-sorter';
 import { usePlausible } from 'next-plausible';
-import { CloseIcon, SearchIcon } from '@chakra-ui/icons';
+import { MdSearch as SearchIcon, MdClose as CloseIcon } from 'react-icons/md';
 
 interface Props {
   navOpen: boolean;

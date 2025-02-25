@@ -77,6 +77,7 @@ const Example = () => {
     },
     muiTableBodyCellProps: {
       sx: {
+        // Chakra UI uses CSS-in-JS with & selectors
         '&[data-row-index="odd"]:not([data-selected="true"]):not([data-pinned="true"])':
           {
             backgroundColor: darkened1,

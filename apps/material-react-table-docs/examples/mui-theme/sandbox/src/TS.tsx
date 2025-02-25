@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { MaterialReactTable, type MRT_ColumnDef } from 'chakra-react-table';
-import { createTheme, ThemeProvider, useTheme } from '@mui/material';
+import { ChakraProvider, extendTheme, useColorMode } from '@chakra-ui/react';
 
 type Person = {
   firstName: string;
@@ -76,52 +76,62 @@ const data = [
 //end
 
 const Example = () => {
-  const globalTheme = useTheme(); //(optional) if you already have a theme defined in your app root, you can import here
+  const { colorMode } = useColorMode();
 
-  const tableTheme = useMemo(
+  // Create a custom Chakra theme
+  const customTheme = useMemo(
     () =>
-      createTheme({
-        palette: {
-          mode: globalTheme.palette.mode, //let's use the same dark/light mode as the global theme
-          primary: globalTheme.palette.secondary, //swap in the secondary color as the primary for the table
+      extendTheme({
+        colors: {
+          primary: {
+            // Use teal as the primary color
+            50: '#E6FFFA',
+            100: '#B2F5EA',
+            200: '#81E6D9',
+            300: '#4FD1C5',
+            400: '#38B2AC',
+            500: '#319795',
+            600: '#2C7A7B',
+            700: '#285E61',
+            800: '#234E52',
+            900: '#1D4044',
+          },
           info: {
-            main: 'rgb(255,122,0)', //add in a custom color for the toolbar alert background stuff
+            // Custom color for alerts
+            500: 'rgb(255,122,0)',
           },
+          // Custom background color
           background: {
-            default:
-              globalTheme.palette.mode === 'light'
-                ? 'rgb(254,255,244)' //random light yellow color for the background in light mode
-                : '#000', //pure black table in dark mode for fun
+            default: colorMode === 'light' ? 'rgb(254,255,244)' : '#000',
           },
         },
-        typography: {
-          button: {
-            textTransform: 'none', //customize typography styles for all buttons in table by default
-            fontSize: '1.2rem',
-          },
-        },
+        // Customize components
         components: {
-          MuiTooltip: {
-            styleOverrides: {
-              tooltip: {
-                fontSize: '1.1rem', //override to make tooltip font size larger
+          Tooltip: {
+            baseStyle: {
+              fontSize: '1.1rem',
+            },
+          },
+          Switch: {
+            baseStyle: {
+              thumb: {
+                bg: 'pink.400',
               },
             },
           },
-          MuiSwitch: {
-            styleOverrides: {
-              thumb: {
-                color: 'pink', //change the color of the switch thumb in the columns show/hide menu to pink
-              },
+          Button: {
+            baseStyle: {
+              textTransform: 'none',
+              fontSize: '1.2rem',
             },
           },
         },
       }),
-    [globalTheme],
+    [colorMode],
   );
 
   return (
-    <ThemeProvider theme={tableTheme}>
+    <ChakraProvider theme={customTheme}>
       <MaterialReactTable
         columns={columns}
         data={data}
@@ -129,7 +139,7 @@ const Example = () => {
         enableColumnOrdering
         enableColumnPinning
       />
-    </ThemeProvider>
+    </ChakraProvider>
   );
 };
 

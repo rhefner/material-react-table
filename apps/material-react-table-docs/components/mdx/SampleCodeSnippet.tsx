@@ -5,6 +5,7 @@ import {
   IconButton,
   type AsProps,
   Card,
+  useColorMode,
 } from '@chakra-ui/react';
 import { Highlight, themes } from 'prism-react-renderer';
 import {
@@ -24,6 +25,7 @@ interface Props {
 
 export const SampleCodeSnippet = ({ paperSxProps, ...props }: Props) => {
   const theme = useTheme();
+  const { colorMode } = useColorMode();
   const [isCopied, setIsCopied] = useState(false);
 
   const handleCopy = () => {
@@ -35,10 +37,11 @@ export const SampleCodeSnippet = ({ paperSxProps, ...props }: Props) => {
   if (!props.className) {
     return (
       <code
+        className={props.className}
         style={{
           backgroundColor: alpha(
-            theme.palette.primary.main,
-            theme.palette.mode === 'dark' ? 0.2 : 0.1,
+            theme.colors.blue['300'],
+            colorMode === 'dark' ? 0.2 : 0.1,
           ),
           padding: '4px',
           margin: '0 0.5ch',
@@ -68,11 +71,7 @@ export const SampleCodeSnippet = ({ paperSxProps, ...props }: Props) => {
       <Highlight
         code={code}
         language={language}
-        theme={
-          theme.palette.mode === 'dark'
-            ? themes.oceanicNext
-            : themes.nightOwlLight
-        }
+        theme={colorMode === 'dark' ? themes.oceanicNext : themes.nightOwlLight}
       >
         {({ className, style, tokens, getLineProps, getTokenProps }) => (
           <div
@@ -119,9 +118,9 @@ export const SampleCodeSnippet = ({ paperSxProps, ...props }: Props) => {
                       ? 'line-through'
                       : undefined,
                     color: line[0].content.startsWith('-')
-                      ? theme.palette.error.main
+                      ? theme.colors.red['500']
                       : line[0].content.startsWith('+')
-                        ? theme.palette.success.main
+                        ? theme.colors.green['500']
                         : undefined,
                   }}
                 >
