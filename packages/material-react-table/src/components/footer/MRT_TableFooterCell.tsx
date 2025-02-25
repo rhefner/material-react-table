@@ -1,5 +1,4 @@
-import TableCell, { type TableCellProps } from '@mui/material/TableCell';
-import { useTheme } from '@mui/material/styles';
+import { Td, type TableCellProps } from '@chakra-ui/react';
 import {
   type MRT_Header,
   type MRT_RowData,
@@ -8,7 +7,7 @@ import {
 import { getCommonMRTCellStyles } from '../../utils/style.utils';
 import { parseFromValuesOrFunc } from '../../utils/utils';
 import { cellKeyboardShortcuts } from '../../utils/cell.utils';
-
+import { useTheme, type Theme } from '../../hooks/custom/useTheme';
 export interface MRT_TableFooterCellProps<TData extends MRT_RowData>
   extends TableCellProps {
   footer: MRT_Header<TData>;
@@ -22,7 +21,7 @@ export const MRT_TableFooterCell = <TData extends MRT_RowData>({
   table,
   ...rest
 }: MRT_TableFooterCellProps<TData>) => {
-  const theme = useTheme();
+  const theme = useTheme<Theme>();
   const {
     getState,
     options: {
@@ -58,11 +57,11 @@ export const MRT_TableFooterCell = <TData extends MRT_RowData>({
   };
 
   return (
-    <TableCell
-      align={
+    <Td
+      textAlign={
         columnDefType === 'group'
           ? 'center'
-          : theme.direction === 'rtl'
+          : theme.direction !== 'ltr'
             ? 'right'
             : 'left'
       }
@@ -70,10 +69,9 @@ export const MRT_TableFooterCell = <TData extends MRT_RowData>({
       data-index={staticColumnIndex}
       data-pinned={!!isColumnPinned || undefined}
       tabIndex={enableKeyboardShortcuts ? 0 : undefined}
-      variant="footer"
       {...tableCellProps}
       onKeyDown={handleKeyDown}
-      sx={(theme) => ({
+      sx={{
         fontWeight: 'bold',
         p:
           density === 'compact'
@@ -90,7 +88,7 @@ export const MRT_TableFooterCell = <TData extends MRT_RowData>({
           theme,
         }),
         ...(parseFromValuesOrFunc(tableCellProps?.sx, theme) as any),
-      })}
+      }}
     >
       {tableCellProps.children ??
         (footer.isPlaceholder
@@ -102,6 +100,6 @@ export const MRT_TableFooterCell = <TData extends MRT_RowData>({
             }) ??
             columnDef.footer ??
             null))}
-    </TableCell>
+    </Td>
   );
 };

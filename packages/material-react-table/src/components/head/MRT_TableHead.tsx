@@ -1,4 +1,4 @@
-import TableHead, { type TableHeadProps } from '@mui/material/TableHead';
+import { Thead, Tr, Th, useTheme, type TableHeadProps } from '@chakra-ui/react';
 import { MRT_TableHeadRow } from './MRT_TableHeadRow';
 import {
   type MRT_ColumnVirtualizer,
@@ -7,11 +7,13 @@ import {
 } from '../../types';
 import { parseFromValuesOrFunc } from '../../utils/utils';
 import { MRT_ToolbarAlertBanner } from '../toolbar/MRT_ToolbarAlertBanner';
+import * as React from 'react';
 
 export interface MRT_TableHeadProps<TData extends MRT_RowData>
   extends TableHeadProps {
   columnVirtualizer?: MRT_ColumnVirtualizer;
   table: MRT_TableInstance<TData>;
+  ref?: React.RefObject<HTMLTableSectionElement>;
 }
 
 export const MRT_TableHead = <TData extends MRT_RowData>({
@@ -37,34 +39,37 @@ export const MRT_TableHead = <TData extends MRT_RowData>({
   };
 
   const stickyHeader = enableStickyHeader || isFullScreen;
+  const chakraTheme = useTheme();
 
   return (
-    <TableHead
+    <Thead
       {...tableHeadProps}
       ref={(ref: HTMLTableSectionElement) => {
         tableHeadRef.current = ref;
         if (tableHeadProps?.ref) {
-          // @ts-expect-error
-          tableHeadProps.ref.current = ref;
+          // Need to handle ref properly for Chakra UI
+          (
+            tableHeadProps.ref as React.RefObject<HTMLTableSectionElement>
+          ).current = ref;
         }
       }}
-      sx={(theme) => ({
+      sx={{
         display: layoutMode?.startsWith('grid') ? 'grid' : undefined,
         opacity: 0.97,
         position: stickyHeader ? 'sticky' : 'relative',
         top: stickyHeader && layoutMode?.startsWith('grid') ? 0 : undefined,
         zIndex: stickyHeader ? 2 : undefined,
-        ...(parseFromValuesOrFunc(tableHeadProps?.sx, theme) as any),
-      })}
+        ...(parseFromValuesOrFunc(tableHeadProps?.sx, chakraTheme) as any),
+      }}
     >
       {positionToolbarAlertBanner === 'head-overlay' &&
       (showAlertBanner || table.getSelectedRowModel().rows.length > 0) ? (
-        <tr
+        <Tr
           style={{
             display: layoutMode?.startsWith('grid') ? 'grid' : undefined,
           }}
         >
-          <th
+          <Th
             colSpan={table.getVisibleLeafColumns().length}
             style={{
               display: layoutMode?.startsWith('grid') ? 'grid' : undefined,
@@ -72,8 +77,8 @@ export const MRT_TableHead = <TData extends MRT_RowData>({
             }}
           >
             <MRT_ToolbarAlertBanner table={table} />
-          </th>
-        </tr>
+          </Th>
+        </Tr>
       ) : (
         table
           .getHeaderGroups()
@@ -86,6 +91,6 @@ export const MRT_TableHead = <TData extends MRT_RowData>({
             />
           ))
       )}
-    </TableHead>
+    </Thead>
   );
 };

@@ -1,14 +1,22 @@
-import Paper, { type PaperProps } from '@mui/material/Paper';
-import { useTheme } from '@mui/material/styles';
-import { MRT_TableContainer } from './MRT_TableContainer';
+import {
+  Card,
+  type CardProps,
+  useColorModeValue,
+  useTheme,
+} from '@chakra-ui/react';
 import { type MRT_RowData, type MRT_TableInstance } from '../../types';
 import { parseFromValuesOrFunc } from '../../utils/utils';
 import { MRT_BottomToolbar } from '../toolbar/MRT_BottomToolbar';
 import { MRT_TopToolbar } from '../toolbar/MRT_TopToolbar';
+import { MRT_TableContainer } from './MRT_TableContainer';
+import { type KeyboardEvent, type RefObject } from 'react';
 
 export interface MRT_TablePaperProps<TData extends MRT_RowData>
-  extends PaperProps {
+  extends CardProps {
   table: MRT_TableInstance<TData>;
+  ref?:
+    | React.RefObject<HTMLDivElement>
+    | ((node: HTMLDivElement | null) => void);
 }
 
 export const MRT_TablePaper = <TData extends MRT_RowData>({
@@ -34,18 +42,22 @@ export const MRT_TablePaper = <TData extends MRT_RowData>({
     ...rest,
   };
 
-  const theme = useTheme();
+  const chakraTheme = useTheme();
+  const bgColor = useColorModeValue('white', 'gray.800');
 
   return (
-    <Paper
-      elevation={2}
-      onKeyDown={(e) => e.key === 'Escape' && table.setIsFullScreen(false)}
+    <Card
+      borderRadius="md"
+      boxShadow="md"
+      onKeyDown={(e: KeyboardEvent) =>
+        e.key === 'Escape' && table.setIsFullScreen(false)
+      }
       {...paperProps}
       ref={(ref: HTMLDivElement) => {
         tablePaperRef.current = ref;
         if (paperProps?.ref) {
-          //@ts-expect-error
-          paperProps.ref.current = ref;
+          // Use proper type casting for the ref
+          (paperProps.ref as RefObject<HTMLDivElement>).current = ref;
         }
       }}
       style={{
@@ -62,18 +74,15 @@ export const MRT_TablePaper = <TData extends MRT_RowData>({
               right: 0,
               top: 0,
               width: '100dvw',
-              zIndex: theme.zIndex.modal,
+              zIndex: chakraTheme.zIndices.modal,
             }
           : {}),
         ...paperProps?.style,
       }}
-      sx={(theme) => ({
-        backgroundColor: baseBackgroundColor,
-        backgroundImage: 'unset',
-        overflow: 'hidden',
-        transition: 'all 100ms ease-in-out',
-        ...(parseFromValuesOrFunc(paperProps?.sx, theme) as any),
-      })}
+      bg={baseBackgroundColor || bgColor}
+      overflow="hidden"
+      transition="all 100ms ease-in-out"
+      {...(paperProps?.sx ? { sx: paperProps.sx } : {})}
     >
       {enableTopToolbar &&
         (parseFromValuesOrFunc(renderTopToolbar, { table }) ?? (
@@ -84,6 +93,6 @@ export const MRT_TablePaper = <TData extends MRT_RowData>({
         (parseFromValuesOrFunc(renderBottomToolbar, { table }) ?? (
           <MRT_BottomToolbar table={table} />
         ))}
-    </Paper>
+    </Card>
   );
 };

@@ -1,4 +1,4 @@
-import Box, { type BoxProps } from '@mui/material/Box';
+import { Box, type BoxProps } from '@chakra-ui/react';
 import { type MRT_RowData, type MRT_TableInstance } from '../../types';
 import { parseFromValuesOrFunc } from '../../utils/utils';
 import { MRT_ShowHideColumnsButton } from '../buttons/MRT_ShowHideColumnsButton';
@@ -6,7 +6,7 @@ import { MRT_ToggleDensePaddingButton } from '../buttons/MRT_ToggleDensePaddingB
 import { MRT_ToggleFiltersButton } from '../buttons/MRT_ToggleFiltersButton';
 import { MRT_ToggleFullScreenButton } from '../buttons/MRT_ToggleFullScreenButton';
 import { MRT_ToggleGlobalFilterButton } from '../buttons/MRT_ToggleGlobalFilterButton';
-
+import { type Theme, useTheme } from '../../hooks/custom/useTheme';
 export interface MRT_ToolbarInternalButtonsProps<TData extends MRT_RowData>
   extends BoxProps {
   table: MRT_TableInstance<TData>;
@@ -16,6 +16,8 @@ export const MRT_ToolbarInternalButtons = <TData extends MRT_RowData>({
   table,
   ...rest
 }: MRT_ToolbarInternalButtonsProps<TData>) => {
+  const theme = useTheme<Theme>();
+
   const {
     options: {
       columnFilterDisplayMode,
@@ -34,13 +36,15 @@ export const MRT_ToolbarInternalButtons = <TData extends MRT_RowData>({
 
   return (
     <Box
-      {...rest}
-      sx={(theme) => ({
+      sx={{
         alignItems: 'center',
         display: 'flex',
-        zIndex: 3,
+        flexWrap: 'wrap-reverse',
+        gap: '8px',
+        justifyContent: { xs: 'flex-end', md: 'flex-start' },
         ...(parseFromValuesOrFunc(rest?.sx, theme) as any),
-      })}
+      }}
+      {...rest}
     >
       {renderToolbarInternalActions?.({
         table,
@@ -60,10 +64,19 @@ export const MRT_ToolbarInternalButtons = <TData extends MRT_RowData>({
             <MRT_ShowHideColumnsButton table={table} />
           )}
           {enableDensityToggle && (
-            <MRT_ToggleDensePaddingButton table={table} />
+            <MRT_ToggleDensePaddingButton
+              table={table}
+              aria-label={table.options.localization.toggleDensity}
+            />
           )}
           {enableFullScreenToggle && (
-            <MRT_ToggleFullScreenButton table={table} />
+            <MRT_ToggleFullScreenButton
+              table={table}
+              aria-label={table.options.localization.toggleFullScreen}
+              {...(initialState?.density === 'compact' && {
+                size: 'small',
+              })}
+            />
           )}
         </>
       )}

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import Table, { type TableProps } from '@mui/material/Table';
+import { Table, useTheme, type Theme, type TableProps } from '@chakra-ui/react';
 import { useMRT_ColumnVirtualizer } from '../../hooks/useMRT_ColumnVirtualizer';
 import { type MRT_RowData, type MRT_TableInstance } from '../../types';
 import { parseCSSVarId } from '../../utils/style.utils';
@@ -16,6 +16,7 @@ export const MRT_Table = <TData extends MRT_RowData>({
   table,
   ...rest
 }: MRT_TableProps<TData>) => {
+  const theme = useTheme<Theme>();
   const {
     getFlatHeaders,
     getState,
@@ -64,12 +65,12 @@ export const MRT_Table = <TData extends MRT_RowData>({
       stickyHeader={enableStickyHeader || isFullScreen}
       {...tableProps}
       style={{ ...columnSizeVars, ...tableProps?.style }}
-      sx={(theme) => ({
+      sx={{
         borderCollapse: 'separate',
         display: layoutMode?.startsWith('grid') ? 'grid' : undefined,
         position: 'relative',
         ...(parseFromValuesOrFunc(tableProps?.sx, theme) as any),
-      })}
+      }}
     >
       {!!Caption && <caption>{Caption}</caption>}
       {enableTableHead && <MRT_TableHead {...commonTableGroupProps} />}

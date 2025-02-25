@@ -1,5 +1,5 @@
 import { ReactNode, useMemo, type MouseEvent } from 'react';
-import Menu, { type MenuProps } from '@mui/material/Menu';
+import { Box, type MenuProps } from '@chakra-ui/react';
 import { MRT_ActionMenuItem } from './MRT_ActionMenuItem';
 import {
   type MRT_Row,
@@ -65,22 +65,32 @@ export const MRT_RowActionMenu = <TData extends MRT_RowData>({
 
   if (!menuItems.length) return null;
 
+  if (!anchorEl) return null;
+
+  // In Chakra UI, we'll use a positioned Box instead of Menu component
+  // since we're using the anchorEl pattern from MUI
   return (
-    <Menu
-      MenuListProps={{
-        dense: density === 'compact',
-        sx: {
-          backgroundColor: menuBackgroundColor,
-        },
-      }}
-      anchorEl={anchorEl}
-      disableScrollLock
+    <Box
+      position="absolute"
+      zIndex={1000}
+      top={anchorEl.getBoundingClientRect().bottom}
+      left={anchorEl.getBoundingClientRect().left}
       onClick={(event) => event.stopPropagation()}
-      onClose={() => setAnchorEl(null)}
-      open={!!anchorEl}
-      {...rest}
     >
-      {menuItems}
-    </Menu>
+      <Box
+        maxHeight="calc(var(--chakra-vh, 1vh) * 70)"
+        maxWidth="340px"
+        minWidth="200px"
+        overflowY="auto"
+        p={density === 'compact' ? 1 : 2}
+        bg={menuBackgroundColor}
+        borderRadius="md"
+        boxShadow="md"
+        onClick={() => setAnchorEl(null)}
+        {...rest}
+      >
+        {menuItems}
+      </Box>
+    </Box>
   );
 };

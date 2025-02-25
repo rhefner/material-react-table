@@ -39,40 +39,90 @@ import {
   type Virtualizer,
   type VirtualizerOptions,
 } from '@tanstack/react-virtual';
-import { type AlertProps } from '@mui/material/Alert';
-import { type AutocompleteProps } from '@mui/material/Autocomplete';
-import { type BoxProps } from '@mui/material/Box';
-import { type ButtonProps } from '@mui/material/Button';
-import { type CheckboxProps } from '@mui/material/Checkbox';
-import { type ChipProps } from '@mui/material/Chip';
-import { type CircularProgressProps } from '@mui/material/CircularProgress';
-import { type DialogProps } from '@mui/material/Dialog';
-import { type IconButtonProps } from '@mui/material/IconButton';
-import { type LinearProgressProps } from '@mui/material/LinearProgress';
-import { type PaginationProps } from '@mui/material/Pagination';
-import { type PaperProps } from '@mui/material/Paper';
-import { type RadioProps } from '@mui/material/Radio';
-import { type SelectProps } from '@mui/material/Select';
-import { type SkeletonProps } from '@mui/material/Skeleton';
-import { type SliderProps } from '@mui/material/Slider';
-import { type TableProps } from '@mui/material/Table';
-import { type TableBodyProps } from '@mui/material/TableBody';
-import { type TableCellProps } from '@mui/material/TableCell';
-import { type TableContainerProps } from '@mui/material/TableContainer';
-import { type TableFooterProps } from '@mui/material/TableFooter';
-import { type TableHeadProps } from '@mui/material/TableHead';
-import { type TableRowProps } from '@mui/material/TableRow';
-import { type TextFieldProps } from '@mui/material/TextField';
-import { type Theme } from '@mui/material/styles';
 import {
-  type DatePickerProps,
-  type DateTimePickerProps,
-  type TimePickerProps,
-} from '@mui/x-date-pickers';
+  type AlertProps,
+  type BoxProps,
+  type ButtonProps,
+  type CheckboxProps,
+  type TagProps as ChipProps,
+  type CircularProgressProps,
+  type ModalProps as DialogProps,
+  type IconButtonProps,
+  type ProgressProps as LinearProgressProps,
+  type BoxProps as PaperProps,
+  type RadioProps,
+  type SelectProps,
+  type SkeletonProps,
+  type SliderProps,
+  type TableProps,
+  type TableCellProps,
+  type TableHeadProps,
+  type TableContainerProps,
+  type InputProps as TextFieldProps,
+  type Theme,
+  SystemStyleObject,
+} from '@chakra-ui/react';
+
 import { type MRT_AggregationFns } from './fns/aggregationFns';
 import { type MRT_FilterFns } from './fns/filterFns';
 import { type MRT_SortingFns } from './fns/sortingFns';
 import { type MRT_Icons } from './icons';
+
+// Custom type definitions for components not directly available in Chakra UI
+interface TableBodyProps {
+  children?: ReactNode;
+  className?: string;
+}
+
+interface TableFooterProps {
+  children?: ReactNode;
+  className?: string;
+}
+
+interface TableRowProps {
+  children?: ReactNode;
+  className?: string;
+  onClick?: (event: React.MouseEvent) => void;
+  sx?: SystemStyleObject;
+}
+
+interface PaginationProps {
+  count: number;
+  page: number;
+  onChange: (event: React.ChangeEvent<unknown>, page: number) => void;
+  SelectProps?: Partial<SelectProps>;
+  disabled?: boolean;
+  rowsPerPageOptions?: { label: string; value: number }[] | number[];
+  showRowsPerPage?: boolean;
+}
+
+export interface AutocompleteProps<
+  T,
+  Multiple extends boolean | undefined = undefined,
+  DisableClearable extends boolean | undefined = undefined,
+  FreeSolo extends boolean | undefined = undefined,
+> {
+  options: T[];
+  multiple?: Multiple;
+  disableClearable?: DisableClearable;
+  freeSolo?: FreeSolo;
+  value?: T | T[] | null;
+  onChange?: (event: React.SyntheticEvent, value: T | T[] | null) => void;
+}
+
+// Date picker component types (previously from @mui/x-date-pickers)
+export interface DatePickerProps<T = unknown> {
+  value?: T;
+  onChange?: (value: T | null) => void;
+}
+
+export interface DateTimePickerProps<T = unknown> extends DatePickerProps<T> {
+  // Additional props specific to datetime pickers
+}
+
+export interface TimePickerProps<T = unknown> extends DatePickerProps<T> {
+  // Additional props specific to time pickers
+}
 
 export type { MRT_Icons };
 export type LiteralUnion<T extends U, U = string> =

@@ -1,7 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
-import FormHelperText from '@mui/material/FormHelperText';
-import Slider, { type SliderProps } from '@mui/material/Slider';
-import Stack from '@mui/material/Stack';
+import {
+  FormHelperText,
+  RangeSlider,
+  RangeSliderTrack,
+  RangeSliderFilledTrack,
+  RangeSliderThumb,
+  Stack,
+  type RangeSliderProps,
+} from '@chakra-ui/react';
 import {
   type MRT_Header,
   type MRT_RowData,
@@ -10,7 +16,7 @@ import {
 import { parseFromValuesOrFunc } from '../../utils/utils';
 
 export interface MRT_FilterRangeSliderProps<TData extends MRT_RowData>
-  extends SliderProps {
+  extends Omit<RangeSliderProps, 'value' | 'onChange' | 'onChangeEnd'> {
   header: MRT_Header<TData>;
   table: MRT_TableInstance<TData>;
 }
@@ -49,10 +55,14 @@ export const MRT_FilterRangeSlider = <TData extends MRT_RowData>({
   if (min === null) min = 0;
   if (max === null) max = 1;
 
-  const [filterValues, setFilterValues] = useState([min, max]);
+  const [filterValues, setFilterValues] = useState<[number, number]>([
+    min,
+    max,
+  ]);
   const columnFilterValue = column.getFilterValue();
 
   const isMounted = useRef(false);
+  const sliderWrapperRef = useRef<HTMLInputElement>(null);
 
   // prevent moving the focus to the next/prev cell when using the arrow keys
   const handleKeyDown = (event: React.KeyboardEvent) => {
@@ -66,58 +76,61 @@ export const MRT_FilterRangeSlider = <TData extends MRT_RowData>({
       if (columnFilterValue === undefined) {
         setFilterValues([min, max]);
       } else if (Array.isArray(columnFilterValue)) {
-        setFilterValues(columnFilterValue);
+        setFilterValues(columnFilterValue as [number, number]);
       }
     }
     isMounted.current = true;
   }, [columnFilterValue, min, max]);
 
+  useEffect(() => {
+    if (sliderWrapperRef.current) {
+      filterInputRefs.current![`${column.id}-0`] = sliderWrapperRef.current;
+    }
+  }, [column.id, filterInputRefs]);
+
+  // Create a clean version of sliderProps without properties that cause type errors
+  const safeSliderProps: Record<string, any> = { ...sliderProps };
+  delete safeSliderProps.onChange;
+  delete safeSliderProps.onChangeEnd;
+  delete safeSliderProps.value;
+
+  // Chakra UI's RangeSlider requires these components
   return (
     <Stack>
-      <Slider
-        disableSwap
-        max={max}
-        min={min}
-        onChange={(_event, values) => {
-          setFilterValues(values as [number, number]);
-        }}
-        onChangeCommitted={(_event, value) => {
-          if (Array.isArray(value)) {
-            if (value[0] <= min && value[1] >= max) {
+      <div ref={sliderWrapperRef}>
+        <RangeSlider
+          min={min}
+          max={max}
+          onChange={(values: number[]) => {
+            setFilterValues(values as [number, number]);
+          }}
+          onChangeEnd={(values: number[]) => {
+            if (values[0] <= min && values[1] >= max) {
               //if the user has selected the entire range, remove the filter
               column.setFilterValue(undefined);
             } else {
-              column.setFilterValue(value as [number, number]);
+              column.setFilterValue(values as [number, number]);
             }
-          }
-        }}
-        onKeyDown={handleKeyDown}
-        value={filterValues}
-        valueLabelDisplay="auto"
-        {...sliderProps}
-        slotProps={{
-          input: {
-            ref: (node) => {
-              if (node) {
-                filterInputRefs.current![`${column.id}-0`] = node;
-                // @ts-expect-error
-                if (sliderProps?.slotProps?.input?.ref) {
-                  //@ts-expect-error
-                  sliderProps.slotProps.input.ref = node;
-                }
-              }
-            },
-          },
-        }}
-        sx={(theme) => ({
-          m: 'auto',
-          minWidth: `${column.getSize() - 50}px`,
-          mt: !showChangeModeButton ? '10px' : '6px',
-          px: '4px',
-          width: 'calc(100% - 8px)',
-          ...(parseFromValuesOrFunc(sliderProps?.sx, theme) as any),
-        })}
-      />
+          }}
+          onKeyDown={handleKeyDown}
+          value={filterValues as unknown as number[]}
+          {...safeSliderProps}
+          sx={{
+            m: 'auto',
+            minWidth: `${column.getSize() - 50}px`,
+            mt: !showChangeModeButton ? '10px' : '6px',
+            px: '4px',
+            width: 'calc(100% - 8px)',
+            ...(sliderProps?.sx as any),
+          }}
+        >
+          <RangeSliderTrack>
+            <RangeSliderFilledTrack />
+          </RangeSliderTrack>
+          <RangeSliderThumb index={0} />
+          <RangeSliderThumb index={1} />
+        </RangeSlider>
+      </div>
       {showChangeModeButton ? (
         <FormHelperText
           sx={{

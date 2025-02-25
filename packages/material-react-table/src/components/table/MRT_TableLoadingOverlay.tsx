@@ -1,13 +1,14 @@
-import Box from '@mui/material/Box';
-import CircularProgress, {
+import {
+  Box,
+  CircularProgress,
   type CircularProgressProps,
-} from '@mui/material/CircularProgress';
-import { alpha } from '@mui/material/styles';
+} from '@chakra-ui/react';
 import { type MRT_RowData, type MRT_TableInstance } from '../../types';
 import { parseFromValuesOrFunc } from '../../utils/utils';
+import { alpha } from '../../utils/color.utils';
 
 export interface MRT_TableLoadingOverlayProps<TData extends MRT_RowData>
-  extends CircularProgressProps {
+  extends Omit<CircularProgressProps, 'ref'> {
   table: MRT_TableInstance<TData>;
 }
 
@@ -28,6 +29,10 @@ export const MRT_TableLoadingOverlay = <TData extends MRT_RowData>({
     ...parseFromValuesOrFunc(muiCircularProgressProps, { table }),
     ...rest,
   };
+
+  // Remove props that Chakra doesn't support
+  const safeProps: Record<string, any> = { ...circularProgressProps };
+  delete safeProps.Component;
 
   return (
     <Box
@@ -50,7 +55,8 @@ export const MRT_TableLoadingOverlay = <TData extends MRT_RowData>({
         <CircularProgress
           aria-label={localization.noRecordsToDisplay}
           id={`mrt-progress-${id}`}
-          {...circularProgressProps}
+          isIndeterminate
+          {...safeProps}
         />
       )}
     </Box>

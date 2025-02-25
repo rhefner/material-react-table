@@ -1,5 +1,5 @@
 import { type DragEvent, type RefObject } from 'react';
-import { type IconButtonProps } from '@mui/material/IconButton';
+import { type IconButtonProps } from '@chakra-ui/react';
 import {
   type MRT_Column,
   type MRT_RowData,
@@ -10,7 +10,8 @@ import { parseFromValuesOrFunc } from '../../utils/utils';
 import { MRT_GrabHandleButton } from '../buttons/MRT_GrabHandleButton';
 
 export interface MRT_TableHeadCellGrabHandleProps<TData extends MRT_RowData>
-  extends IconButtonProps {
+  extends Omit<IconButtonProps, 'aria-label'> {
+  'aria-label'?: string;
   column: MRT_Column<TData>;
   table: MRT_TableInstance<TData>;
   tableHeadCellRef: RefObject<HTMLTableCellElement | null>;
@@ -65,11 +66,15 @@ export const MRT_TableHeadCellGrabHandle = <TData extends MRT_RowData>({
       hoveredColumn &&
       hoveredColumn?.id !== draggingColumn?.id
     ) {
-      const reorderedColumns = reorderColumn(column, hoveredColumn as MRT_Column<TData>, columnOrder);
+      const reorderedColumns = reorderColumn(
+        column,
+        hoveredColumn as MRT_Column<TData>,
+        columnOrder,
+      );
       setColumnOrder(reorderedColumns);
       setColumnPinning(({ left = [], right = [] }) => ({
-        left: reorderedColumns.filter(header => left.includes(header)),
-        right: reorderedColumns.filter(header => right.includes(header)),
+        left: reorderedColumns.filter((header) => left.includes(header)),
+        right: reorderedColumns.filter((header) => right.includes(header)),
       }));
     }
     setDraggingColumn(null);
@@ -79,6 +84,7 @@ export const MRT_TableHeadCellGrabHandle = <TData extends MRT_RowData>({
   return (
     <MRT_GrabHandleButton
       {...iconButtonProps}
+      aria-label={iconButtonProps['aria-label'] ?? 'Drag handle'}
       onDragEnd={handleDragEnd}
       onDragStart={handleDragStart}
       table={table}

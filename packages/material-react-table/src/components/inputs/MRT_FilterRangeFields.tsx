@@ -1,4 +1,4 @@
-import Box, { type BoxProps } from '@mui/material/Box';
+import { Box, type BoxProps } from '@chakra-ui/react';
 import { MRT_FilterTextField } from './MRT_FilterTextField';
 import {
   type MRT_Header,
@@ -21,12 +21,10 @@ export const MRT_FilterRangeFields = <TData extends MRT_RowData>({
   return (
     <Box
       {...rest}
-      sx={(theme) => ({
-        display: 'grid',
-        gap: '1rem',
-        gridTemplateColumns: '1fr 1fr',
-        ...(parseFromValuesOrFunc(rest?.sx, theme) as any),
-      })}
+      display="grid"
+      gridTemplateColumns="1fr 1fr"
+      gap="1rem"
+      {...(rest?.sx ? { sx: rest.sx } : {})}
     >
       {[0, 1].map((rangeFilterIndex) => (
         <MRT_FilterTextField

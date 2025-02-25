@@ -1,4 +1,4 @@
-import Menu, { type MenuProps } from '@mui/material/Menu';
+import { Box, type MenuProps } from '@chakra-ui/react';
 import { MRT_ActionMenuItem } from './MRT_ActionMenuItem';
 import { type MRT_RowData, type MRT_TableInstance } from '../../types';
 import { openEditingCell } from '../../utils/cell.utils';
@@ -81,25 +81,30 @@ export const MRT_CellActionMenu = <TData extends MRT_RowData>({
     columnDef.renderCellActionMenuItems?.(renderActionProps) ??
     renderCellActionMenuItems?.(renderActionProps);
 
+  if (!menuItems?.length && !internalMenuItems?.length) return null;
+  if (!actionCellRef.current || !cell) return null;
+
+  // Using the same positioned Box approach as in other menus
+  const anchorRect = actionCellRef.current.getBoundingClientRect();
+
   return (
-    (!!menuItems?.length || !!internalMenuItems?.length) && (
-      <Menu
-        MenuListProps={{
-          dense: density === 'compact',
-          sx: {
-            backgroundColor: menuBackgroundColor,
-          },
-        }}
-        anchorEl={actionCellRef.current}
-        disableScrollLock
-        onClick={(event) => event.stopPropagation()}
-        onClose={handleClose}
-        open={!!cell}
-        transformOrigin={{ horizontal: -100, vertical: 8 }}
-        {...rest}
-      >
-        {menuItems ?? internalMenuItems}
-      </Menu>
-    )
+    <Box
+      position="absolute"
+      zIndex={1000}
+      top={anchorRect.bottom}
+      left={anchorRect.left - 100} // Matching transformOrigin from MUI version
+      bg={menuBackgroundColor}
+      borderRadius="md"
+      boxShadow="md"
+      maxHeight="calc(var(--chakra-vh, 1vh) * 70)"
+      maxWidth="340px"
+      minWidth="200px"
+      overflowY="auto"
+      p={density === 'compact' ? 1 : 2}
+      onClick={(event) => event.stopPropagation()}
+      {...rest}
+    >
+      {menuItems ?? internalMenuItems}
+    </Box>
   );
 };

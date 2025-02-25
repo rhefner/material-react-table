@@ -1,4 +1,9 @@
-import TableRow, { type TableRowProps } from '@mui/material/TableRow';
+import {
+  Tr,
+  useColorModeValue,
+  useTheme,
+  type TableRowProps,
+} from '@chakra-ui/react';
 import { MRT_TableFooterCell } from './MRT_TableFooterCell';
 import {
   type MRT_ColumnVirtualizer,
@@ -23,6 +28,7 @@ export const MRT_TableFooterRow = <TData extends MRT_RowData>({
   table,
   ...rest
 }: MRT_TableFooterRowProps<TData>) => {
+  const theme = useTheme();
   const {
     options: {
       layoutMode,
@@ -30,6 +36,8 @@ export const MRT_TableFooterRow = <TData extends MRT_RowData>({
       muiTableFooterRowProps,
     },
   } = table;
+
+  const bgColor = useColorModeValue('white', 'gray.800');
 
   const { virtualColumns, virtualPaddingLeft, virtualPaddingRight } =
     columnVirtualizer ?? {};
@@ -54,16 +62,20 @@ export const MRT_TableFooterRow = <TData extends MRT_RowData>({
     ...rest,
   };
 
+  // Filter out properties that might cause issues with Chakra UI components
+  const safeRowProps = { ...tableRowProps };
+  delete (safeRowProps as any).sx;
+
   return (
-    <TableRow
-      {...tableRowProps}
-      sx={(theme) => ({
-        backgroundColor: baseBackgroundColor,
+    <Tr
+      {...safeRowProps}
+      sx={{
+        backgroundColor: baseBackgroundColor || bgColor,
         display: layoutMode?.startsWith('grid') ? 'flex' : undefined,
         position: 'relative',
         width: '100%',
         ...(parseFromValuesOrFunc(tableRowProps?.sx, theme) as any),
-      })}
+      }}
     >
       {virtualPaddingLeft ? (
         <th style={{ display: 'flex', width: virtualPaddingLeft }} />
@@ -90,6 +102,6 @@ export const MRT_TableFooterRow = <TData extends MRT_RowData>({
       {virtualPaddingRight ? (
         <th style={{ display: 'flex', width: virtualPaddingRight }} />
       ) : null}
-    </TableRow>
+    </Tr>
   );
 };

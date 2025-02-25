@@ -1,8 +1,13 @@
 import { type MouseEvent } from 'react';
-import Checkbox, { type CheckboxProps } from '@mui/material/Checkbox';
-import Radio, { type RadioProps } from '@mui/material/Radio';
-import Tooltip from '@mui/material/Tooltip';
-import { type Theme } from '@mui/material/styles';
+import {
+  Checkbox,
+  Radio,
+  Tooltip,
+  useColorModeValue,
+  type CheckboxProps,
+  type RadioProps,
+  type TooltipProps,
+} from '@chakra-ui/react';
 import {
   type MRT_Row,
   type MRT_RowData,
@@ -74,58 +79,55 @@ export const MRT_SelectCheckbox = <TData extends MRT_RowData>({
 
   const onSelectAllChange = getMRT_SelectAllHandler({ table });
 
+  const isDisabled =
+    isLoading || (row && !row.getCanSelect()) || row?.id === 'mrt-row-create';
+
+  const size = density === 'compact' ? 'sm' : 'md';
+
+  const bgColor = useColorModeValue('white', 'gray.800');
+
   const commonProps = {
     'aria-label': selectAll
       ? localization.toggleSelectAll
       : localization.toggleSelectRow,
-    checked: isChecked,
-    disabled:
-      isLoading || (row && !row.getCanSelect()) || row?.id === 'mrt-row-create',
-    inputProps: {
-      'aria-label': selectAll
-        ? localization.toggleSelectAll
-        : localization.toggleSelectRow,
-    },
-    onChange: (event) => {
-      event.stopPropagation();
-      selectAll ? onSelectAllChange(event) : onSelectionChange!(event);
-    },
-    size: (density === 'compact' ? 'small' : 'medium') as 'medium' | 'small',
+    isChecked: isChecked,
+    isDisabled: isDisabled,
+    size: size,
     ...checkboxProps,
     onClick: (e: MouseEvent<HTMLButtonElement>) => {
       e.stopPropagation();
-      checkboxProps?.onClick?.(e);
+      checkboxProps?.onClick?.(e as any);
     },
-    sx: (theme: Theme) => ({
-      height: density === 'compact' ? '1.75rem' : '2.5rem',
-      m: density !== 'compact' ? '-0.4rem' : undefined,
-      width: density === 'compact' ? '1.75rem' : '2.5rem',
-      zIndex: 0,
-      ...parseFromValuesOrFunc(checkboxProps?.sx, theme),
-    }),
-    title: undefined,
-  } as CheckboxProps | RadioProps;
+    onChange: (e: any) => {
+      e.stopPropagation();
+      selectAll ? onSelectAllChange(e) : onSelectionChange!(e);
+    },
+    height: density === 'compact' ? '1.75rem' : '2.5rem',
+    width: density === 'compact' ? '1.75rem' : '2.5rem',
+    zIndex: 0,
+    bgColor: bgColor,
+    ...(checkboxProps?.sx ? { sx: checkboxProps.sx } : {}),
+  };
+
+  const tooltipProps = {
+    ...getCommonTooltipProps(),
+    label:
+      checkboxProps?.title ??
+      (selectAll ? localization.toggleSelectAll : localization.toggleSelectRow),
+  } as TooltipProps;
 
   return (
-    <Tooltip
-      {...getCommonTooltipProps()}
-      title={
-        checkboxProps?.title ??
-        (selectAll
-          ? localization.toggleSelectAll
-          : localization.toggleSelectRow)
-      }
-    >
+    <Tooltip {...tooltipProps}>
       {enableMultiRowSelection === false ? (
-        <Radio {...(commonProps as any)} />
+        <Radio {...(commonProps as unknown as RadioProps)} />
       ) : (
         <Checkbox
-          indeterminate={
+          isIndeterminate={
             !isChecked && selectAll
               ? table.getIsSomeRowsSelected()
               : row?.getIsSomeSelected() && row.getCanSelectSubRows()
           }
-          {...commonProps}
+          {...(commonProps as unknown as CheckboxProps)}
         />
       )}
     </Tooltip>

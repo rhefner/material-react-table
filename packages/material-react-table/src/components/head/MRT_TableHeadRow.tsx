@@ -1,5 +1,4 @@
-import TableRow, { type TableRowProps } from '@mui/material/TableRow';
-import { alpha } from '@mui/material/styles';
+import { Tr, useColorModeValue, type TableRowProps } from '@chakra-ui/react';
 import { MRT_TableHeadCell } from './MRT_TableHeadCell';
 import {
   type MRT_ColumnVirtualizer,
@@ -24,6 +23,11 @@ export const MRT_TableHeadRow = <TData extends MRT_RowData>({
   table,
   ...rest
 }: MRT_TableHeadRowProps<TData>) => {
+  const shadowColor = useColorModeValue(
+    'rgba(0, 0, 0, 0.1)',
+    'rgba(0, 0, 0, 0.3)',
+  );
+
   const {
     options: {
       enableStickyHeader,
@@ -45,19 +49,19 @@ export const MRT_TableHeadRow = <TData extends MRT_RowData>({
   };
 
   return (
-    <TableRow
+    <Tr
       {...tableRowProps}
-      sx={(theme) => ({
+      sx={{
         backgroundColor: baseBackgroundColor,
-        boxShadow: `4px 0 8px ${alpha(theme.palette.common.black, 0.1)}`,
+        boxShadow: `4px 0 8px ${shadowColor}`,
         display: layoutMode?.startsWith('grid') ? 'flex' : undefined,
         position:
           enableStickyHeader && layoutMode === 'semantic'
             ? 'sticky'
             : 'relative',
         top: 0,
-        ...(parseFromValuesOrFunc(tableRowProps?.sx, theme) as any),
-      })}
+        ...(parseFromValuesOrFunc(tableRowProps?.sx, null) as any),
+      }}
     >
       {virtualPaddingLeft ? (
         <th style={{ display: 'flex', width: virtualPaddingLeft }} />
@@ -85,6 +89,6 @@ export const MRT_TableHeadRow = <TData extends MRT_RowData>({
       {virtualPaddingRight ? (
         <th style={{ display: 'flex', width: virtualPaddingRight }} />
       ) : null}
-    </TableRow>
+    </Tr>
   );
 };

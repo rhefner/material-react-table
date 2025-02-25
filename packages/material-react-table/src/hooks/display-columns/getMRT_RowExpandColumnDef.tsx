@@ -1,6 +1,5 @@
 import { type ReactNode } from 'react';
-import Stack from '@mui/material/Stack';
-import Tooltip from '@mui/material/Tooltip';
+import { Stack, Tooltip } from '@chakra-ui/react';
 import { MRT_ExpandAllButton } from '../../components/buttons/MRT_ExpandAllButton';
 import { MRT_ExpandButton } from '../../components/buttons/MRT_ExpandButton';
 import {
@@ -32,15 +31,20 @@ export const getMRT_RowExpandColumnDef = <TData extends MRT_RowData>(
 
   return {
     Cell: ({ cell, column, row, staticRowIndex, table }) => {
-      const expandButtonProps = { row, staticRowIndex, table };
+      const expandButtonProps = {
+        row,
+        staticRowIndex,
+        table,
+        'aria-label': 'Expand Row',
+      };
       const subRowsLength = row.subRows?.length;
       if (groupedColumnMode === 'remove' && row.groupingColumnId) {
         return (
-          <Stack alignItems="center" flexDirection="row" gap="0.25rem">
+          <Stack direction="row" alignItems="center" spacing="0.25rem">
             <MRT_ExpandButton {...expandButtonProps} />
             <Tooltip
               {...getCommonTooltipProps('right')}
-              title={table.getColumn(row.groupingColumnId).columnDef.header}
+              label={table.getColumn(row.groupingColumnId).columnDef.header}
             >
               <span>{row.groupingValue as ReactNode}</span>
             </Tooltip>
@@ -60,7 +64,7 @@ export const getMRT_RowExpandColumnDef = <TData extends MRT_RowData>(
       ? ({ table }) => {
           return (
             <>
-              <MRT_ExpandAllButton table={table} />
+              <MRT_ExpandAllButton table={table} aria-label="Expand All Rows" />
               {groupedColumnMode === 'remove' &&
                 grouping
                   ?.map(

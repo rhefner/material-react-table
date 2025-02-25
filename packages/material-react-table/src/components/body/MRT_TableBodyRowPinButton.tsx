@@ -1,5 +1,4 @@
-import Box from '@mui/material/Box';
-import { type IconButtonProps } from '@mui/material/IconButton';
+import { Box, type IconButtonProps } from '@chakra-ui/react';
 import {
   type MRT_Row,
   type MRT_RowData,
@@ -38,10 +37,8 @@ export const MRT_TableBodyRowPinButton = <TData extends MRT_RowData>({
   if (rowPinningDisplayMode === 'top-and-bottom' && !row.getIsPinned()) {
     return (
       <Box
-        sx={{
-          display: 'flex',
-          flexDirection: density === 'compact' ? 'row' : 'column',
-        }}
+        display="flex"
+        flexDirection={density === 'compact' ? 'row' : 'column'}
       >
         <MRT_RowPinButton pinningPosition="top" {...rowPinButtonProps} />
         <MRT_RowPinButton pinningPosition="bottom" {...rowPinButtonProps} />

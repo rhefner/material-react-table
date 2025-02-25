@@ -1,12 +1,15 @@
-import Checkbox, { type CheckboxProps } from '@mui/material/Checkbox';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Tooltip from '@mui/material/Tooltip';
+import {
+  Checkbox,
+  FormControl,
+  FormLabel,
+  Tooltip,
+  type CheckboxProps,
+} from '@chakra-ui/react';
 import {
   type MRT_Column,
   type MRT_RowData,
   type MRT_TableInstance,
 } from '../../types';
-import { getCommonTooltipProps } from '../../utils/style.utils';
 import { parseFromValuesOrFunc } from '../../utils/utils';
 
 export interface MRT_FilterCheckboxProps<TData extends MRT_RowData>
@@ -44,47 +47,58 @@ export const MRT_FilterCheckbox = <TData extends MRT_RowData>({
     columnDef.header,
   );
 
+  const tooltipLabel = checkboxProps?.title ?? filterLabel;
+
   return (
-    <Tooltip
-      {...getCommonTooltipProps()}
-      title={checkboxProps?.title ?? filterLabel}
-    >
-      <FormControlLabel
-        control={
-          <Checkbox
-            checked={column.getFilterValue() === 'true'}
-            color={
-              column.getFilterValue() === undefined ? 'default' : 'primary'
-            }
-            indeterminate={column.getFilterValue() === undefined}
-            size={density === 'compact' ? 'small' : 'medium'}
-            {...checkboxProps}
-            onChange={(e, checked) => {
-              column.setFilterValue(
-                column.getFilterValue() === undefined
-                  ? 'true'
-                  : column.getFilterValue() === 'true'
-                    ? 'false'
-                    : undefined,
-              );
-              checkboxProps?.onChange?.(e, checked);
-            }}
-            onClick={(e) => {
-              e.stopPropagation();
-              checkboxProps?.onClick?.(e);
-            }}
-            sx={(theme) => ({
-              height: '2.5rem',
-              width: '2.5rem',
-              ...(parseFromValuesOrFunc(checkboxProps?.sx, theme) as any),
-            })}
-          />
-        }
-        disableTypography
-        label={checkboxProps.title ?? filterLabel}
-        sx={{ color: 'text.secondary', fontWeight: 'normal', mt: '-4px' }}
-        title={undefined}
-      />
+    <Tooltip label={tooltipLabel} placement="top" hasArrow>
+      <FormControl
+        display="flex"
+        alignItems="center"
+        color="gray.600"
+        fontWeight="normal"
+        mt="-1px"
+      >
+        <Checkbox
+          isChecked={column.getFilterValue() === 'true'}
+          colorScheme={column.getFilterValue() === undefined ? 'gray' : 'blue'}
+          isIndeterminate={column.getFilterValue() === undefined}
+          size={density === 'compact' ? 'sm' : 'md'}
+          {...checkboxProps}
+          onChange={(e) => {
+            column.setFilterValue(
+              column.getFilterValue() === undefined
+                ? 'true'
+                : column.getFilterValue() === 'true'
+                  ? 'false'
+                  : undefined,
+            );
+            checkboxProps?.onChange?.(e);
+          }}
+          onClick={(e) => {
+            e.stopPropagation();
+            checkboxProps?.onClick?.(e);
+          }}
+          height="2.5rem"
+          width="2.5rem"
+        />
+        <FormLabel
+          htmlFor="filter-checkbox"
+          mb={0}
+          ml={2}
+          cursor="pointer"
+          onClick={() => {
+            column.setFilterValue(
+              column.getFilterValue() === undefined
+                ? 'true'
+                : column.getFilterValue() === 'true'
+                  ? 'false'
+                  : undefined,
+            );
+          }}
+        >
+          {checkboxProps.title ?? filterLabel}
+        </FormLabel>
+      </FormControl>
     </Tooltip>
   );
 };

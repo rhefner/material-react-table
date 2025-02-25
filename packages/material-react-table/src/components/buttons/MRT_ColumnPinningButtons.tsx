@@ -1,6 +1,11 @@
-import Box, { type BoxProps } from '@mui/material/Box';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
+import {
+  Box,
+  Icon,
+  IconButton,
+  Tooltip,
+  useTheme,
+  type BoxProps,
+} from '@chakra-ui/react';
 import {
   type MRT_Column,
   type MRT_RowData,
@@ -30,35 +35,46 @@ export const MRT_ColumnPinningButtons = <TData extends MRT_RowData>({
     column.pin(pinDirection);
   };
 
+  const theme = useTheme();
+
   return (
     <Box
       {...rest}
-      sx={(theme) => ({
+      sx={{
         minWidth: '70px',
         textAlign: 'center',
         ...(parseFromValuesOrFunc(rest?.sx, theme) as any),
-      })}
+      }}
     >
       {column.getIsPinned() ? (
-        <Tooltip title={localization.unpin}>
-          <IconButton onClick={() => handlePinColumn(false)} size="small">
-            <PushPinIcon />
+        <Tooltip label={localization.unpin}>
+          <IconButton
+            onClick={() => handlePinColumn(false)}
+            size="sm"
+            aria-label={localization.unpin}
+          >
+            <Icon as={PushPinIcon} />
           </IconButton>
         </Tooltip>
       ) : (
         <>
-          <Tooltip title={localization.pinToLeft}>
-            <IconButton onClick={() => handlePinColumn('left')} size="small">
-              <PushPinIcon
-                style={{
-                  transform: 'rotate(90deg)',
-                }}
-              />
+          <Tooltip label={localization.pinToLeft}>
+            <IconButton
+              onClick={() => handlePinColumn('left')}
+              size="sm"
+              aria-label={localization.pinToLeft}
+            >
+              <Icon as={PushPinIcon} style={{ transform: 'rotate(90deg)' }} />
             </IconButton>
           </Tooltip>
-          <Tooltip title={localization.pinToRight}>
-            <IconButton onClick={() => handlePinColumn('right')} size="small">
-              <PushPinIcon
+          <Tooltip label={localization.pinToRight}>
+            <IconButton
+              onClick={() => handlePinColumn('right')}
+              size="sm"
+              aria-label={localization.pinToRight}
+            >
+              <Icon
+                as={PushPinIcon}
                 style={{
                   transform: 'rotate(-90deg)',
                 }}

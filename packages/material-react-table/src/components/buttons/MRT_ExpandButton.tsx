@@ -1,7 +1,12 @@
 import { type MouseEvent } from 'react';
-import IconButton, { type IconButtonProps } from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-import { useTheme } from '@mui/material/styles';
+import {
+  IconButton,
+  type IconButtonProps,
+  Tooltip,
+  useTheme,
+  SystemStyleObject,
+  Icon,
+} from '@chakra-ui/react';
 import {
   type MRT_Row,
   type MRT_RowData,
@@ -52,51 +57,52 @@ export const MRT_ExpandButton = <TData extends MRT_RowData>({
 
   const detailPanel = !!renderDetailPanel?.({ row, table });
 
+  // Define button styles as an object instead of sx function
+  const buttonStyles: SystemStyleObject = {
+    height: density === 'compact' ? '1.75rem' : '2.25rem',
+    opacity: !canExpand && !detailPanel ? 0.3 : 1,
+    [theme.direction === 'rtl' || positionExpandColumn === 'last'
+      ? 'mr'
+      : 'ml']: `${row.depth * 16}px`,
+    width: density === 'compact' ? '1.75rem' : '2.25rem',
+    ...(parseFromValuesOrFunc(iconButtonProps?.sx, theme) as any),
+  };
+
   return (
     <Tooltip
-      disableHoverListener={!canExpand && !detailPanel}
+      isDisabled={!canExpand && !detailPanel}
       {...getCommonTooltipProps()}
-      title={
+      label={
         iconButtonProps?.title ??
         (isExpanded ? localization.collapse : localization.expand)
       }
     >
-      <span>
-        <IconButton
-          aria-label={localization.expand}
-          disabled={!canExpand && !detailPanel}
-          {...iconButtonProps}
-          onClick={handleToggleExpand}
-          sx={(theme) => ({
-            height: density === 'compact' ? '1.75rem' : '2.25rem',
-            opacity: !canExpand && !detailPanel ? 0.3 : 1,
-            [theme.direction === 'rtl' || positionExpandColumn === 'last'
-              ? 'mr'
-              : 'ml']: `${row.depth * 16}px`,
-            width: density === 'compact' ? '1.75rem' : '2.25rem',
-            ...(parseFromValuesOrFunc(iconButtonProps?.sx, theme) as any),
-          })}
-          title={undefined}
-        >
-          {iconButtonProps?.children ?? (
-            <ExpandMoreIcon
-              style={{
-                transform: `rotate(${
-                  !canExpand && !renderDetailPanel
-                    ? positionExpandColumn === 'last' ||
-                      theme.direction === 'rtl'
-                      ? 90
-                      : -90
-                    : isExpanded
-                      ? -180
-                      : 0
-                }deg)`,
-                transition: 'transform 150ms',
-              }}
-            />
-          )}
-        </IconButton>
-      </span>
+      <IconButton
+        aria-label={localization.expand}
+        isDisabled={!canExpand && !detailPanel}
+        {...iconButtonProps}
+        onClick={handleToggleExpand}
+        sx={buttonStyles}
+        title={undefined}
+      >
+        {iconButtonProps?.children ?? (
+          <Icon
+            as={ExpandMoreIcon}
+            style={{
+              transform: `rotate(${
+                !canExpand && !renderDetailPanel
+                  ? positionExpandColumn === 'last' || theme.direction === 'rtl'
+                    ? 90
+                    : -90
+                  : isExpanded
+                    ? -180
+                    : 0
+              }deg)`,
+              transition: 'transform 150ms',
+            }}
+          />
+        )}
+      </IconButton>
     </Tooltip>
   );
 };

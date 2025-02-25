@@ -1,5 +1,5 @@
 import { type ReactNode, type RefObject } from 'react';
-import Box from '@mui/material/Box';
+import { Box, useColorMode } from '@chakra-ui/react';
 import {
   type MRT_Cell,
   type MRT_RowData,
@@ -24,6 +24,7 @@ export const MRT_TableBodyCellValue = <TData extends MRT_RowData>({
   staticRowIndex,
   table,
 }: MRT_TableBodyCellValueProps<TData>) => {
+  const { colorMode } = useColorMode();
   const {
     getState,
     options: {
@@ -89,17 +90,14 @@ export const MRT_TableBodyCellValue = <TData extends MRT_RowData>({
           {chunks?.map(({ key, match, text }) => (
             <Box
               aria-hidden="true"
-              component="span"
+              as="span"
               key={key}
               sx={
                 match
                   ? {
                       backgroundColor: matchHighlightColor,
                       borderRadius: '2px',
-                      color: (theme) =>
-                        theme.palette.mode === 'dark'
-                          ? theme.palette.common.white
-                          : theme.palette.common.black,
+                      color: colorMode === 'dark' ? 'white' : 'black',
                       padding: '2px 1px',
                     }
                   : undefined

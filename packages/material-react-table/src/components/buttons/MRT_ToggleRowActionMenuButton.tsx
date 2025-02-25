@@ -1,6 +1,5 @@
 import { type MouseEvent, useState } from 'react';
-import IconButton, { type IconButtonProps } from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
+import { IconButton, Tooltip, type IconButtonProps } from '@chakra-ui/react';
 import { MRT_EditActionButtons } from './MRT_EditActionButtons';
 import {
   type MRT_Cell,
@@ -13,7 +12,7 @@ import { parseFromValuesOrFunc } from '../../utils/utils';
 import { MRT_RowActionMenu } from '../menus/MRT_RowActionMenu';
 
 const commonIconButtonStyles = {
-  '&:hover': {
+  _hover: {
     opacity: 1,
   },
   height: '2rem',
@@ -84,12 +83,12 @@ export const MRT_ToggleRowActionMenuButton = <TData extends MRT_RowData>({
       ) : !renderRowActionMenuItems &&
         parseFromValuesOrFunc(enableEditing, row) &&
         ['modal', 'row'].includes(editDisplayMode!) ? (
-        <Tooltip placement="right" title={localization.edit}>
+        <Tooltip placement="right" label={localization.edit}>
           <IconButton
-            aria-label={localization.edit}
             onClick={handleStartEditMode}
             sx={commonIconButtonStyles}
             {...rest}
+            aria-label={localization.edit}
           >
             <EditIcon />
           </IconButton>
@@ -100,11 +99,9 @@ export const MRT_ToggleRowActionMenuButton = <TData extends MRT_RowData>({
           table,
         } as any)?.length ? (
         <>
-          <Tooltip {...getCommonTooltipProps()} title={localization.rowActions}>
+          <Tooltip {...getCommonTooltipProps()} label={localization.rowActions}>
             <IconButton
-              aria-label={localization.rowActions}
               onClick={handleOpenRowActionMenu}
-              size="small"
               sx={commonIconButtonStyles}
               {...rest}
             >

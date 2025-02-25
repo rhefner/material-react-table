@@ -1,14 +1,21 @@
-import IconButton, { type IconButtonProps } from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
+import {
+  IconButton,
+  type IconButtonProps,
+  Tooltip,
+  useTheme,
+  Icon,
+} from '@chakra-ui/react';
 import { type MRT_RowData, type MRT_TableInstance } from '../../types';
 
 export interface MRT_ToggleDensePaddingButtonProps<TData extends MRT_RowData>
-  extends IconButtonProps {
+  extends Omit<IconButtonProps, 'aria-label'> {
   table: MRT_TableInstance<TData>;
+  'aria-label'?: string;
 }
 
 export const MRT_ToggleDensePaddingButton = <TData extends MRT_RowData>({
   table,
+  'aria-label': ariaLabel,
   ...rest
 }: MRT_ToggleDensePaddingButtonProps<TData>) => {
   const {
@@ -20,6 +27,7 @@ export const MRT_ToggleDensePaddingButton = <TData extends MRT_RowData>({
     setDensity,
   } = table;
   const { density } = getState();
+  const theme = useTheme();
 
   const handleToggleDensePadding = () => {
     const nextDensity =
@@ -31,20 +39,23 @@ export const MRT_ToggleDensePaddingButton = <TData extends MRT_RowData>({
     setDensity(nextDensity);
   };
 
+  // Use provided aria-label or fall back to localization
+  const buttonAriaLabel = ariaLabel || localization.toggleDensity;
+
   return (
-    <Tooltip title={rest?.title ?? localization.toggleDensity}>
+    <Tooltip label={rest?.title ?? localization.toggleDensity}>
       <IconButton
-        aria-label={localization.toggleDensity}
+        aria-label={buttonAriaLabel}
         onClick={handleToggleDensePadding}
         {...rest}
         title={undefined}
       >
         {density === 'compact' ? (
-          <DensitySmallIcon />
+          <Icon as={DensitySmallIcon} />
         ) : density === 'comfortable' ? (
-          <DensityMediumIcon />
+          <Icon as={DensityMediumIcon} />
         ) : (
-          <DensityLargeIcon />
+          <Icon as={DensityLargeIcon} />
         )}
       </IconButton>
     </Tooltip>

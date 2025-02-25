@@ -1,5 +1,11 @@
-import Box from '@mui/material/Box';
-import Divider, { type DividerProps } from '@mui/material/Divider';
+import {
+  Box,
+  Divider,
+  type DividerProps,
+  useTheme,
+  useColorModeValue,
+  type Theme,
+} from '@chakra-ui/react';
 import {
   type MRT_Header,
   type MRT_RowData,
@@ -8,7 +14,7 @@ import {
 import { parseFromValuesOrFunc } from '../../utils/utils';
 
 export interface MRT_TableHeadCellResizeHandleProps<TData extends MRT_RowData>
-  extends DividerProps {
+  extends Omit<DividerProps, 'orientation' | 'variant'> {
   header: MRT_Header<TData>;
   table: MRT_TableInstance<TData>;
 }
@@ -18,6 +24,7 @@ export const MRT_TableHeadCellResizeHandle = <TData extends MRT_RowData>({
   table,
   ...rest
 }: MRT_TableHeadCellResizeHandleProps<TData>) => {
+  const theme = useTheme<Theme>();
   const {
     getState,
     options: { columnResizeDirection, columnResizeMode },
@@ -37,9 +44,11 @@ export const MRT_TableHeadCellResizeHandle = <TData extends MRT_RowData>({
 
   const lr = column.columnDef.columnDefType === 'display' ? '4px' : '0';
 
+  const infoColor = useColorModeValue('blue.500', 'blue.300');
+
   return (
     <Box
-      className="Mui-TableHeadCell-ResizeHandle-Wrapper"
+      className="Chakra-TableHeadCell-ResizeHandle-Wrapper"
       onDoubleClick={() => {
         setColumnSizingInfo((old) => ({
           ...old,
@@ -58,9 +67,9 @@ export const MRT_TableHeadCellResizeHandle = <TData extends MRT_RowData>({
               }px)`
             : undefined,
       }}
-      sx={(theme) => ({
+      sx={{
         '&:active > hr': {
-          backgroundColor: theme.palette.info.main,
+          backgroundColor: infoColor,
           opacity:
             header.subHeaders.length || columnResizeMode === 'onEnd' ? 1 : 0,
         },
@@ -71,13 +80,13 @@ export const MRT_TableHeadCellResizeHandle = <TData extends MRT_RowData>({
         position: 'absolute',
         px: '4px',
         right: columnResizeDirection === 'ltr' ? lr : undefined,
-      })}
+      }}
     >
       <Divider
-        className="Mui-TableHeadCell-ResizeHandle-Divider"
-        flexItem
+        className="Chakra-TableHeadCell-ResizeHandle-Divider"
         orientation="vertical"
-        sx={(theme) => ({
+        {...rest}
+        sx={{
           borderRadius: '2px',
           borderWidth: '2px',
           height: '24px',
@@ -89,7 +98,7 @@ export const MRT_TableHeadCellResizeHandle = <TData extends MRT_RowData>({
           userSelect: 'none',
           zIndex: 4,
           ...(parseFromValuesOrFunc(rest?.sx, theme) as any),
-        })}
+        }}
       />
     </Box>
   );

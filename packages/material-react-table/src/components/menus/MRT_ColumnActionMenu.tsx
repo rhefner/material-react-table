@@ -1,15 +1,14 @@
 import { type MouseEvent, useState } from 'react';
-import Menu, { type MenuProps } from '@mui/material/Menu';
+import { Box } from '@chakra-ui/react';
 import { MRT_ActionMenuItem } from './MRT_ActionMenuItem';
 import { MRT_FilterOptionMenu } from './MRT_FilterOptionMenu';
 import {
   type MRT_Header,
-  type MRT_RowData,
   type MRT_TableInstance,
+  type MRT_RowData,
 } from '../../types';
 
-export interface MRT_ColumnActionMenuProps<TData extends MRT_RowData>
-  extends Partial<MenuProps> {
+export interface MRT_ColumnActionMenuProps<TData extends MRT_RowData> {
   anchorEl: HTMLElement | null;
   header: MRT_Header<TData>;
   setAnchorEl: (anchorEl: HTMLElement | null) => void;
@@ -21,7 +20,6 @@ export const MRT_ColumnActionMenu = <TData extends MRT_RowData>({
   header,
   setAnchorEl,
   table,
-  ...rest
 }: MRT_ColumnActionMenuProps<TData>) => {
   const {
     getAllLeafColumns,
@@ -318,33 +316,45 @@ export const MRT_ColumnActionMenu = <TData extends MRT_RowData>({
       : []),
   ].filter(Boolean);
 
+  const menuItems =
+    renderColumnActionsMenuItems?.({
+      column,
+      closeMenu: () => setAnchorEl(null),
+      internalColumnMenuItems,
+      table,
+    }) ?? internalColumnMenuItems;
+
+  if (!anchorEl) return null;
+
   return (
-    <Menu
-      MenuListProps={{
-        dense: density === 'compact',
-        sx: {
-          backgroundColor: menuBackgroundColor,
-        },
-      }}
-      anchorEl={anchorEl}
-      disableScrollLock
-      onClose={() => setAnchorEl(null)}
-      open={!!anchorEl}
-      {...rest}
+    <Box
+      position="absolute"
+      zIndex={1000}
+      top={anchorEl.getBoundingClientRect().bottom}
+      left={anchorEl.getBoundingClientRect().left}
+      onClick={() => setAnchorEl(null)}
     >
-      {columnDef.renderColumnActionsMenuItems?.({
-        closeMenu: () => setAnchorEl(null),
-        column,
-        internalColumnMenuItems,
-        table,
-      }) ??
-        renderColumnActionsMenuItems?.({
-          closeMenu: () => setAnchorEl(null),
-          column,
-          internalColumnMenuItems,
-          table,
-        }) ??
-        internalColumnMenuItems}
-    </Menu>
+      <Box
+        maxHeight="calc(var(--chakra-vh, 1vh) * 70)"
+        maxWidth="340px"
+        minWidth="200px"
+        overflowY="auto"
+        p={density === 'compact' ? 1 : 2}
+        bg={menuBackgroundColor}
+        borderRadius="md"
+        boxShadow="md"
+      >
+        {menuItems}
+      </Box>
+      {filterMenuAnchorEl && (
+        <MRT_FilterOptionMenu
+          anchorEl={filterMenuAnchorEl}
+          header={header}
+          onSelect={handleFilterByColumn}
+          setAnchorEl={setFilterMenuAnchorEl}
+          table={table}
+        />
+      )}
+    </Box>
   );
 };

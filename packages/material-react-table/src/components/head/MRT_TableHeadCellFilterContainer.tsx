@@ -1,4 +1,4 @@
-import Collapse, { type CollapseProps } from '@mui/material/Collapse';
+import { Collapse, type CollapseProps } from '@chakra-ui/react';
 import {
   type MRT_Header,
   type MRT_RowData,
@@ -12,7 +12,7 @@ import { MRT_FilterTextField } from '../inputs/MRT_FilterTextField';
 
 export interface MRT_TableHeadCellFilterContainerProps<
   TData extends MRT_RowData,
-> extends CollapseProps {
+> extends Omit<CollapseProps, 'in'> {
   header: MRT_Header<TData>;
   table: MRT_TableInstance<TData>;
 }
@@ -34,8 +34,7 @@ export const MRT_TableHeadCellFilterContainer = <TData extends MRT_RowData>({
   return (
     <Collapse
       in={showColumnFilters || columnFilterDisplayMode === 'popover'}
-      mountOnEnter
-      unmountOnExit
+      animateOpacity
       {...rest}
     >
       {columnDef.filterVariant === 'checkbox' ? (

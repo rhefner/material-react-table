@@ -4,18 +4,17 @@ import {
   type KeyboardEvent,
   useState,
 } from 'react';
-import MenuItem from '@mui/material/MenuItem';
-import TextField from '@mui/material/TextField';
-import { type TextFieldProps } from '@mui/material/TextField';
+import { Select, Input, type InputProps } from '@chakra-ui/react';
 import {
   type MRT_Cell,
   type MRT_RowData,
   type MRT_TableInstance,
+  type DropdownOption,
 } from '../../types';
 import { getValueAndLabel, parseFromValuesOrFunc } from '../../utils/utils';
 
 export interface MRT_EditCellTextFieldProps<TData extends MRT_RowData>
-  extends TextFieldProps<'standard'> {
+  extends InputProps {
   cell: MRT_Cell<TData>;
   table: MRT_TableInstance<TData>;
 }
@@ -44,7 +43,11 @@ export const MRT_EditCellTextField = <TData extends MRT_RowData>({
   const [value, setValue] = useState(() => cell.getValue<string>());
   const [completesComposition, setCompletesComposition] = useState(true);
 
-  const textFieldProps: TextFieldProps = {
+  const inputProps: InputProps & {
+    ref?:
+      | React.RefObject<HTMLInputElement>
+      | ((node: HTMLInputElement | null) => void);
+  } = {
     ...parseFromValuesOrFunc(muiEditTextFieldProps, {
       cell,
       column,
@@ -58,136 +61,65 @@ export const MRT_EditCellTextField = <TData extends MRT_RowData>({
       table,
     }),
     ...rest,
+    value,
+    onChange: (event: ChangeEvent<HTMLInputElement>) => {
+      setValue(event.target.value);
+      rest.onChange?.(event);
+    },
+    onBlur: (event: FocusEvent<HTMLInputElement>) => {
+      if (completesComposition) {
+        setEditingCell(null);
+      }
+      rest.onBlur?.(event);
+    },
+    onKeyDown: (event: KeyboardEvent<HTMLInputElement>) => {
+      if (event.key === 'Enter' && completesComposition) {
+        setEditingCell(null);
+      }
+      rest.onKeyDown?.(event);
+    },
+    onCompositionStart: () => {
+      setCompletesComposition(false);
+    },
+    onCompositionEnd: () => {
+      setCompletesComposition(true);
+    },
+    ref: (node: HTMLInputElement | null) => {
+      if (node && editInputRefs?.current) {
+        editInputRefs.current[`${column.id}-${row.id}`] = node;
+      }
+    },
   };
 
-  const selectOptions = parseFromValuesOrFunc(editSelectOptions, {
-    cell,
-    column,
-    row,
-    table,
-  });
+  const selectOptions =
+    typeof editSelectOptions === 'function'
+      ? editSelectOptions({ cell, column, row, table })
+      : editSelectOptions || [];
 
-  const isSelectEdit = editVariant === 'select' || textFieldProps?.select;
-
-  const saveInputValueToRowCache = (newValue: string) => {
-    //@ts-expect-error
-    row._valuesCache[column.id] = newValue;
-    if (isCreating) {
-      setCreatingRow(row);
-    } else if (isEditing) {
-      setEditingRow(row);
-    }
-  };
-
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    textFieldProps.onChange?.(event);
-    setValue(event.target.value);
-    if (isSelectEdit) {
-      saveInputValueToRowCache(event.target.value);
-    }
-  };
-
-  const handleBlur = (event: FocusEvent<HTMLInputElement>) => {
-    textFieldProps.onBlur?.(event);
-    saveInputValueToRowCache(value);
-    setEditingCell(null);
-  };
-
-  const handleEnterKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    textFieldProps.onKeyDown?.(event);
-    if (event.key === 'Enter' && !event.shiftKey && completesComposition) {
-      editInputRefs.current?.[column.id]?.blur();
-    }
-  };
-
-  if (columnDef.Edit) {
-    return <>{columnDef.Edit?.({ cell, column, row, table })}</>;
-  }
-
-  return (
-    <TextField
-      disabled={parseFromValuesOrFunc(columnDef.enableEditing, row) === false}
-      fullWidth
-      inputRef={(inputRef) => {
-        if (inputRef) {
-          editInputRefs.current![column.id] = isSelectEdit
-            ? inputRef.node
-            : inputRef;
-          if (textFieldProps.inputRef) {
-            textFieldProps.inputRef = inputRef;
-          }
+  return selectOptions.length > 0 ? (
+    <Select
+      value={value}
+      onChange={(event: ChangeEvent<HTMLSelectElement>) => {
+        setValue(event.target.value);
+      }}
+      onBlur={inputProps.onBlur as any}
+      onKeyDown={inputProps.onKeyDown as any}
+      ref={(node: HTMLSelectElement | null) => {
+        if (node && editInputRefs?.current) {
+          editInputRefs.current[`${column.id}-${row.id}`] = node as any;
         }
       }}
-      label={
-        ['custom', 'modal'].includes(
-          (isCreating ? createDisplayMode : editDisplayMode) as string,
-        )
-          ? columnDef.header
-          : undefined
-      }
-      margin="none"
-      name={column.id}
-      placeholder={
-        !['custom', 'modal'].includes(
-          (isCreating ? createDisplayMode : editDisplayMode) as string,
-        )
-          ? columnDef.header
-          : undefined
-      }
-      select={isSelectEdit}
-      size="small"
-      value={value ?? ''}
-      variant="standard"
-      {...textFieldProps}
-      InputProps={{
-        ...(textFieldProps.variant !== 'outlined'
-          ? { disableUnderline: editDisplayMode === 'table' }
-          : {}),
-        ...textFieldProps.InputProps,
-        sx: (theme) => ({
-          mb: 0,
-          ...(parseFromValuesOrFunc(
-            textFieldProps?.InputProps?.sx,
-            theme,
-          ) as any),
-        }),
-      }}
-      SelectProps={{
-        MenuProps: { disableScrollLock: true },
-        ...textFieldProps.SelectProps,
-      }}
-      inputProps={{
-        autoComplete: 'off',
-        ...textFieldProps.inputProps,
-      }}
-      onBlur={handleBlur}
-      onChange={handleChange}
-      onClick={(e) => {
-        e.stopPropagation();
-        textFieldProps?.onClick?.(e);
-      }}
-      onKeyDown={handleEnterKeyDown}
-      onCompositionStart={() => setCompletesComposition(false)}
-      onCompositionEnd={() => setCompletesComposition(true)}
     >
-      {textFieldProps.children ??
-        selectOptions?.map((option) => {
-          const { label, value } = getValueAndLabel(option);
-          return (
-            <MenuItem
-              key={value}
-              sx={{
-                alignItems: 'center',
-                display: 'flex',
-                gap: '0.5rem',
-                m: 0,
-              }}
-              value={value}
-            >
-              {label}
-            </MenuItem>
-          );
-        })}
-    </TextField>
+      {selectOptions.map((option) => {
+        const { label, value } = getValueAndLabel(option);
+        return (
+          <option key={value} value={value}>
+            {label}
+          </option>
+        );
+      })}
+    </Select>
+  ) : (
+    <Input {...inputProps} />
   );
 };

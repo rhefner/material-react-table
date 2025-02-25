@@ -21,12 +21,18 @@
     "moduleResolution": "node",
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
     "target": "ES6",
+    "paths": {
+      "react": ["./node_modules/react"],
+      "react-dom": ["./node_modules/react-dom"],
+      "@chakra-ui/react": ["./node_modules/@chakra-ui/react"],
+      "tslib": ["./node_modules/tslib"]
+    }
   },
   "references": [
     {

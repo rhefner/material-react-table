@@ -1,8 +1,14 @@
-import Dialog, { type DialogProps } from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import Stack from '@mui/material/Stack';
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Stack,
+  type ModalProps,
+} from '@chakra-ui/react';
 import {
   type MRT_Row,
   type MRT_RowData,
@@ -13,7 +19,7 @@ import { MRT_EditActionButtons } from '../buttons/MRT_EditActionButtons';
 import { MRT_EditCellTextField } from '../inputs/MRT_EditCellTextField';
 
 export interface MRT_EditRowModalProps<TData extends MRT_RowData>
-  extends Partial<DialogProps> {
+  extends Partial<ModalProps> {
   open: boolean;
   table: MRT_TableInstance<TData>;
 }
@@ -58,57 +64,55 @@ export const MRT_EditRowModal = <TData extends MRT_RowData>({
       />
     ));
 
+  const handleClose = () => {
+    if (creatingRow) {
+      onCreatingRowCancel?.({ row, table });
+      setCreatingRow(null);
+    } else {
+      onEditingRowCancel?.({ row, table });
+      setEditingRow(null);
+    }
+    row._valuesCache = {} as any; //reset values cache
+    dialogProps.onClose?.();
+  };
+
   return (
-    <Dialog
-      fullWidth
-      maxWidth="xs"
-      onClose={(event, reason) => {
-        if (creatingRow) {
-          onCreatingRowCancel?.({ row, table });
-          setCreatingRow(null);
-        } else {
-          onEditingRowCancel?.({ row, table });
-          setEditingRow(null);
-        }
-        row._valuesCache = {} as any; //reset values cache
-        dialogProps.onClose?.(event, reason);
-      }}
-      open={open}
+    <Modal
+      isOpen={open}
+      onClose={handleClose}
+      isCentered
+      size="md"
       {...dialogProps}
     >
-      {((creatingRow &&
-        renderCreateRowDialogContent?.({
-          internalEditComponents,
-          row,
-          table,
-        })) ||
-        renderEditRowDialogContent?.({
-          internalEditComponents,
-          row,
-          table,
-        })) ?? (
-        <>
-          <DialogTitle sx={{ textAlign: 'center' }}>
-            {localization.edit}
-          </DialogTitle>
-          <DialogContent>
-            <form onSubmit={(e) => e.preventDefault()}>
-              <Stack
-                sx={{
-                  gap: '32px',
-                  paddingTop: '16px',
-                  width: '100%',
-                }}
-              >
-                {internalEditComponents}
-              </Stack>
-            </form>
-          </DialogContent>
-          <DialogActions sx={{ p: '1.25rem' }}>
-            <MRT_EditActionButtons row={row} table={table} variant="text" />
-          </DialogActions>
-        </>
-      )}
-    </Dialog>
+      <ModalOverlay />
+      <ModalContent>
+        {((creatingRow &&
+          renderCreateRowDialogContent?.({
+            internalEditComponents,
+            row,
+            table,
+          })) ||
+          renderEditRowDialogContent?.({
+            internalEditComponents,
+            row,
+            table,
+          })) ?? (
+          <>
+            <ModalHeader textAlign="center">{localization.edit}</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <form onSubmit={(e) => e.preventDefault()}>
+                <Stack spacing={8} py={4} width="100%">
+                  {internalEditComponents}
+                </Stack>
+              </form>
+            </ModalBody>
+            <ModalFooter p={5}>
+              <MRT_EditActionButtons row={row} table={table} variant="text" />
+            </ModalFooter>
+          </>
+        )}
+      </ModalContent>
+    </Modal>
   );
 };

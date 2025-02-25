@@ -1,11 +1,16 @@
 import { type MouseEvent, useState } from 'react';
-import IconButton, { type IconButtonProps } from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
+import {
+  IconButton,
+  Tooltip,
+  type IconButtonProps,
+  Icon,
+} from '@chakra-ui/react';
 import { type MRT_RowData, type MRT_TableInstance } from '../../types';
 import { MRT_ShowHideColumnsMenu } from '../menus/MRT_ShowHideColumnsMenu';
 
 export interface MRT_ShowHideColumnsButtonProps<TData extends MRT_RowData>
-  extends IconButtonProps {
+  extends Omit<IconButtonProps, 'aria-label'> {
+  'aria-label'?: string;
   table: MRT_TableInstance<TData>;
 }
 
@@ -26,17 +31,17 @@ export const MRT_ShowHideColumnsButton = <TData extends MRT_RowData>({
     setAnchorEl(event.currentTarget);
   };
 
+  const { 'aria-label': ariaLabel, ...restProps } = rest;
+
   return (
     <>
-      <Tooltip title={rest?.title ?? localization.showHideColumns}>
+      <Tooltip label={restProps?.title ?? localization.showHideColumns}>
         <IconButton
-          aria-label={localization.showHideColumns}
+          aria-label={ariaLabel ?? localization.showHideColumns}
           onClick={handleClick}
-          {...rest}
-          title={undefined}
-        >
-          <ViewColumnIcon />
-        </IconButton>
+          {...restProps}
+          icon={<Icon as={ViewColumnIcon} />}
+        />
       </Tooltip>
       {anchorEl && (
         <MRT_ShowHideColumnsMenu

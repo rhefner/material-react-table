@@ -1,19 +1,26 @@
-import Badge from '@mui/material/Badge';
-import TableSortLabel, {
-  type TableSortLabelProps,
-} from '@mui/material/TableSortLabel';
-import Tooltip from '@mui/material/Tooltip';
+import {
+  Box,
+  Tooltip,
+  Badge,
+  Flex,
+  useColorModeValue,
+  type SystemStyleObject,
+  type Theme,
+  Icon,
+  useTheme,
+} from '@chakra-ui/react';
 import {
   type MRT_Header,
   type MRT_RowData,
   type MRT_TableInstance,
 } from '../../types';
 import { parseFromValuesOrFunc } from '../../utils/utils';
+import { getCommonTooltipProps } from '../../utils/style.utils';
 
-export interface MRT_TableHeadCellSortLabelProps<TData extends MRT_RowData>
-  extends TableSortLabelProps {
+export interface MRT_TableHeadCellSortLabelProps<TData extends MRT_RowData> {
   header: MRT_Header<TData>;
   table: MRT_TableInstance<TData>;
+  sx?: SystemStyleObject;
 }
 
 export const MRT_TableHeadCellSortLabel = <TData extends MRT_RowData>({
@@ -52,50 +59,61 @@ export const MRT_TableHeadCellSortLabel = <TData extends MRT_RowData>({
     ? (column.getIsSorted() as 'asc' | 'desc')
     : undefined;
 
+  const theme = useTheme<Theme>();
+  const textColor = useColorModeValue('gray.600', 'gray.300');
+
   return (
-    <Tooltip placement="top" title={sortTooltip}>
-      <Badge
-        badgeContent={sorting.length > 1 ? column.getSortIndex() + 1 : 0}
-        overlap="circular"
-      >
-        <TableSortLabel
-          IconComponent={
-            !isSorted
-              ? (props) => (
-                  <SyncAltIcon
-                    {...props}
-                    direction={direction}
-                    style={{
-                      transform: 'rotate(-90deg) scaleX(0.9) translateX(-1px)',
-                    }}
-                  />
-                )
-              : ArrowDownwardIcon
+    <Tooltip placement="top" label={sortTooltip} {...getCommonTooltipProps()}>
+      <Box position="relative">
+        <Badge
+          position="absolute"
+          top="-8px"
+          right="-8px"
+          borderRadius="full"
+          display={
+            sorting.length > 1 && column.getSortIndex() + 1 > 0
+              ? 'flex'
+              : 'none'
           }
-          active
-          aria-label={sortTooltip}
-          direction={direction}
-          onClick={(e) => {
-            e.stopPropagation();
-            header.column.getToggleSortingHandler()?.(e);
-          }}
-          {...rest}
-          sx={(theme) => ({
-            '.MuiTableSortLabel-icon': {
-              color: `${
-                theme.palette.mode === 'dark'
-                  ? theme.palette.text.primary
-                  : theme.palette.text.secondary
-              } !important`,
-            },
+          sx={{
             flex: '0 0',
             opacity: isSorted ? 1 : 0.3,
             transition: 'all 150ms ease-in-out',
             width: '3ch',
             ...(parseFromValuesOrFunc(rest?.sx, theme) as any),
-          })}
-        />
-      </Badge>
+          }}
+        >
+          {sorting.length > 1 ? column.getSortIndex() + 1 : ''}
+        </Badge>
+        <Flex
+          alignItems="center"
+          justifyContent="center"
+          aria-label={sortTooltip}
+          width="3ch"
+          opacity={isSorted ? 1 : 0.3}
+          transition="all 150ms ease-in-out"
+          onClick={(e) => {
+            e.stopPropagation();
+            header.column.getToggleSortingHandler()?.(e);
+          }}
+          cursor="pointer"
+          {...rest}
+        >
+          {!isSorted ? (
+            <Icon
+              as={SyncAltIcon}
+              transform="rotate(-90deg) scaleX(0.9) translateX(-1px)"
+              color={textColor}
+            />
+          ) : (
+            <Icon
+              as={ArrowDownwardIcon}
+              transform={direction === 'asc' ? 'rotate(180deg)' : undefined}
+              color={textColor}
+            />
+          )}
+        </Flex>
+      </Box>
     </Tooltip>
   );
 };
