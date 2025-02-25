@@ -4,7 +4,7 @@ import {
   type MRT_Row,
   createMRTColumnHelper,
 } from 'chakra-react-table';
-import { Box, Button } from '@mui/material';
+import {Box, Button} from '@chakra-ui/react';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { jsPDF } from 'jspdf'; //or use your library of choice here
 import autoTable from 'jspdf-autotable';
@@ -61,12 +61,7 @@ const Example = () => {
     positionToolbarAlertBanner: 'bottom',
     renderTopToolbarCustomActions: ({ table }) => (
       <Box
-        sx={{
-          display: 'flex',
-          gap: '16px',
-          padding: '8px',
-          flexWrap: 'wrap',
-        }}
+        display={'flex'} gap={'16px'} padding={'8px'} flexWrap={'wrap'} ={undefined}
       >
         <Button
           disabled={table.getPrePaginationRowModel().rows.length === 0}

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Box } from '@mui/material';
+import {Box} from '@chakra-ui/react';
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -41,29 +41,29 @@ const Example = () => {
         AggregatedCell: ({ cell }) => (
           <>
             Count:{' '}
-            <Box sx={{ color: 'success.main', fontWeight: 'bold' }}>
+            <Box color={'success.main'} fontWeight={'bold'}>
               {cell.getValue<Array<number>>()?.[0]}
             </Box>
             Average:{' '}
-            <Box sx={{ color: 'success.main', fontWeight: 'bold' }}>
+            <Box color={'success.main'} fontWeight={'bold'}>
               {cell
                 .getValue<Array<number>>()?.[1]
                 ?.toLocaleString?.('en-US', localeStringOptions)}
             </Box>
             Median:{' '}
-            <Box sx={{ color: 'success.main', fontWeight: 'bold' }}>
+            <Box color={'success.main'} fontWeight={'bold'}>
               {cell
                 .getValue<Array<number>>()?.[2]
                 ?.toLocaleString?.('en-US', localeStringOptions)}
             </Box>
             Min:{' '}
-            <Box sx={{ color: 'success.main', fontWeight: 'bold' }}>
+            <Box color={'success.main'} fontWeight={'bold'}>
               {cell
                 .getValue<Array<number>>()?.[3]
                 ?.toLocaleString?.('en-US', localeStringOptions)}
             </Box>
             Max:{' '}
-            <Box sx={{ color: 'success.main', fontWeight: 'bold' }}>
+            <Box color={'success.main'} fontWeight={'bold'}>
               {cell
                 .getValue<Array<number>>()?.[4]
                 ?.toLocaleString?.('en-US', localeStringOptions)}

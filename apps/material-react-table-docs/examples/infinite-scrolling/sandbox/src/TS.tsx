@@ -16,7 +16,7 @@ import {
   type MRT_SortingState,
   type MRT_RowVirtualizer,
 } from 'chakra-react-table';
-import { Typography } from '@mui/material';
+import {Text} from '@chakra-ui/react';
 import {
   QueryClient,
   QueryClientProvider,

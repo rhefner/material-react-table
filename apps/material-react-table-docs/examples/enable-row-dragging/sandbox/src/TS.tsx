@@ -6,7 +6,7 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'chakra-react-table';
-import { Box, Typography } from '@mui/material';
+import {Box, Text} from '@chakra-ui/react';
 import { data, type Person } from './makeData';
 
 const Example = () => {

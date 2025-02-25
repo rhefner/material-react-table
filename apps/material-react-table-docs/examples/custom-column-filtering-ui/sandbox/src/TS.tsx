@@ -6,7 +6,7 @@ import {
   MRT_TableHeadCellFilterContainer,
 } from 'chakra-react-table';
 import { data, type Person } from './makeData';
-import { Paper, Stack, useMediaQuery } from '@mui/material';
+import {Box, Stack, useMediaQuery} from '@chakra-ui/react';
 
 const Example = () => {
   const isMobile = useMediaQuery('(max-width: 1000px)');

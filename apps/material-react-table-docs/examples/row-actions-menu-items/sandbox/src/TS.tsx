@@ -5,7 +5,7 @@ import {
   type MRT_ColumnDef,
 } from 'chakra-react-table';
 import { data, type Person } from './makeData';
-import { Edit, Delete } from '@mui/icons-material';
+import {MdEdit, MdDelete} from 'react-icons/md';
 
 export const Example = () => {
   const columns = useMemo<MRT_ColumnDef<Person>[]>(

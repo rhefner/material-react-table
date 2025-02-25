@@ -8,7 +8,7 @@ import {
   type MRT_SortingState,
   type MRT_Row,
 } from 'chakra-react-table';
-import { Alert, CircularProgress, Stack } from '@mui/material';
+import {Alert, Spinner, Stack} from '@chakra-ui/react';
 import AddIcon from '@mui/icons-material/Add';
 import MinusIcon from '@mui/icons-material/Remove';
 import {

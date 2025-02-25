@@ -4,7 +4,7 @@ import {
   useMaterialReactTable,
   type MRT_ColumnDef,
 } from 'chakra-react-table';
-import { MenuItem } from '@mui/material';
+import {MenuItem} from '@chakra-ui/react';
 import { data, type Person } from './makeData';
 
 const Example = () => {

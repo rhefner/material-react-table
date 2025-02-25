@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Box, Button } from '@mui/material';
+import {Box, Button} from '@chakra-ui/react';
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -71,7 +71,7 @@ const Example = () => {
     enableRowSelection: true,
     enableRowActions: true,
     renderRowActions: ({ row }) => (
-      <Box sx={{ display: 'flex', gap: '1rem' }}>
+      <Box display={'flex'} gap={'1rem'}>
         <Button>Button 1</Button>
         <Button>Button 2</Button>
         <Button>Button 3</Button>

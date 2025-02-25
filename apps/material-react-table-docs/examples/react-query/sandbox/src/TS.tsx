@@ -7,7 +7,7 @@ import {
   type MRT_PaginationState,
   type MRT_SortingState,
 } from 'chakra-react-table';
-import { IconButton, Tooltip } from '@mui/material';
+import {IconButton, Tooltip} from '@chakra-ui/react';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import {
   QueryClient,

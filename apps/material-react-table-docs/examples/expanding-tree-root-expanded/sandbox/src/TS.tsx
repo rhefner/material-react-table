@@ -5,7 +5,7 @@ import {
   type MRT_ColumnDef,
   useMaterialReactTable,
 } from 'chakra-react-table';
-import { Button } from '@mui/material';
+import {Button} from '@chakra-ui/react';
 
 export type Person = {
   id: string;

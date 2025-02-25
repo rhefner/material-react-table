@@ -7,7 +7,7 @@ import {
   MRT_ExpandAllButton,
 } from 'chakra-react-table';
 import { data, type Person } from './makeData';
-import { Box, Stack } from '@mui/material';
+import {Box, Stack} from '@chakra-ui/react';
 
 const Example = () => {
   const columns = useMemo<MRT_ColumnDef<Person>[]>(

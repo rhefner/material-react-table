@@ -8,15 +8,7 @@ import {
   type MRT_TableOptions,
   useMaterialReactTable,
 } from 'chakra-react-table';
-import {
-  Box,
-  Button,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-  Tooltip,
-} from '@mui/material';
+import {Box, Button, DialogActions, DialogContent, DialogTitle, IconButton, Tooltip, } from '@chakra-ui/react';
 import {
   QueryClient,
   QueryClientProvider,
@@ -184,7 +176,7 @@ const Example = () => {
       <>
         <DialogTitle variant="h3">Create New User</DialogTitle>
         <DialogContent
-          sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
+          display={'flex'} flexDirection={'column'} gap={'1rem'}
         >
           {internalEditComponents} {/* or render custom edit components here */}
         </DialogContent>
@@ -198,7 +190,7 @@ const Example = () => {
       <>
         <DialogTitle variant="h3">Edit User</DialogTitle>
         <DialogContent
-          sx={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}
+          display={'flex'} flexDirection={'column'} gap={'1.5rem'}
         >
           {internalEditComponents} {/* or render custom edit components here */}
         </DialogContent>
@@ -208,14 +200,14 @@ const Example = () => {
       </>
     ),
     renderRowActions: ({ row, table }) => (
-      <Box sx={{ display: 'flex', gap: '1rem' }}>
+      <Box display={'flex'} gap={'1rem'}>
         <Tooltip title="Edit">
           <IconButton onClick={() => table.setEditingRow(row)}>
             <EditIcon />
           </IconButton>
         </Tooltip>
         <Tooltip title="Delete">
-          <IconButton color="error" onClick={() => openDeleteConfirmModal(row)}>
+          <IconButton colorScheme="red" onClick={() => openDeleteConfirmModal(row)}>
             <DeleteIcon />
           </IconButton>
         </Tooltip>
@@ -223,7 +215,7 @@ const Example = () => {
     ),
     renderTopToolbarCustomActions: ({ table }) => (
       <Button
-        variant="contained"
+        colorScheme="blue"
         onClick={() => {
           table.setCreatingRow(true); //simplest way to open the create row modal with no default values
           //or you can pass in a row object to set default values with the `createRow` helper function

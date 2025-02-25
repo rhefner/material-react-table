@@ -4,7 +4,7 @@ import {
   useMaterialReactTable,
   type MRT_ColumnDef,
 } from 'chakra-react-table';
-import { Box, Typography, useMediaQuery } from '@mui/material';
+import {Box, Text, useMediaQuery} from '@chakra-ui/react';
 import { data, type Person } from './makeData';
 
 const Example = () => {
@@ -57,12 +57,7 @@ const Example = () => {
     },
     renderDetailPanel: ({ row }) => (
       <Box
-        sx={{
-          display: 'grid',
-          margin: 'auto',
-          gridTemplateColumns: '1fr 1fr',
-          width: '100%',
-        }}
+        display={'grid'} margin={'auto'} gridTemplateColumns={'1fr 1fr'} width={'100%'} ={undefined}
       >
         <Typography>Address: {row.original.address}</Typography>
         <Typography>City: {row.original.city}</Typography>

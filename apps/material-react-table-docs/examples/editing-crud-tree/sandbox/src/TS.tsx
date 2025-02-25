@@ -7,14 +7,7 @@ import {
   type MRT_TableOptions,
   useMaterialReactTable,
 } from 'chakra-react-table';
-import {
-  Box,
-  Button,
-  IconButton,
-  Tooltip,
-  darken,
-  lighten,
-} from '@mui/material';
+import {Box, Button, IconButton, Tooltip, darken, lighten, } from '@chakra-ui/react';
 import {
   QueryClient,
   QueryClientProvider,
@@ -196,14 +189,14 @@ const Example = () => {
     onEditingRowCancel: () => setValidationErrors({}),
     onEditingRowSave: handleSaveUser,
     renderRowActions: ({ row, staticRowIndex, table }) => (
-      <Box sx={{ display: 'flex', gap: '1rem' }}>
+      <Box display={'flex'} gap={'1rem'}>
         <Tooltip title="Edit">
           <IconButton onClick={() => table.setEditingRow(row)}>
             <EditIcon />
           </IconButton>
         </Tooltip>
         <Tooltip title="Delete">
-          <IconButton color="error" onClick={() => openDeleteConfirmModal(row)}>
+          <IconButton colorScheme="red" onClick={() => openDeleteConfirmModal(row)}>
             <DeleteIcon />
           </IconButton>
         </Tooltip>
@@ -237,7 +230,7 @@ const Example = () => {
     renderTopToolbarCustomActions: ({ table }) => (
       <Button
         startIcon={<PersonAddAltIcon />}
-        variant="contained"
+        colorScheme="blue"
         onClick={() => {
           setCreatingRowIndex(table.getRowModel().rows.length); //create new row at bottom of table
           table.setCreatingRow(true);

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { MaterialReactTable, type MRT_ColumnDef } from 'chakra-react-table';
-import { ContentCopy } from '@mui/icons-material';
+import {ContentCopy} from 'react-icons/md';
 import { data, type Person } from './makeData';
 
 const Example = () => {

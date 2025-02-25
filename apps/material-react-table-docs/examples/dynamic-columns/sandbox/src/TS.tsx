@@ -8,7 +8,7 @@ import {
   type MRT_SortingState,
   // type MRT_ColumnOrderState,
 } from 'chakra-react-table';
-import { IconButton, Tooltip } from '@mui/material';
+import {IconButton, Tooltip} from '@chakra-ui/react';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import {
   keepPreviousData,

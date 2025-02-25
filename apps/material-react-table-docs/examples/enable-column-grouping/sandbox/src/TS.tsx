@@ -5,14 +5,7 @@ import {
   type MRT_ColumnDef,
 } from 'chakra-react-table';
 import { data, type Person } from './makeData';
-import {
-  FormControl,
-  FormControlLabel,
-  FormLabel,
-  Radio,
-  RadioGroup,
-  Stack,
-} from '@mui/material';
+import {FormControl, FormLabel, FormLabel, Radio, RadioGroup, Stack, } from '@chakra-ui/react';
 
 const Example = () => {
   const columns = useMemo<MRT_ColumnDef<Person>[]>(
@@ -89,7 +82,7 @@ const DemoRadioGroup = ({
   ) => void;
 }) => {
   return (
-    <FormControl sx={{ margin: 'auto', textAlign: 'center' }}>
+    <FormControl margin={'auto'} textAlign={'center'}>
       <FormLabel>Grouped Column Mode</FormLabel>
       <RadioGroup
         row

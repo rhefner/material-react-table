@@ -7,14 +7,7 @@ import {
   type MRT_TableOptions,
   useMaterialReactTable,
 } from 'chakra-react-table';
-import {
-  Box,
-  Button,
-  CircularProgress,
-  IconButton,
-  Tooltip,
-  Typography,
-} from '@mui/material';
+import {Box, Button, Spinner, IconButton, Tooltip, Text, } from '@chakra-ui/react';
 import {
   QueryClient,
   QueryClientProvider,
@@ -195,19 +188,19 @@ const Example = () => {
     onCreatingRowCancel: () => setValidationErrors({}),
     onCreatingRowSave: handleCreateUser,
     renderRowActions: ({ row }) => (
-      <Box sx={{ display: 'flex', gap: '1rem' }}>
+      <Box display={'flex'} gap={'1rem'}>
         <Tooltip title="Delete">
-          <IconButton color="error" onClick={() => openDeleteConfirmModal(row)}>
+          <IconButton colorScheme="red" onClick={() => openDeleteConfirmModal(row)}>
             <DeleteIcon />
           </IconButton>
         </Tooltip>
       </Box>
     ),
     renderBottomToolbarCustomActions: () => (
-      <Box sx={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+      <Box display={'flex'} gap={'1rem'} alignItems={'center'}>
         <Button
           color="success"
-          variant="contained"
+          colorScheme="blue"
           onClick={handleSaveUsers}
           disabled={
             Object.keys(editedUsers).length === 0 ||
@@ -217,13 +210,13 @@ const Example = () => {
           {isUpdatingUsers ? <CircularProgress size={25} /> : 'Save'}
         </Button>
         {Object.values(validationErrors).some((error) => !!error) && (
-          <Typography color="error">Fix errors before submitting</Typography>
+          <Typography colorScheme="red">Fix errors before submitting</Typography>
         )}
       </Box>
     ),
     renderTopToolbarCustomActions: ({ table }) => (
       <Button
-        variant="contained"
+        colorScheme="blue"
         onClick={() => {
           table.setCreatingRow(true); //simplest way to open the create row modal with no default values
           //or you can pass in a row object to set default values with the `createRow` helper function
