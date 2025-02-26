@@ -1,5 +1,5 @@
 import { ReactNode, useMemo, type MouseEvent } from 'react';
-import { Box, type MenuProps } from '@chakra-ui/react';
+import { Box, Menu, type MenuProps } from '@chakra-ui/react';
 import { MRT_ActionMenuItem } from './MRT_ActionMenuItem';
 import {
   type MRT_Row,
@@ -69,28 +69,5 @@ export const MRT_RowActionMenu = <TData extends MRT_RowData>({
 
   // In Chakra UI, we'll use a positioned Box instead of Menu component
   // since we're using the anchorEl pattern from MUI
-  return (
-    <Box
-      position="absolute"
-      zIndex={1000}
-      top={anchorEl.getBoundingClientRect().bottom}
-      left={anchorEl.getBoundingClientRect().left}
-      onClick={(event) => event.stopPropagation()}
-    >
-      <Box
-        maxHeight="calc(var(--chakra-vh, 1vh) * 70)"
-        maxWidth="340px"
-        minWidth="200px"
-        overflowY="auto"
-        p={density === 'compact' ? 1 : 2}
-        bg={menuBackgroundColor}
-        borderRadius="md"
-        boxShadow="md"
-        onClick={() => setAnchorEl(null)}
-        {...rest}
-      >
-        {menuItems}
-      </Box>
-    </Box>
-  );
+  return <Menu>{menuItems}</Menu>;
 };

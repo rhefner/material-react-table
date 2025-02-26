@@ -1,5 +1,5 @@
 import { type MouseEvent, useState } from 'react';
-import { Box } from '@chakra-ui/react';
+import { Box, Menu } from '@chakra-ui/react';
 import { MRT_ActionMenuItem } from './MRT_ActionMenuItem';
 import { MRT_FilterOptionMenu } from './MRT_FilterOptionMenu';
 import {
@@ -344,7 +344,7 @@ export const MRT_ColumnActionMenu = <TData extends MRT_RowData>({
         borderRadius="md"
         boxShadow="md"
       >
-        {menuItems}
+        <Menu>{menuItems}</Menu>
       </Box>
       {filterMenuAnchorEl && (
         <MRT_FilterOptionMenu

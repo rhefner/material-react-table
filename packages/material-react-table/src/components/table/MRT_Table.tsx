@@ -62,7 +62,7 @@ export const MRT_Table = <TData extends MRT_RowData>({
 
   return (
     <Table
-      stickyHeader={enableStickyHeader || isFullScreen}
+      // stickyHeader={enableStickyHeader || isFullScreen}
       {...tableProps}
       style={{ ...columnSizeVars, ...tableProps?.style }}
       sx={{

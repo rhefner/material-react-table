@@ -1,13 +1,5 @@
 import { useMemo } from 'react';
-import {
-  Menu,
-  MenuList,
-  MenuButton,
-  MenuItem,
-  MenuDivider,
-  Box,
-  type MenuProps,
-} from '@chakra-ui/react';
+import { Menu, MenuList, type MenuProps } from '@chakra-ui/react';
 import { MRT_ActionMenuItem } from './MRT_ActionMenuItem';
 import {
   type MRT_FilterOption,
@@ -253,12 +245,7 @@ export const MRT_FilterOptionMenu = <TData extends MRT_RowData>({
   // Chakra UI's Menu won't work without a MenuButton, so we use a positioning wrapper
   // instead and only render the MenuList directly
   return (
-    <Box
-      position="absolute"
-      zIndex={1000}
-      top={anchorEl.getBoundingClientRect().bottom}
-      left={anchorEl.getBoundingClientRect().left}
-    >
+    <Menu>
       <MenuList
         maxWidth="340px"
         minWidth="200px"
@@ -303,6 +290,6 @@ export const MRT_FilterOptionMenu = <TData extends MRT_RowData>({
             ),
           )}
       </MenuList>
-    </Box>
+    </Menu>
   );
 };

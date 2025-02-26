@@ -134,7 +134,7 @@ If the script fails on an example, you can always migrate it manually using the 
 ### Material UI to Chakra UI Component Imports
 ```javascript
 // Before
-import { Button, TextField, Typography } from '@mui/material';
+import { Button, TextField, Text } from '@mui/material';
 
 // After
 import { Button, Input, Text } from '@chakra-ui/react';

@@ -102,7 +102,7 @@ Below is a mapping of key Material UI components to their Chakra UI equivalents:
 | TableRow | Tr |
 | TextField | Input |
 | Tooltip | Tooltip |
-| Typography | Text, Heading |
+| Text | Text, Heading |
 
 ### Step 1: Update Types (In Progress)
 

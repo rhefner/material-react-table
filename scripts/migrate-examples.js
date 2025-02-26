@@ -13,7 +13,7 @@ const COMPONENT_MAPPING = {
   Box: 'Box',
   Button: 'Button',
   IconButton: 'IconButton',
-  Typography: 'Text', // May need special handling: variant="h1" -> as="h1"
+  Text: 'Text', // May need special handling: variant="h1" -> as="h1"
   Paper: 'Box',
   Stack: 'Stack',
   Divider: 'Divider',
