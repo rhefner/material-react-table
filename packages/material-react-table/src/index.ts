@@ -92,3 +92,6 @@ export * from './components/toolbar/MRT_TopToolbar';
 
 // Icons
 export { MRT_Default_Icons } from './icons';
+
+// Export Chakra UI Theme Components
+export * from './theme';
