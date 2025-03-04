@@ -10,6 +10,9 @@
       "request": "launch",
       "cwd": "${workspaceFolder}/apps/remix-demo",
       "command": "pnpm run dev",
+      "env": {
+        "PORT": "${input:port}"
+      }
     },
     {
       "name": "Remix Demo App Client",
@@ -17,6 +20,7 @@
       "request": "launch",
       "showAsyncStacks": true,
       "cleanUp": "wholeBrowser",
+      "url": "http://localhost:${input:port}",
     },
   ],
   "inputs": [
@@ -24,12 +28,19 @@
       "id": "port",
       "type": "promptString",
       "description": "Port number",
+      "default": "5173"
     },
   ],
   "compounds": [
     {
       "name": "Debug Remix Demo (Client + Server)",
-      "configurations": ["Remix Demo App Client", "Remix Demo App Server"],
+      "configurations": ["Remix Demo App Server", "Remix Demo App Client"],
+      "presentation": {
+        "hidden": false,
+        "group": "Compounds",
+        "order": 1
+      },
+      "stopAll": true
     },
   ],
 }
