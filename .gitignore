@@ -43,6 +43,7 @@ yarn-error.log*
 *storybook.log
 
 # VSCode
-.vscode
+.vscode/*
+!.vscode/launch.json
 
 CLAUDE.md
