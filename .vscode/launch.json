@@ -23,6 +23,7 @@
       "cleanUp": "wholeBrowser",
       "url": "http://localhost:${input:port}",
       "sourceMaps": true,
+      "userDataDir": "${env:HOME}/.vscode-edge-debug",
     },
   ],
   "inputs": [

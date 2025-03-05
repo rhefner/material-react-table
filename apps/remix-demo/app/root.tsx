@@ -17,6 +17,7 @@ import {
   Flex,
   localStorageManager,
   ThemeProvider,
+  useColorMode,
 } from '@chakra-ui/react';
 import { withEmotionCache } from '@emotion/react';
 import { useContext, useEffect } from 'react';
@@ -145,6 +146,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+  const { colorMode } = useColorMode();
+  console.log('[App] colorMode:', colorMode);
+
   return (
     <Flex
       minH="calc(100vh - 32px)"

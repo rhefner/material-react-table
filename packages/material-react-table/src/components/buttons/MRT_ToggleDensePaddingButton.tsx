@@ -2,11 +2,10 @@ import {
   IconButton,
   type IconButtonProps,
   Tooltip,
-  useTheme,
   Icon,
-  type Theme,
 } from '@chakra-ui/react';
 import { type MRT_RowData, type MRT_TableInstance } from '../../types';
+import { useTheme, type Theme } from '../../hooks/custom/useTheme';
 
 export interface MRT_ToggleDensePaddingButtonProps<TData extends MRT_RowData>
   extends Omit<IconButtonProps, 'aria-label'> {

@@ -2,13 +2,12 @@ import {
   Icon,
   IconButton,
   Tooltip,
-  useTheme,
   type IconButtonProps,
-  type Theme,
 } from '@chakra-ui/react';
 import { type MRT_RowData, type MRT_TableInstance } from '../../types';
 import { getCommonTooltipProps } from '../../utils/style.utils';
 import { parseFromValuesOrFunc } from '../../utils/utils';
+import { useTheme, type Theme } from '../../hooks/custom/useTheme';
 
 export interface MRT_ExpandAllButtonProps<TData extends MRT_RowData>
   extends IconButtonProps {

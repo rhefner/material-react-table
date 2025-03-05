@@ -1,10 +1,4 @@
-import {
-  Tr,
-  useColorModeValue,
-  useTheme,
-  type TableRowProps,
-  type Theme,
-} from '@chakra-ui/react';
+import { Tr, useColorModeValue, type TableRowProps } from '@chakra-ui/react';
 import { MRT_TableFooterCell } from './MRT_TableFooterCell';
 import {
   type MRT_ColumnVirtualizer,
@@ -15,6 +9,7 @@ import {
   type MRT_VirtualItem,
 } from '../../types';
 import { parseFromValuesOrFunc } from '../../utils/utils';
+import { useTheme, type Theme } from '../../hooks/custom/useTheme';
 
 export interface MRT_TableFooterRowProps<TData extends MRT_RowData>
   extends TableRowProps {

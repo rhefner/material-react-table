@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Table, useTheme, type Theme, type TableProps } from '@chakra-ui/react';
+import { Table, type TableProps } from '@chakra-ui/react';
 import { useMRT_ColumnVirtualizer } from '../../hooks/useMRT_ColumnVirtualizer';
 import { type MRT_RowData, type MRT_TableInstance } from '../../types';
 import { parseCSSVarId } from '../../utils/style.utils';
@@ -7,6 +7,7 @@ import { parseFromValuesOrFunc } from '../../utils/utils';
 import { MRT_TableBody, Memo_MRT_TableBody } from '../body/MRT_TableBody';
 import { MRT_TableFooter } from '../footer/MRT_TableFooter';
 import { MRT_TableHead } from '../head/MRT_TableHead';
+import { useTheme, type Theme } from '../../hooks/custom/useTheme';
 
 export interface MRT_TableProps<TData extends MRT_RowData> extends TableProps {
   table: MRT_TableInstance<TData>;

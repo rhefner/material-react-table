@@ -23,20 +23,45 @@ export const getMRTTheme = <TData extends MRT_RowData>(
   const baseBackgroundColor =
     mrtThemeOverrides?.baseBackgroundColor ??
     (muiTheme.colorMode === 'dark'
-      ? lighten(muiTheme.colors.gray[800], 0.05)
+      ? muiTheme.colors.gray[900]
       : muiTheme.colors.white);
+  const matchHighlightColor =
+    (mrtThemeOverrides?.matchHighlightColor ?? muiTheme.colorMode === 'dark')
+      ? muiTheme.colors.yellow[600]
+      : muiTheme.colors.yellow[300];
+  const cellNavigationOutlineColor =
+    (mrtThemeOverrides?.cellNavigationOutlineColor ??
+    muiTheme.colorMode === 'dark')
+      ? muiTheme.colors.blue[300]
+      : muiTheme.colors.blue[600];
+  const menuBackgroundColor =
+    mrtThemeOverrides?.menuBackgroundColor ??
+    (muiTheme.colorMode === 'dark'
+      ? muiTheme.colors.gray[800]
+      : muiTheme.colors.gray[100]);
+  const pinnedRowBackgroundColor =
+    mrtThemeOverrides?.pinnedRowBackgroundColor ??
+    (muiTheme.colorMode === 'dark'
+      ? muiTheme.colors.gray[700]
+      : muiTheme.colors.gray[50]);
+  const selectedRowBackgroundColor =
+    mrtThemeOverrides?.selectedRowBackgroundColor ??
+    (muiTheme.colorMode === 'dark'
+      ? muiTheme.colors.blue[900]
+      : muiTheme.colors.blue[50]);
+  const draggingBorderColor =
+    (mrtThemeOverrides?.draggingBorderColor ?? muiTheme.colorMode === 'dark')
+      ? muiTheme.colors.blue[600]
+      : muiTheme.colors.blue[300];
 
   return {
     baseBackgroundColor,
-    cellNavigationOutlineColor: muiTheme.colors.blue[500],
-    draggingBorderColor: muiTheme.colors.blue[500],
-    matchHighlightColor:
-      muiTheme.colorMode === 'dark'
-        ? darken(muiTheme.colors.yellow[600], 0.25)
-        : lighten(muiTheme.colors.yellow[300], 0.5),
-    menuBackgroundColor: lighten(baseBackgroundColor, 0.07),
-    pinnedRowBackgroundColor: alpha(muiTheme.colors.blue[500], 0.1),
-    selectedRowBackgroundColor: alpha(muiTheme.colors.blue[500], 0.2),
+    cellNavigationOutlineColor,
+    draggingBorderColor,
+    matchHighlightColor,
+    menuBackgroundColor,
+    pinnedRowBackgroundColor,
+    selectedRowBackgroundColor,
     ...mrtThemeOverrides,
   };
 };
@@ -66,15 +91,30 @@ export const getCommonPinnedCellStyles = <TData extends MRT_RowData>({
   const isPinned = column?.getIsPinned();
   const isHovered = column?.id === hoveredColumn?.id;
 
+  let backgroundColor =
+    theme.colorMode === 'dark' ? theme.colors.gray[900] : theme.colors.white;
+  let boxShadow = undefined;
+
+  if (isHovered) {
+    boxShadow = `2px 0 0 0 ${theme.colorMode === 'dark' ? theme.colors.blue[300] : theme.colors.blue[500]} inset`;
+  }
+
+  if (isPinned) {
+    backgroundColor =
+      theme.colorMode === 'dark'
+        ? theme.colors.gray[700]
+        : theme.colors.gray[50];
+
+    if (isPinned === 'left') {
+      boxShadow = `1px 0 0 0 ${theme.colorMode === 'dark' ? theme.colors.gray[700] : theme.colors.gray[200]}`;
+    } else if (isPinned === 'right') {
+      boxShadow = `-1px 0 0 0 ${theme.colorMode === 'dark' ? theme.colors.gray[700] : theme.colors.gray[200]}`;
+    }
+  }
+
   return {
-    backgroundColor: isPinned ? theme.colors.gray[50] : undefined,
-    boxShadow: isHovered
-      ? `2px 0 0 0 ${theme.colors.blue[500]} inset`
-      : isPinned === 'left'
-        ? `1px 0 0 0 ${theme.colors.gray[200]}`
-        : isPinned === 'right'
-          ? `-1px 0 0 0 ${theme.colors.gray[200]}`
-          : undefined,
+    backgroundColor,
+    boxShadow,
     left: isPinned === 'left' ? 0 : undefined,
     opacity: isPinned ? 1 : undefined,
     position: isPinned ? 'sticky' : undefined,

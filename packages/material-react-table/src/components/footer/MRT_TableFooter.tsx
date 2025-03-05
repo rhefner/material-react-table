@@ -1,9 +1,7 @@
 import {
   Tfoot,
-  useTheme,
   useColorMode,
   type TableFooterProps as ChakraTableFooterProps,
-  type Theme,
 } from '@chakra-ui/react';
 import { MRT_TableFooterRow } from './MRT_TableFooterRow';
 import {
@@ -12,6 +10,7 @@ import {
   type MRT_TableInstance,
 } from '../../types';
 import { parseFromValuesOrFunc } from '../../utils/utils';
+import { useTheme, type Theme } from '../../hooks/custom/useTheme';
 
 export interface MRT_TableFooterProps<TData extends MRT_RowData>
   extends ChakraTableFooterProps {

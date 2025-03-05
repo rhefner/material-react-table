@@ -4,8 +4,6 @@ import {
   Td,
   Tr,
   useColorModeValue,
-  useTheme,
-  type Theme,
   type TableCellProps,
 } from '@chakra-ui/react';
 import {
@@ -16,6 +14,7 @@ import {
   type MRT_VirtualItem,
 } from '../../types';
 import { parseFromValuesOrFunc } from '../../utils/utils';
+import { useTheme, type Theme } from '../../hooks/custom/useTheme';
 
 export interface MRT_TableDetailPanelProps<TData extends MRT_RowData>
   extends TableCellProps {

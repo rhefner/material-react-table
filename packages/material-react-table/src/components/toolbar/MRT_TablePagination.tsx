@@ -9,16 +9,15 @@ import {
   Text,
   Tooltip,
   useBreakpointValue,
-  useTheme,
   type BoxProps,
   type FlexProps,
   type SelectProps,
-  type Theme,
   type ThemeTypings,
 } from '@chakra-ui/react';
 import { type MRT_RowData, type MRT_TableInstance } from '../../types';
 import { getCommonTooltipProps } from '../../utils/style.utils';
 import { parseFromValuesOrFunc } from '../../utils/utils';
+import { useTheme, type Theme } from '../../hooks/custom/useTheme';
 
 const defaultRowsPerPage = [5, 10, 15, 20, 25, 30, 50, 100];
 

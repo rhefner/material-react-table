@@ -1,16 +1,12 @@
-import {
-  Card,
-  type CardProps,
-  useColorModeValue,
-  useTheme,
-  type Theme,
-} from '@chakra-ui/react';
+import { Card, type CardProps, useColorModeValue } from '@chakra-ui/react';
+import clsx from 'clsx';
 import { type MRT_RowData, type MRT_TableInstance } from '../../types';
 import { parseFromValuesOrFunc } from '../../utils/utils';
 import { MRT_BottomToolbar } from '../toolbar/MRT_BottomToolbar';
 import { MRT_TopToolbar } from '../toolbar/MRT_TopToolbar';
 import { MRT_TableContainer } from './MRT_TableContainer';
 import { type KeyboardEvent, type RefObject } from 'react';
+import { useTheme, type Theme } from '../../hooks/custom/useTheme';
 
 export interface MRT_TablePaperProps<TData extends MRT_RowData>
   extends CardProps {
@@ -44,7 +40,6 @@ export const MRT_TablePaper = <TData extends MRT_RowData>({
   };
 
   const chakraTheme = useTheme<Theme>();
-  const bgColor = useColorModeValue('white', 'gray.800');
 
   return (
     <Card
@@ -54,6 +49,7 @@ export const MRT_TablePaper = <TData extends MRT_RowData>({
         e.key === 'Escape' && table.setIsFullScreen(false)
       }
       {...paperProps}
+      className={clsx('MRT_TablePaper', paperProps?.className)}
       ref={(ref: HTMLDivElement) => {
         // @ts-ignore
         tablePaperRef.current = ref;
@@ -82,7 +78,7 @@ export const MRT_TablePaper = <TData extends MRT_RowData>({
           : {}),
         ...paperProps?.style,
       }}
-      bg={baseBackgroundColor || bgColor}
+      bg={baseBackgroundColor}
       overflow="hidden"
       transition="all 100ms ease-in-out"
       {...(paperProps?.sx ? { sx: paperProps.sx } : {})}

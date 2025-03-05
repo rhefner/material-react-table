@@ -2,9 +2,7 @@ import {
   Box,
   Divider,
   type DividerProps,
-  useTheme,
   useColorModeValue,
-  type Theme,
 } from '@chakra-ui/react';
 import {
   type MRT_Header,
@@ -12,6 +10,7 @@ import {
   type MRT_TableInstance,
 } from '../../types';
 import { parseFromValuesOrFunc } from '../../utils/utils';
+import { useTheme, type Theme } from '../../hooks/custom/useTheme';
 
 export interface MRT_TableHeadCellResizeHandleProps<TData extends MRT_RowData>
   extends Omit<DividerProps, 'orientation' | 'variant'> {

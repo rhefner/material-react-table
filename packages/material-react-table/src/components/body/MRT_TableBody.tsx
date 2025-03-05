@@ -4,8 +4,6 @@ import {
   Tbody,
   type TableBodyProps,
   Text,
-  useTheme,
-  type Theme,
   type SystemStyleObject,
 } from '@chakra-ui/react';
 import { MRT_TableBodyRow, Memo_MRT_TableBodyRow } from './MRT_TableBodyRow';
@@ -18,6 +16,7 @@ import {
   type MRT_TableInstance,
 } from '../../types';
 import { parseFromValuesOrFunc } from '../../utils/utils';
+import { useTheme, type Theme } from '../../hooks/custom/useTheme';
 
 export interface MRT_TableBodyProps<TData extends MRT_RowData>
   extends TableBodyProps {

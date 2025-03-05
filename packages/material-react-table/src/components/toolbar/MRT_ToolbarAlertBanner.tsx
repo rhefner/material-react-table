@@ -8,13 +8,12 @@ import {
   Stack,
   Tag,
   type AlertProps,
-  type Theme,
-  useTheme,
 } from '@chakra-ui/react';
 import { type MRT_RowData, type MRT_TableInstance } from '../../types';
 import { getMRT_SelectAllHandler } from '../../utils/row.utils';
 import { parseFromValuesOrFunc } from '../../utils/utils';
 import { MRT_SelectCheckbox } from '../inputs/MRT_SelectCheckbox';
+import { useTheme, type Theme } from '../../hooks/custom/useTheme';
 
 export interface MRT_ToolbarAlertBannerProps<TData extends MRT_RowData>
   extends AlertProps {

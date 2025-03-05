@@ -21,9 +21,7 @@ import {
   TagLabel,
   Text,
   Tooltip,
-  useTheme,
   Flex,
-  type Theme,
 } from '@chakra-ui/react';
 import { debounce } from '../../utils/common.utils';
 
@@ -39,6 +37,7 @@ import {
 } from '../../utils/column.utils';
 import { getValueAndLabel, parseFromValuesOrFunc } from '../../utils/utils';
 import { MRT_FilterOptionMenu } from '../menus/MRT_FilterOptionMenu';
+import { useTheme, type Theme } from '../../hooks/custom/useTheme';
 
 export interface MRT_FilterTextFieldProps<TData extends MRT_RowData> {
   header: MRT_Header<TData>;

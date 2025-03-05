@@ -4,12 +4,11 @@ import {
   Fade,
   Text,
   useColorModeValue,
-  useTheme,
   type BoxProps,
-  type Theme,
 } from '@chakra-ui/react';
 import { type MRT_RowData, type MRT_TableInstance } from '../../types';
 import { parseFromValuesOrFunc } from '../../utils/utils';
+import { useTheme, type Theme } from '../../hooks/custom/useTheme';
 
 export interface MRT_ToolbarDropZoneProps<TData extends MRT_RowData>
   extends BoxProps {

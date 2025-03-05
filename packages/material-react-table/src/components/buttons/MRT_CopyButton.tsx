@@ -1,11 +1,5 @@
 import { type MouseEvent, useState } from 'react';
-import {
-  Button,
-  type ButtonProps,
-  type Theme,
-  Tooltip,
-  useTheme,
-} from '@chakra-ui/react';
+import { Button, type ButtonProps, Tooltip } from '@chakra-ui/react';
 import {
   type MRT_Cell,
   type MRT_RowData,
@@ -13,6 +7,7 @@ import {
 } from '../../types';
 import { getCommonTooltipProps } from '../../utils/style.utils';
 import { parseFromValuesOrFunc } from '../../utils/utils';
+import { useTheme, type Theme } from '../../hooks/custom/useTheme';
 
 export interface MRT_CopyButtonProps<TData extends MRT_RowData>
   extends ButtonProps {

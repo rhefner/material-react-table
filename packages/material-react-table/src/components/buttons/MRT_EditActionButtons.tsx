@@ -5,9 +5,7 @@ import {
   Icon,
   IconButton,
   Tooltip,
-  useTheme,
   type BoxProps,
-  type Theme,
 } from '@chakra-ui/react';
 import {
   type MRT_Row,
@@ -15,6 +13,7 @@ import {
   type MRT_TableInstance,
 } from '../../types';
 import { parseFromValuesOrFunc } from '../../utils/utils';
+import { useTheme, type Theme } from '../../hooks/custom/useTheme';
 
 export interface MRT_EditActionButtonsProps<TData extends MRT_RowData>
   extends BoxProps {

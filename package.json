@@ -22,9 +22,12 @@
     "start": "turbo run start --parallel",
     "storybook": "turbo run storybook",
     "storybook:build": "turbo run storybook:build",
-    "storybook:dev": "turbo run storybook"
+    "storybook:dev": "turbo run storybook",
+    "knip": "knip"
   },
   "devDependencies": {
+    "@types/node": "^22.10.2",
+    "knip": "5.45.0",
     "prettier": "^3.5.3",
     "turbo": "2.4.4",
     "typescript": "5.8.2"

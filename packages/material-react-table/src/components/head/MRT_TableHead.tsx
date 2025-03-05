@@ -1,11 +1,4 @@
-import {
-  Thead,
-  Tr,
-  Th,
-  useTheme,
-  type TableHeadProps,
-  type Theme,
-} from '@chakra-ui/react';
+import { Thead, Tr, Th, type TableHeadProps } from '@chakra-ui/react';
 import { MRT_TableHeadRow } from './MRT_TableHeadRow';
 import {
   type MRT_ColumnVirtualizer,
@@ -15,6 +8,7 @@ import {
 import { parseFromValuesOrFunc } from '../../utils/utils';
 import { MRT_ToolbarAlertBanner } from '../toolbar/MRT_ToolbarAlertBanner';
 import * as React from 'react';
+import { useTheme, type Theme } from '../../hooks/custom/useTheme';
 
 export interface MRT_TableHeadProps<TData extends MRT_RowData>
   extends TableHeadProps {

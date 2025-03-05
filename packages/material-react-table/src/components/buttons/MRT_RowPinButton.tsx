@@ -1,12 +1,6 @@
 import { type MouseEvent, useState } from 'react';
 import { type RowPinningPosition } from '@tanstack/react-table';
-import {
-  IconButton,
-  Tooltip,
-  useTheme,
-  type IconButtonProps,
-  type Theme,
-} from '@chakra-ui/react';
+import { IconButton, Tooltip, type IconButtonProps } from '@chakra-ui/react';
 import {
   type MRT_Row,
   type MRT_RowData,
@@ -14,6 +8,7 @@ import {
 } from '../../types';
 import { getCommonTooltipProps } from '../../utils/style.utils';
 import { parseFromValuesOrFunc } from '../../utils/utils';
+import { useTheme, type Theme } from '../../hooks/custom/useTheme';
 
 export interface MRT_RowPinButtonProps<TData extends MRT_RowData>
   extends IconButtonProps {
