@@ -12,7 +12,8 @@
       "command": "pnpm run dev",
       "env": {
         "PORT": "${input:port}"
-      }
+      },
+      "sourceMaps": true,
     },
     {
       "name": "Remix Demo App Client",
@@ -21,6 +22,7 @@
       "showAsyncStacks": true,
       "cleanUp": "wholeBrowser",
       "url": "http://localhost:${input:port}",
+      "sourceMaps": true,
     },
   ],
   "inputs": [
