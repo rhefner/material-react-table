@@ -1,4 +1,9 @@
-import { Tr, useColorModeValue, type TableRowProps } from '@chakra-ui/react';
+import {
+  Th,
+  Tr,
+  useColorModeValue,
+  type TableRowProps,
+} from '@chakra-ui/react';
 import { MRT_TableHeadCell } from './MRT_TableHeadCell';
 import {
   type MRT_ColumnVirtualizer,
@@ -64,7 +69,7 @@ export const MRT_TableHeadRow = <TData extends MRT_RowData>({
       }}
     >
       {virtualPaddingLeft ? (
-        <th style={{ display: 'flex', width: virtualPaddingLeft }} />
+        <Th style={{ display: 'flex', width: virtualPaddingLeft }} />
       ) : null}
       {(virtualColumns ?? headerGroup.headers).map(
         (headerOrVirtualHeader, staticColumnIndex) => {
@@ -87,7 +92,7 @@ export const MRT_TableHeadRow = <TData extends MRT_RowData>({
         },
       )}
       {virtualPaddingRight ? (
-        <th style={{ display: 'flex', width: virtualPaddingRight }} />
+        <Th style={{ display: 'flex', width: virtualPaddingRight }} />
       ) : null}
     </Tr>
   );

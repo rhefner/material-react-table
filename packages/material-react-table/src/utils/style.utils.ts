@@ -235,11 +235,6 @@ export const getCommonToolbarStyles = <TData extends MRT_RowData>({
   zIndex: 1,
 });
 
-export const flipIconStyles = (theme: Theme) =>
-  (theme.direction as any) === 'rtl'
-    ? { style: { transform: 'scaleX(-1)' } }
-    : undefined;
-
 export const getCommonTooltipProps = (
   placement?: TooltipProps['placement'],
 ): Partial<TooltipProps> => ({

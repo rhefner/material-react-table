@@ -8,14 +8,18 @@ import external from 'rollup-plugin-peer-deps-external';
 export default [
   {
     external: [
+      '@chakra-ui/react',
+      '@emotion/react',
       '@mui/icons-material',
       '@mui/material',
       '@mui/x-date-pickers',
       '@tanstack/match-sorter-utils',
       '@tanstack/react-table',
       '@tanstack/react-virtual',
+      'framer-motion',
       'highlight-words',
       'react',
+      'react-icons',
     ],
     input: './src/index.ts',
     output: [

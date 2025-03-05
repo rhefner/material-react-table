@@ -8,12 +8,13 @@
       "name": "Remix Demo App Server",
       "type": "node-terminal",
       "request": "launch",
-      "cwd": "${workspaceFolder}/apps/remix-demo",
+      "cwd": "${workspaceFolder}",
       "command": "pnpm run dev",
       "env": {
         "PORT": "${input:port}"
       },
       "sourceMaps": true,
+      "showAsyncStacks": true
     },
     {
       "name": "Remix Demo App Client",

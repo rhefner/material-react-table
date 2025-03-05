@@ -11,7 +11,7 @@ export type Theme = ChakraTheme & {
   colors: {
     text: string;
   };
-  direction: 'ltr' | 'rtl';
+  direction: 'ltr' | 'rtl' | any;
   palette: {
     mode: 'light' | 'dark';
     primary?: {

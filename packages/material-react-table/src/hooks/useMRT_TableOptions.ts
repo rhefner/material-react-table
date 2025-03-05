@@ -116,6 +116,7 @@ export const useMRT_TableOptions: <TData extends MRT_RowData>(
 }: MRT_TableOptions<TData>) => {
   const theme = useTheme<Theme>();
 
+  console.log('useMRT_TableOptions - color mode:', theme.colorMode);
   icons = useMemo(() => ({ ...MRT_Default_Icons, ...icons }), [icons]);
   localization = useMemo(
     () => ({

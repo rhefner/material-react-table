@@ -5,9 +5,7 @@ import {
   Flex,
   useColorModeValue,
   type SystemStyleObject,
-  type Theme,
   Icon,
-  useTheme,
 } from '@chakra-ui/react';
 import {
   type MRT_Header,
@@ -16,6 +14,7 @@ import {
 } from '../../types';
 import { parseFromValuesOrFunc } from '../../utils/utils';
 import { getCommonTooltipProps } from '../../utils/style.utils';
+import { useTheme, type Theme } from '../../hooks/custom/useTheme';
 
 export interface MRT_TableHeadCellSortLabelProps<TData extends MRT_RowData> {
   header: MRT_Header<TData>;

@@ -6,14 +6,18 @@
         "^build"
       ],
       "outputs": [
-        ".next/**",
+        "build/**",
         "dist/**",
         "locales/**",
         "storybook/static/**"
       ]
     },
     "dev": {
-      "cache": false
+      "cache": false,
+      "outputs": [
+        ".react-router/**"
+      ],
+      "persistent": true
     },
     "lint": {
       "outputs": []
