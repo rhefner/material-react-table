@@ -16,14 +16,11 @@ import {
 import {
   Box,
   chakra,
-  ChakraProvider,
   Popover as ChakraPopover,
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
   Portal,
-  useTheme,
-  type Theme,
 } from '@chakra-ui/react';
 
 // Chakra styled components for react-aria components
@@ -77,75 +74,72 @@ export const CRT_DatePicker = <T extends DateValue>({
   onChange,
   ...props
 }: DatePickerProps<T>) => {
-  const theme = useTheme<Theme>();
   const [isOpen, setIsOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
 
   return (
-    <ChakraProvider theme={theme}>
-      <DatePicker
-        value={value as T}
-        onChange={(date) => {
-          onChange?.(date);
-          setIsOpen(false);
-        }}
+    <DatePicker
+      value={value as T}
+      onChange={(date) => {
+        onChange?.(date);
+        setIsOpen(false);
+      }}
+    >
+      <ChakraPopover
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        placement="bottom-start"
+        closeOnBlur={true}
       >
-        <ChakraPopover
-          isOpen={isOpen}
-          onClose={() => setIsOpen(false)}
-          placement="bottom-start"
-          closeOnBlur={true}
-        >
-          <PopoverTrigger>
-            <Box onClick={() => setIsOpen(!isOpen)}>
-              <Label sr-only>Date</Label>
-              <Group>
-                <DateInput>
-                  {(segment) => <StyledDateSegment segment={segment} />}
-                </DateInput>
-                <Button
-                  onPress={() => setIsOpen(!isOpen)}
-                  aria-label="Choose date"
-                  ref={triggerRef}
+        <PopoverTrigger>
+          <Box onClick={() => setIsOpen(!isOpen)}>
+            <Label sr-only>Date</Label>
+            <Group>
+              <DateInput>
+                {(segment) => <StyledDateSegment segment={segment} />}
+              </DateInput>
+              <Button
+                onPress={() => setIsOpen(!isOpen)}
+                aria-label="Choose date"
+                ref={triggerRef}
+              >
+                <Box as="span" mr={2}>
+                  📅
+                </Box>
+              </Button>
+            </Group>
+          </Box>
+        </PopoverTrigger>
+        <Portal>
+          <PopoverContent
+            width="auto"
+            p={0}
+            shadow="lg"
+            rounded="md"
+            bg="white"
+            _dark={{ bg: 'gray.800' }}
+          >
+            <PopoverBody p={0}>
+              <Calendar>
+                <header
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    padding: '8px',
+                  }}
                 >
-                  <Box as="span" mr={2}>
-                    📅
-                  </Box>
-                </Button>
-              </Group>
-            </Box>
-          </PopoverTrigger>
-          <Portal>
-            <PopoverContent
-              width="auto"
-              p={0}
-              shadow="lg"
-              rounded="md"
-              bg="white"
-              _dark={{ bg: 'gray.800' }}
-            >
-              <PopoverBody p={0}>
-                <Calendar>
-                  <header
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      padding: '8px',
-                    }}
-                  >
-                    <Button slot="previous">◀</Button>
-                    <Heading />
-                    <Button slot="next">▶</Button>
-                  </header>
-                  <StyledCalendarGrid>
-                    {(date) => <StyledCalendarCell date={date} />}
-                  </StyledCalendarGrid>
-                </Calendar>
-              </PopoverBody>
-            </PopoverContent>
-          </Portal>
-        </ChakraPopover>
-      </DatePicker>
-    </ChakraProvider>
+                  <Button slot="previous">◀</Button>
+                  <Heading />
+                  <Button slot="next">▶</Button>
+                </header>
+                <StyledCalendarGrid>
+                  {(date) => <StyledCalendarCell date={date} />}
+                </StyledCalendarGrid>
+              </Calendar>
+            </PopoverBody>
+          </PopoverContent>
+        </Portal>
+      </ChakraPopover>
+    </DatePicker>
   );
 };

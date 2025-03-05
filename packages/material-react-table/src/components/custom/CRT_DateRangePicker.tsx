@@ -7,24 +7,18 @@ import {
   Label,
   RangeCalendar,
   CalendarGrid,
-  DatePickerProps,
-  DateRange,
   DateRangePickerProps,
 } from 'react-aria-components';
 import {
   Box,
   chakra,
-  ChakraProvider,
   Flex,
   Popover,
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
   Portal,
-  Stack,
   Text,
-  useTheme,
-  type Theme,
 } from '@chakra-ui/react';
 
 // Chakra styled components for react-aria components
@@ -79,80 +73,77 @@ export const CRT_DateRangePicker = <T extends DateValue>({
   onChange,
   ...props
 }: DateRangePickerProps<T>) => {
-  const theme = useTheme<Theme>();
   const [isOpen, setIsOpen] = useState(false);
   const triggerRef = useRef<HTMLDivElement>(null);
 
   return (
-    <ChakraProvider theme={theme}>
-      <DateRangePicker
-        value={value}
-        onChange={(date) => {
-          onChange?.(date);
-          if (date && date.end) {
-            setIsOpen(false);
-          }
-        }}
+    <DateRangePicker
+      value={value}
+      onChange={(date) => {
+        onChange?.(date);
+        if (date && date.end) {
+          setIsOpen(false);
+        }
+      }}
+    >
+      <Popover
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        placement="bottom-start"
+        closeOnBlur={true}
       >
-        <Popover
-          isOpen={isOpen}
-          onClose={() => setIsOpen(false)}
-          placement="bottom-start"
-          closeOnBlur={true}
-        >
-          <PopoverTrigger>
-            <Box
-              onClick={() => setIsOpen(!isOpen)}
-              ref={triggerRef}
-              cursor="pointer"
-            >
-              <Flex
-                align="center"
-                border="1px solid"
-                borderColor="gray.300"
-                rounded="md"
-                p={2}
-              >
-                <Text>
-                  {value
-                    ? `${value.start?.toString()} - ${value.end?.toString() || 'Select end date'}`
-                    : 'Select date range'}
-                </Text>
-                <Box ml={2}>📅</Box>
-              </Flex>
-            </Box>
-          </PopoverTrigger>
-          <Portal>
-            <PopoverContent
-              width="auto"
-              p={0}
-              shadow="lg"
+        <PopoverTrigger>
+          <Box
+            onClick={() => setIsOpen(!isOpen)}
+            ref={triggerRef}
+            cursor="pointer"
+          >
+            <Flex
+              align="center"
+              border="1px solid"
+              borderColor="gray.300"
               rounded="md"
-              bg="white"
-              _dark={{ bg: 'gray.800' }}
+              p={2}
             >
-              <PopoverBody p={0}>
-                <RangeCalendar>
-                  <header
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      padding: '8px',
-                    }}
-                  >
-                    <Button slot="previous">◀</Button>
-                    <Label />
-                    <Button slot="next">▶</Button>
-                  </header>
-                  <StyledRangeCalendarGrid>
-                    {(date) => <StyledRangeCalendarCell date={date} />}
-                  </StyledRangeCalendarGrid>
-                </RangeCalendar>
-              </PopoverBody>
-            </PopoverContent>
-          </Portal>
-        </Popover>
-      </DateRangePicker>
-    </ChakraProvider>
+              <Text>
+                {value
+                  ? `${value.start?.toString()} - ${value.end?.toString() || 'Select end date'}`
+                  : 'Select date range'}
+              </Text>
+              <Box ml={2}>📅</Box>
+            </Flex>
+          </Box>
+        </PopoverTrigger>
+        <Portal>
+          <PopoverContent
+            width="auto"
+            p={0}
+            shadow="lg"
+            rounded="md"
+            bg="white"
+            _dark={{ bg: 'gray.800' }}
+          >
+            <PopoverBody p={0}>
+              <RangeCalendar>
+                <header
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    padding: '8px',
+                  }}
+                >
+                  <Button slot="previous">◀</Button>
+                  <Label />
+                  <Button slot="next">▶</Button>
+                </header>
+                <StyledRangeCalendarGrid>
+                  {(date) => <StyledRangeCalendarCell date={date} />}
+                </StyledRangeCalendarGrid>
+              </RangeCalendar>
+            </PopoverBody>
+          </PopoverContent>
+        </Portal>
+      </Popover>
+    </DateRangePicker>
   );
 };

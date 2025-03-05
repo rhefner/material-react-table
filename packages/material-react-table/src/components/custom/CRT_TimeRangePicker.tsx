@@ -1,21 +1,5 @@
-import { useRef, useState } from 'react';
-import {
-  Button,
-  Group,
-  Label,
-  TimeField,
-  TimeValue,
-} from 'react-aria-components';
-import {
-  Box,
-  chakra,
-  ChakraProvider,
-  Flex,
-  Stack,
-  Text,
-  useTheme,
-  type Theme,
-} from '@chakra-ui/react';
+import { Label, TimeField, TimeValue } from 'react-aria-components';
+import { Box, chakra, Stack } from '@chakra-ui/react';
 import { TimePickerProps } from '../../types';
 
 // Custom type to represent a time range
@@ -49,10 +33,6 @@ export const CRT_TimeRangePicker = <T extends TimeValue>({
   onChange,
   ...props
 }: TimePickerProps<TimeRange<T>>) => {
-  const theme = useTheme<Theme>();
-  const startRef = useRef<HTMLInputElement>(null);
-  const endRef = useRef<HTMLInputElement>(null);
-
   // Safe access to start/end values
   const timeRange = (value as TimeRange<T>) || { start: null, end: null };
 
@@ -69,26 +49,24 @@ export const CRT_TimeRangePicker = <T extends TimeValue>({
   };
 
   return (
-    <ChakraProvider theme={theme}>
-      <Stack spacing={4}>
-        <Box>
-          <Label>Start Time</Label>
-          <StyledTimeField
-            value={timeRange.start as T}
-            onChange={(value) => handleStartChange(value as T)}
-            hourCycle={24}
-          />
-        </Box>
+    <Stack spacing={4}>
+      <Box>
+        <Label>Start Time</Label>
+        <StyledTimeField
+          value={timeRange.start as T}
+          onChange={(value) => handleStartChange(value as T)}
+          hourCycle={24}
+        />
+      </Box>
 
-        <Box>
-          <Label>End Time</Label>
-          <StyledTimeField
-            value={timeRange.end as T}
-            onChange={(value) => handleEndChange(value as T)}
-            hourCycle={24}
-          />
-        </Box>
-      </Stack>
-    </ChakraProvider>
+      <Box>
+        <Label>End Time</Label>
+        <StyledTimeField
+          value={timeRange.end as T}
+          onChange={(value) => handleEndChange(value as T)}
+          hourCycle={24}
+        />
+      </Box>
+    </Stack>
   );
 };

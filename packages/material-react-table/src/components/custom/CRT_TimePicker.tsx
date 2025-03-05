@@ -1,22 +1,5 @@
-import { useRef, useState } from 'react';
-import {
-  Button,
-  DateValue,
-  Group,
-  Label,
-  TimeField,
-  TimeValue,
-} from 'react-aria-components';
-import {
-  Box,
-  chakra,
-  ChakraProvider,
-  Flex,
-  Input,
-  Stack,
-  useTheme,
-  type Theme,
-} from '@chakra-ui/react';
+import { Label, TimeField, TimeValue } from 'react-aria-components';
+import { Box, chakra } from '@chakra-ui/react';
 import { TimePickerProps } from '../../types';
 
 // Chakra styled component for the time field
@@ -44,19 +27,14 @@ export const CRT_TimePicker = <T extends TimeValue>({
   onChange,
   ...props
 }: TimePickerProps<T>) => {
-  const theme = useTheme<Theme>();
-  const inputRef = useRef<HTMLInputElement>(null);
-
   return (
-    <ChakraProvider theme={theme}>
-      <Box>
-        <Label>Time</Label>
-        <StyledTimeField
-          value={value as T}
-          onChange={(value) => onChange?.(value as T)}
-          hourCycle={24}
-        />
-      </Box>
-    </ChakraProvider>
+    <Box>
+      <Label>Time</Label>
+      <StyledTimeField
+        value={value as T}
+        onChange={(value) => onChange?.(value as T)}
+        hourCycle={24}
+      />
+    </Box>
   );
 };

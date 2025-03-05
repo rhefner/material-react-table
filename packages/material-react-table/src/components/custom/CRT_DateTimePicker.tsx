@@ -14,7 +14,6 @@ import {
   Box,
   ButtonGroup,
   chakra,
-  ChakraProvider,
   Divider,
   Flex,
   Popover as ChakraPopover,
@@ -22,8 +21,6 @@ import {
   PopoverContent,
   Stack,
   Text,
-  useTheme,
-  type Theme,
 } from '@chakra-ui/react';
 import { DateTimePickerProps } from '../../types';
 
@@ -103,7 +100,6 @@ export const CRT_DateTimePicker = <T extends DateTimeValue>({
   onChange,
   ...props
 }: DateTimePickerProps<T>) => {
-  const theme = useTheme<Theme>();
   const [isOpen, setIsOpen] = useState(false);
   const triggerRef = useRef<HTMLDivElement>(null);
 
@@ -123,98 +119,96 @@ export const CRT_DateTimePicker = <T extends DateTimeValue>({
   };
 
   return (
-    <ChakraProvider theme={theme}>
-      <Box>
-        <Flex
-          alignItems="center"
-          onClick={() => setIsOpen(!isOpen)}
-          ref={triggerRef}
-          cursor="pointer"
+    <Box>
+      <Flex
+        alignItems="center"
+        onClick={() => setIsOpen(!isOpen)}
+        ref={triggerRef}
+        cursor="pointer"
+      >
+        <Box
+          border="1px solid"
+          borderColor="gray.300"
+          rounded="md"
+          p={2}
+          width="100%"
         >
-          <Box
-            border="1px solid"
-            borderColor="gray.300"
-            rounded="md"
-            p={2}
-            width="100%"
-          >
-            <Text>
-              {dateTimeValue.date && dateTimeValue.time
-                ? `${dateTimeValue.date.toString()} ${dateTimeValue.time.toString()}`
-                : 'Select date and time'}
-            </Text>
-          </Box>
-          <Box ml={2}>📅</Box>
-        </Flex>
+          <Text>
+            {dateTimeValue.date && dateTimeValue.time
+              ? `${dateTimeValue.date.toString()} ${dateTimeValue.time.toString()}`
+              : 'Select date and time'}
+          </Text>
+        </Box>
+        <Box ml={2}>📅</Box>
+      </Flex>
 
-        <ChakraPopover
-          isOpen={isOpen}
-          onClose={() => setIsOpen(false)}
-          placement="bottom-start"
-          closeOnBlur={true}
+      <ChakraPopover
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        placement="bottom-start"
+        closeOnBlur={true}
+      >
+        <PopoverContent
+          width="auto"
+          p={4}
+          shadow="lg"
+          rounded="md"
+          bg="white"
+          _dark={{ bg: 'gray.800' }}
         >
-          <PopoverContent
-            width="auto"
-            p={4}
-            shadow="lg"
-            rounded="md"
-            bg="white"
-            _dark={{ bg: 'gray.800' }}
-          >
-            <PopoverBody>
-              <Stack spacing={4}>
-                <Box>
-                  <Text fontWeight="bold" mb={2}>
-                    Date
-                  </Text>
-                  <Calendar
-                    value={dateTimeValue.date as DateValue}
-                    onChange={(value) => handleDateChange(value as DateValue)}
+          <PopoverBody>
+            <Stack spacing={4}>
+              <Box>
+                <Text fontWeight="bold" mb={2}>
+                  Date
+                </Text>
+                <Calendar
+                  value={dateTimeValue.date as DateValue}
+                  onChange={(value) => handleDateChange(value as DateValue)}
+                >
+                  <header
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      padding: '8px',
+                    }}
                   >
-                    <header
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        padding: '8px',
-                      }}
-                    >
-                      <Button slot="previous">◀</Button>
-                      <Heading />
-                      <Button slot="next">▶</Button>
-                    </header>
-                    <StyledCalendarGrid>
-                      {(date) => <StyledCalendarCell date={date} />}
-                    </StyledCalendarGrid>
-                  </Calendar>
-                </Box>
+                    <Button slot="previous">◀</Button>
+                    <Heading />
+                    <Button slot="next">▶</Button>
+                  </header>
+                  <StyledCalendarGrid>
+                    {(date) => <StyledCalendarCell date={date} />}
+                  </StyledCalendarGrid>
+                </Calendar>
+              </Box>
 
-                <Divider />
+              <Divider />
 
-                <Box>
-                  <Text fontWeight="bold" mb={2}>
-                    Time
-                  </Text>
-                  <StyledTimeField
-                    value={dateTimeValue.time as TimeValue}
-                    onChange={(value) => handleTimeChange(value as TimeValue)}
-                    hourCycle={24}
-                  />
-                </Box>
+              <Box>
+                <Text fontWeight="bold" mb={2}>
+                  Time
+                </Text>
+                <StyledTimeField
+                  value={dateTimeValue.time as TimeValue}
+                  onChange={(value) => handleTimeChange(value as TimeValue)}
+                  hourCycle={24}
+                />
+              </Box>
 
-                <ButtonGroup display="flex" justifyContent="flex-end">
-                  <Button onPress={() => setIsOpen(false)}>Close</Button>
-                  <Button
-                    onPress={() => setIsOpen(false)}
-                    isDisabled={!dateTimeValue.date || !dateTimeValue.time}
-                  >
-                    Apply
-                  </Button>
-                </ButtonGroup>
-              </Stack>
-            </PopoverBody>
-          </PopoverContent>
-        </ChakraPopover>
-      </Box>
-    </ChakraProvider>
+              <ButtonGroup display="flex" justifyContent="flex-end">
+                <Button onPress={() => setIsOpen(false)}>Close</Button>
+                <Button
+                  onPress={() => setIsOpen(false)}
+                  isDisabled={!dateTimeValue.date || !dateTimeValue.time}
+                >
+                  Apply
+                </Button>
+              </ButtonGroup>
+            </Stack>
+          </PopoverBody>
+        </PopoverContent>
+      </ChakraPopover>
+    </Box>
   );
 };

@@ -2,9 +2,7 @@ import { useRef, useState } from 'react';
 import {
   Button,
   DateValue,
-  Group,
   Heading,
-  Label,
   RangeCalendar,
   CalendarCell,
   CalendarGrid,
@@ -16,13 +14,11 @@ import {
   Box,
   ButtonGroup,
   chakra,
-  ChakraProvider,
   Divider,
   Flex,
   Popover,
   PopoverBody,
   PopoverContent,
-  Portal,
   Stack,
   Tab,
   TabList,
@@ -30,10 +26,7 @@ import {
   TabPanels,
   Tabs,
   Text,
-  useTheme,
-  type Theme,
 } from '@chakra-ui/react';
-import { getLocalTimeZone, today } from '@internationalized/date';
 import { DateTimePickerProps } from '../../types';
 
 // Type for date-time range
@@ -115,7 +108,6 @@ export const CRT_DateTimeRangePicker = <T extends DateTimeRange>({
   onChange,
   ...props
 }: DateTimePickerProps<T>) => {
-  const theme = useTheme<Theme>();
   const [isOpen, setIsOpen] = useState(false);
   const triggerRef = useRef<HTMLDivElement>(null);
 
@@ -167,122 +159,118 @@ export const CRT_DateTimeRangePicker = <T extends DateTimeRange>({
   };
 
   return (
-    <ChakraProvider theme={theme}>
-      <Box>
-        <Flex
-          alignItems="center"
-          onClick={() => setIsOpen(!isOpen)}
-          ref={triggerRef}
-          cursor="pointer"
+    <Box>
+      <Flex
+        alignItems="center"
+        onClick={() => setIsOpen(!isOpen)}
+        ref={triggerRef}
+        cursor="pointer"
+      >
+        <Box
+          border="1px solid"
+          borderColor="gray.300"
+          rounded="md"
+          p={2}
+          width="100%"
         >
-          <Box
-            border="1px solid"
-            borderColor="gray.300"
-            rounded="md"
-            p={2}
-            width="100%"
-          >
-            <Text>{getDisplayText()}</Text>
-          </Box>
-          <Box ml={2}>📅</Box>
-        </Flex>
+          <Text>{getDisplayText()}</Text>
+        </Box>
+        <Box ml={2}>📅</Box>
+      </Flex>
 
-        <Popover
-          isOpen={isOpen}
-          onClose={() => setIsOpen(false)}
-          placement="bottom-start"
-          closeOnBlur={true}
+      <Popover
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        placement="bottom-start"
+        closeOnBlur={true}
+      >
+        <PopoverContent
+          width="auto"
+          p={4}
+          shadow="lg"
+          rounded="md"
+          bg="white"
+          _dark={{ bg: 'gray.800' }}
         >
-          <PopoverContent
-            width="auto"
-            p={4}
-            shadow="lg"
-            rounded="md"
-            bg="white"
-            _dark={{ bg: 'gray.800' }}
-          >
-            <PopoverBody>
-              <Stack spacing={4}>
-                <Box>
-                  <Text fontWeight="bold" mb={2}>
-                    Date Range
-                  </Text>
-                  <RangeCalendar
-                    value={
-                      {
-                        start: dateTimeRange.startDate,
-                        end: dateTimeRange.endDate,
-                      } as DateRange
-                    }
-                    onChange={(date) =>
-                      handleDateRangeChange(date as DateRange)
-                    }
+          <PopoverBody>
+            <Stack spacing={4}>
+              <Box>
+                <Text fontWeight="bold" mb={2}>
+                  Date Range
+                </Text>
+                <RangeCalendar
+                  value={
+                    {
+                      start: dateTimeRange.startDate,
+                      end: dateTimeRange.endDate,
+                    } as DateRange
+                  }
+                  onChange={(date) => handleDateRangeChange(date as DateRange)}
+                >
+                  <header
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      padding: '8px',
+                    }}
                   >
-                    <header
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        padding: '8px',
-                      }}
-                    >
-                      <Button slot="previous">◀</Button>
-                      <Heading />
-                      <Button slot="next">▶</Button>
-                    </header>
-                    <StyledRangeCalendarGrid>
-                      {(date) => <StyledRangeCalendarCell date={date} />}
-                    </StyledRangeCalendarGrid>
-                  </RangeCalendar>
-                </Box>
+                    <Button slot="previous">◀</Button>
+                    <Heading />
+                    <Button slot="next">▶</Button>
+                  </header>
+                  <StyledRangeCalendarGrid>
+                    {(date) => <StyledRangeCalendarCell date={date} />}
+                  </StyledRangeCalendarGrid>
+                </RangeCalendar>
+              </Box>
 
-                <Divider />
+              <Divider />
 
-                <Tabs isFitted variant="enclosed">
-                  <TabList mb="1em">
-                    <Tab>Start Time</Tab>
-                    <Tab>End Time</Tab>
-                  </TabList>
-                  <TabPanels>
-                    <TabPanel>
-                      <StyledTimeField
-                        value={dateTimeRange.startTime as TimeValue}
-                        onChange={(value) =>
-                          handleStartTimeChange(value as TimeValue)
-                        }
-                        hourCycle={24}
-                      />
-                    </TabPanel>
-                    <TabPanel>
-                      <StyledTimeField
-                        value={dateTimeRange.endTime as TimeValue}
-                        onChange={(value) =>
-                          handleEndTimeChange(value as TimeValue)
-                        }
-                        hourCycle={24}
-                      />
-                    </TabPanel>
-                  </TabPanels>
-                </Tabs>
+              <Tabs isFitted variant="enclosed">
+                <TabList mb="1em">
+                  <Tab>Start Time</Tab>
+                  <Tab>End Time</Tab>
+                </TabList>
+                <TabPanels>
+                  <TabPanel>
+                    <StyledTimeField
+                      value={dateTimeRange.startTime as TimeValue}
+                      onChange={(value) =>
+                        handleStartTimeChange(value as TimeValue)
+                      }
+                      hourCycle={24}
+                    />
+                  </TabPanel>
+                  <TabPanel>
+                    <StyledTimeField
+                      value={dateTimeRange.endTime as TimeValue}
+                      onChange={(value) =>
+                        handleEndTimeChange(value as TimeValue)
+                      }
+                      hourCycle={24}
+                    />
+                  </TabPanel>
+                </TabPanels>
+              </Tabs>
 
-                <ButtonGroup display="flex" justifyContent="flex-end">
-                  <Button onPress={() => setIsOpen(false)}>Close</Button>
-                  <Button
-                    onPress={() => setIsOpen(false)}
-                    isDisabled={
-                      !dateTimeRange.startDate ||
-                      !dateTimeRange.startTime ||
-                      !dateTimeRange.endDate ||
-                      !dateTimeRange.endTime
-                    }
-                  >
-                    Apply
-                  </Button>
-                </ButtonGroup>
-              </Stack>
-            </PopoverBody>
-          </PopoverContent>
-        </Popover>
-      </Box>
-    </ChakraProvider>
+              <ButtonGroup display="flex" justifyContent="flex-end">
+                <Button onPress={() => setIsOpen(false)}>Close</Button>
+                <Button
+                  onPress={() => setIsOpen(false)}
+                  isDisabled={
+                    !dateTimeRange.startDate ||
+                    !dateTimeRange.startTime ||
+                    !dateTimeRange.endDate ||
+                    !dateTimeRange.endTime
+                  }
+                >
+                  Apply
+                </Button>
+              </ButtonGroup>
+            </Stack>
+          </PopoverBody>
+        </PopoverContent>
+      </Popover>
+    </Box>
   );
 };
