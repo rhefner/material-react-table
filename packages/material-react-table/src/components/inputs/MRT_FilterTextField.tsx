@@ -22,8 +22,12 @@ import {
   Text,
   Tooltip,
   Flex,
+  FormControl,
+  FormHelperText,
 } from '@chakra-ui/react';
 import { debounce } from '../../utils/common.utils';
+import { CRT_Autocomplete } from '../custom/CRT_Autocomplete';
+import { CRT_DatePicker, CRT_DateTimePicker, CRT_TimePicker } from '../custom';
 
 import {
   type DropdownOption,
@@ -37,7 +41,7 @@ import {
 } from '../../utils/column.utils';
 import { getValueAndLabel, parseFromValuesOrFunc } from '../../utils/utils';
 import { MRT_FilterOptionMenu } from '../menus/MRT_FilterOptionMenu';
-import { useTheme, type Theme } from '../../hooks/custom/useTheme';
+import { useTheme } from '../../hooks/custom/useTheme';
 
 export interface MRT_FilterTextFieldProps<TData extends MRT_RowData> {
   header: MRT_Header<TData>;
@@ -71,7 +75,7 @@ export const MRT_FilterTextField = <TData extends MRT_RowData>({
   const { column } = header;
   const { columnDef } = column;
   const { filterVariant } = columnDef;
-  const theme = useTheme<Theme>();
+  const theme = useTheme();
 
   const args = { column, rangeFilterIndex, table };
 
@@ -89,17 +93,17 @@ export const MRT_FilterTextField = <TData extends MRT_RowData>({
   const datePickerProps = {
     ...parseFromValuesOrFunc(muiFilterDatePickerProps, args),
     ...parseFromValuesOrFunc(columnDef.muiFilterDatePickerProps, args),
-  } as any;
+  };
 
   const dateTimePickerProps = {
     ...parseFromValuesOrFunc(muiFilterDateTimePickerProps, args),
     ...parseFromValuesOrFunc(columnDef.muiFilterDateTimePickerProps, args),
-  } as any;
+  };
 
   const timePickerProps = {
     ...parseFromValuesOrFunc(muiFilterTimePickerProps, args),
     ...parseFromValuesOrFunc(columnDef.muiFilterTimePickerProps, args),
-  } as any;
+  };
 
   const {
     allowedColumnFilterOptions,
@@ -202,7 +206,6 @@ export const MRT_FilterTextField = <TData extends MRT_RowData>({
   const handleAutocompleteInputChange = (
     _event: SyntheticEvent,
     newValue: string,
-    _reason: any,
   ) => {
     handleChange(newValue);
   };
@@ -226,6 +229,7 @@ export const MRT_FilterTextField = <TData extends MRT_RowData>({
     } else if (isAutocompleteFilter) {
       setAutocompleteValue(null);
       setFilterValue('');
+      column.setFilterValue(undefined);
     } else {
       setFilterValue('');
       column.setFilterValue(undefined);
@@ -267,7 +271,6 @@ export const MRT_FilterTextField = <TData extends MRT_RowData>({
     );
   }
 
-  // If a custom filter component is provided, render it
   if (CustomFilterComponent) {
     const filterVal = isRangeFilter
       ? (column.getFilterValue() as [string, string])?.[
@@ -298,9 +301,7 @@ export const MRT_FilterTextField = <TData extends MRT_RowData>({
     );
   }
 
-  // Return appropriate filter UI based on filter variant
   if (filterChipLabel) {
-    // Empty/Not Empty filter UI
     return (
       <Tag variant="outline" size="md" borderRadius="full" colorScheme="blue">
         <TagLabel>{filterChipLabel}</TagLabel>
@@ -309,11 +310,87 @@ export const MRT_FilterTextField = <TData extends MRT_RowData>({
     );
   }
 
-  // Check for different filter types and render appropriate UI
+  const commonProps = {
+    'aria-label': filterPlaceholder,
+    placeholder: filterPlaceholder,
+    size: 'md',
+    width: isDateFilter
+      ? '160px'
+      : enableColumnFilterModes && rangeFilterIndex === 0
+        ? '110px'
+        : isRangeFilter
+          ? '100px'
+          : '120px',
+    ...textFieldProps,
+  };
+
+  if (filterVariant?.startsWith('time')) {
+    return (
+      <CRT_TimePicker
+        value={filterValue || null}
+        onChange={(newValue) => handleChange(newValue)}
+        {...commonProps}
+        {...timePickerProps}
+      />
+    );
+  }
+
+  if (filterVariant?.startsWith('datetime')) {
+    return (
+      <CRT_DateTimePicker
+        value={filterValue || null}
+        onChange={(newValue) => handleChange(newValue)}
+        {...commonProps}
+        {...dateTimePickerProps}
+      />
+    );
+  }
+
+  if (filterVariant?.startsWith('date')) {
+    return (
+      <CRT_DatePicker
+        value={filterValue || null}
+        onChange={(newValue) => handleChange(newValue)}
+        {...commonProps}
+        {...datePickerProps}
+      />
+    );
+  }
+
+  if (isAutocompleteFilter) {
+    return (
+      <Box position="relative">
+        <CRT_Autocomplete
+          freeSolo
+          options={
+            dropdownOptions?.map((option) => getValueAndLabel(option)) ?? []
+          }
+          value={autocompleteValue}
+          onChange={(_e, newValue) =>
+            handleAutocompleteChange(newValue as DropdownOption | null)
+          }
+          inputValue={filterValue as string}
+          onInputChange={(_e, newValue) =>
+            handleAutocompleteInputChange(_e, newValue)
+          }
+          {...autocompleteProps}
+        />
+        {showChangeModeButton && (
+          <MRT_FilterOptionMenu
+            anchorEl={anchorEl}
+            header={header}
+            onSelect={() => setAnchorEl(null)}
+            setAnchorEl={setAnchorEl}
+            table={table}
+          />
+        )}
+      </Box>
+    );
+  }
+
   if (isMultiSelectFilter) {
     return (
       <Box>
-        {/* Multi-select filter using Chakra UI components */}
         <Flex flexWrap="wrap" gap={1}>
           {filterValue && (filterValue as string[]).length > 0 ? (
             (filterValue as string[]).map((value) => {
@@ -352,77 +429,105 @@ export const MRT_FilterTextField = <TData extends MRT_RowData>({
     );
   }
 
-  if (isSelectFilter || isAutocompleteFilter) {
+  if (isSelectFilter) {
     return (
-      <Select
-        aria-label={`Filter ${columnDef.header}`}
-        value={filterValue as string}
-        placeholder={filterPlaceholder}
-        size="md"
-        {...(textFieldProps as any)}
-        onChange={(e) => handleChange(e.target.value)}
-      >
-        <option value="">{filterPlaceholder}</option>
-        {dropdownOptions?.map((option, index) => {
-          const { label, value } = getValueAndLabel(option);
-          return (
-            <option key={`${label}-${index}`} value={value}>
-              {label}
-            </option>
-          );
-        })}
-      </Select>
+      <Box position="relative">
+        <Select
+          {...commonProps}
+          value={filterValue as string}
+          onChange={(e) => handleChange(e.target.value)}
+        >
+          <option value="">{filterPlaceholder}</option>
+          {dropdownOptions?.map((option, index) => {
+            const { label, value } = getValueAndLabel(option);
+            return (
+              <option key={`${label}-${index}`} value={value}>
+                {label}
+                {!columnDef.filterSelectOptions &&
+                  ` (${facetedUniqueValues.get(value)})`}
+              </option>
+            );
+          })}
+        </Select>
+        {showChangeModeButton && (
+          <MRT_FilterOptionMenu
+            anchorEl={anchorEl}
+            header={header}
+            onSelect={() => setAnchorEl(null)}
+            setAnchorEl={setAnchorEl}
+            table={table}
+          />
+        )}
+      </Box>
     );
   }
 
   return (
     <Box position="relative">
-      <InputGroup>
+      <FormControl>
+        <InputGroup>
+          {showChangeModeButton && (
+            <InputLeftElement>
+              <Tooltip label={localization.changeFilterMode}>
+                <IconButton
+                  aria-label={localization.changeFilterMode}
+                  icon={<FilterListIcon />}
+                  size="sm"
+                  onClick={handleFilterMenuOpen}
+                  variant="ghost"
+                />
+              </Tooltip>
+            </InputLeftElement>
+          )}
+          <Input
+            {...commonProps}
+            value={filterValue as string}
+            onChange={handleTextFieldChange}
+            ref={(node) => {
+              if (node && filterInputRefs.current) {
+                filterInputRefs.current[
+                  `${header.id}-${rangeFilterIndex ?? 0}`
+                ] = node;
+              }
+            }}
+          />
+          {(filterValue as string)?.length > 0 && (
+            <InputRightElement>
+              <Tooltip label={localization.clearFilter}>
+                <IconButton
+                  aria-label={localization.clearFilter}
+                  icon={<CloseIcon />}
+                  onClick={handleClear}
+                  size="sm"
+                  variant="ghost"
+                />
+              </Tooltip>
+            </InputRightElement>
+          )}
+        </InputGroup>
         {showChangeModeButton && (
-          <InputLeftElement>
-            <IconButton
-              aria-label={localization.changeFilterMode}
-              icon={<FilterListIcon />}
-              size="sm"
-              onClick={handleFilterMenuOpen}
-              variant="ghost"
-            />
-          </InputLeftElement>
+          <FormHelperText fontSize="xs" whiteSpace="nowrap">
+            {localization.filterMode.replace(
+              '{filterType}',
+              localization[
+                `filter${
+                  currentFilterOption?.charAt(0)?.toUpperCase() +
+                  currentFilterOption?.slice(1)
+                }` as keyof typeof localization
+              ],
+            )}
+          </FormHelperText>
         )}
-        <Input
-          placeholder={filterPlaceholder}
-          value={filterValue as string}
-          onChange={handleTextFieldChange}
-          size="md"
-          ref={(node) => {
-            if (node && filterInputRefs.current) {
-              filterInputRefs.current[`${header.id}-${rangeFilterIndex ?? 0}`] =
-                node;
-            }
-          }}
-          {...textFieldProps}
-        />
-        {(filterValue as string)?.length > 0 && (
-          <InputRightElement>
-            <IconButton
-              aria-label={localization.clearFilter}
-              icon={<CloseIcon />}
-              onClick={handleClear}
-              size="sm"
-              variant="ghost"
-            />
-          </InputRightElement>
+        {showChangeModeButton && (
+          <MRT_FilterOptionMenu
+            anchorEl={anchorEl}
+            header={header}
+            onSelect={() => setAnchorEl(null)}
+            setAnchorEl={setAnchorEl}
+            table={table}
+          />
         )}
-      </InputGroup>
-      {showChangeModeButton && (
-        <MRT_FilterOptionMenu
-          anchorEl={anchorEl}
-          header={header}
-          onSelect={() => setAnchorEl(null)}
-          setAnchorEl={setAnchorEl}
-          table={table}
-        />
-      )}
+      </FormControl>
     </Box>
   );
 };
