@@ -319,7 +319,7 @@ importers:
         version: 2.0.0
     devDependencies:
       '@chakra-ui/react':
-        specifier: ^3.0.0
+        specifier: ^3.19.1
         version: 3.19.1(@emotion/react@11.14.0(@types/react@19.0.2)(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@emotion/react':
         specifier: ^11.14.0
@@ -361,10 +361,10 @@ importers:
         specifier: ^8.4.7
         version: 8.4.7(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(rollup@2.79.2)(storybook@8.4.7(prettier@3.4.2))(typescript@5.7.2)(vite@6.0.5(@types/node@22.10.2)(jiti@2.4.1)(terser@5.37.0)(yaml@2.6.1))
       '@testing-library/jest-dom':
-        specifier: ^6.1.0
+        specifier: ^6.6.3
         version: 6.6.3
       '@testing-library/react':
-        specifier: ^14.2.0
+        specifier: ^14.3.1
         version: 14.3.1(@types/react@19.0.2)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@types/node':
         specifier: ^22.10.2
@@ -400,8 +400,8 @@ importers:
         specifier: ^19.0.0
         version: 19.0.0(react@19.0.0)
       react-icons:
-        specifier: ^4.10.1
-        version: 4.12.0(react@19.0.0)
+        specifier: ^5.5.0
+        version: 5.5.0(react@19.0.0)
       react-is:
         specifier: ^19.0.0
         version: 19.0.0
@@ -439,7 +439,7 @@ importers:
         specifier: ^6.0.5
         version: 6.0.5(@types/node@22.10.2)(jiti@2.4.1)(terser@5.37.0)(yaml@2.6.1)
       vitest:
-        specifier: ^1.0.0
+        specifier: ^1.6.1
         version: 1.6.1(@types/node@22.10.2)(jsdom@16.7.0)(terser@5.37.0)
 
 packages:
@@ -7986,8 +7986,8 @@ packages:
   react-error-overlay@6.0.11:
     resolution: {integrity: sha512-/6UZ2qgEyH2aqzYZgQPxEnz33NJ2gNsnHA2o5+o4wW9bLM/JYQitNP9xPhsXwC08hMMovfGe/8retsdDsczPRg==}
 
-  react-icons@4.12.0:
-    resolution: {integrity: sha512-IBaDuHiShdZqmfc/TwHu6+d6k2ltNCf3AszxNmjJc1KUfXdEeRJOKyNvLmAHaarhzGmTSVygNdyu8/opXv2gaw==}
+  react-icons@5.5.0:
+    resolution: {integrity: sha512-MEFcXdkP3dLo8uumGI5xN3lDFNsRtrjbOEKDLD7yv76v4wpnEq2Lt2qeHaQOr34I/wPN3s3+N08WkQ+CW37Xiw==}
     peerDependencies:
       react: '*'
 
@@ -19172,7 +19172,7 @@ snapshots:
 
   react-error-overlay@6.0.11: {}
 
-  react-icons@4.12.0(react@19.0.0):
+  react-icons@5.5.0(react@19.0.0):
     dependencies:
       react: 19.0.0
 
