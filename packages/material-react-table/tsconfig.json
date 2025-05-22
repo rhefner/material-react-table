@@ -28,7 +28,8 @@
     "strict": true,
     "target": "ES6",
     "paths": {
-      "@mui/material/Paper": ["./src/custom/Paper"]
+      "@mui/material/Paper": ["./src/custom/Paper"],
+      "@mui/icons-material/*": ["./src/custom/icons/*"]
     }
   },
   "references": [

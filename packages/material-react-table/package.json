@@ -66,8 +66,8 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@faker-js/faker": "^9.3.0",
-    "@chakra-ui/icons": "^3.0.0",
     "@chakra-ui/react": "^3.0.0",
+    "react-icons": "^4.10.1",
     "@rollup/plugin-typescript": "^11.1.6",
     "@size-limit/preset-small-lib": "^11.1.6",
     "@storybook/addon-a11y": "^8.4.7",
@@ -108,8 +108,8 @@
   "peerDependencies": {
     "@emotion/react": ">=11.13",
     "@emotion/styled": ">=11.13",
-    "@chakra-ui/icons": ">=3",
     "@chakra-ui/react": ">=3",
+    "react-icons": ">=4",
     "react": ">=18.0",
     "react-dom": ">=18.0"
   },
