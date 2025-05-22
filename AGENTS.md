@@ -56,3 +56,10 @@ Converting MRT to CRT, a fully featured CUI V3 implementation of TRT V8 based of
 2. Use backticks for referencing code elements
 3. Be concise and direct in responses
 4. Focus on CUI implementation while maintaining compatibility
+
+## Progress Tracking
+
+The ongoing migration progress and next steps are documented in
+`CRT_PROGRESS.md` at the repository root. Update this file as changes are
+made so future sessions can quickly understand the current state of the
+project.
