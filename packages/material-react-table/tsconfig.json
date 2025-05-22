@@ -29,6 +29,17 @@
     "target": "ES6",
     "paths": {
       "@mui/material/Paper": ["./src/custom/Paper"],
+      "@mui/material/Box": ["./src/custom/Box"],
+      "@mui/material/Button": ["./src/custom/Button"],
+      "@mui/material/IconButton": ["./src/custom/IconButton"],
+      "@mui/material/Tooltip": ["./src/custom/Tooltip"],
+      "@mui/material/Stack": ["./src/custom/Stack"],
+      "@mui/material/TableCell": ["./src/custom/TableCell"],
+      "@mui/material/TableRow": ["./src/custom/TableRow"],
+      "@mui/material/TableHead": ["./src/custom/TableHead"],
+      "@mui/material/TableBody": ["./src/custom/TableBody"],
+      "@mui/material/TableFooter": ["./src/custom/TableFooter"],
+      "@mui/material/TableContainer": ["./src/custom/TableContainer"],
       "@mui/icons-material/*": ["./src/custom/icons/*"]
     }
   },
