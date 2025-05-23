@@ -23,14 +23,7 @@ const mix = (color: string, amount: number, mixWith: number) => {
   );
 };
 
-export const lighten = (color: string, amount: number): string => mix(color, amount, 255);
 
-export const darken = (color: string, amount: number): string => mix(color, amount, 0);
-
-export const alpha = (color: string, value: number): string => {
-  const { r, g, b } = hexToRgb(color);
-  return `rgba(${r}, ${g}, ${b}, ${value})`;
-};
 import { useTheme, type Theme } from '@chakra-ui/react';
 
 interface RGBA {
@@ -150,5 +143,9 @@ export const transparentize = (color: string, amount: number): string => {
   return toRgbaString({ r, g, b, a: clamp(a - amount) });
 };
 
+export const alpha = (color: string, value: number): string => {
+  const { r, g, b } = parseColor(color);
+  return toRgbaString({ r, g, b, a: clamp(value) });
+};
+
 export { useTheme, type Theme };
-export { transparentize as alpha };

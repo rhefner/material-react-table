@@ -4,6 +4,8 @@
 - Created custom Chakra UI wrappers for various Material UI components in `src/custom`.
 - Added icon replacements using `react-icons` under `src/custom/icons`.
 - Configured `vite.config.ts` to alias `@mui/material` imports to Chakra equivalents.
+- Added path and vite aliases for `@mui/material/useMediaQuery` and
+  `@mui/material/styles` to avoid modifying upstream sources.
 - Added a basic vitest test `iconAlias.test.tsx` to verify icon aliases.
 - Introduced `color2k` helpers and removed remaining imports from `@mui/material/styles`.
 
