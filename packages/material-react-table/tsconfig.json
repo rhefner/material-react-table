@@ -40,6 +40,8 @@
       "@mui/material/TableBody": ["./src/custom/TableBody"],
       "@mui/material/TableFooter": ["./src/custom/TableFooter"],
       "@mui/material/TableContainer": ["./src/custom/TableContainer"],
+      "@mui/material/useMediaQuery": ["./src/custom/useMediaQuery"],
+      "@mui/material/styles": ["./src/utils/color.utils"],
       "@mui/icons-material/*": ["./src/custom/icons/*"]
     }
   },
