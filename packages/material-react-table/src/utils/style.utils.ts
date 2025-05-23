@@ -1,7 +1,7 @@
 import { type CSSProperties } from 'react';
 import { type TableCellProps } from '@mui/material/TableCell';
 import { type TooltipProps } from '@mui/material/Tooltip';
-import { alpha, darken, lighten } from '@mui/material/styles';
+import { alpha, darken, lighten } from './color.utils';
 import { type Theme } from '@mui/material/styles';
 import {
   type MRT_Column,
