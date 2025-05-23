@@ -3,11 +3,9 @@ import { type VirtualItem } from '@tanstack/react-virtual';
 import TableRow, { type TableRowProps } from '@mui/material/TableRow';
 import {
   type Theme,
-  alpha,
-  darken,
-  lighten,
   useTheme,
 } from '@mui/material/styles';
+import { darken, lighten, transparentize } from '../../utils/color.utils';
 import { MRT_TableBodyCell, Memo_MRT_TableBodyCell } from './MRT_TableBodyCell';
 import { MRT_TableDetailPanel } from './MRT_TableDetailPanel';
 import {
@@ -186,7 +184,7 @@ export const MRT_TableBodyRow = <TData extends MRT_RowData>({
         sx={(theme: Theme) => ({
           '&:hover td:after': cellHighlightColorHover
             ? {
-                backgroundColor: alpha(cellHighlightColorHover, 0.3),
+                backgroundColor: transparentize(cellHighlightColorHover, 0.7),
                 ...commonCellBeforeAfterStyles,
               }
             : undefined,

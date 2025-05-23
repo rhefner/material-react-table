@@ -1,7 +1,8 @@
 import { type CSSProperties } from 'react';
 import { type TableCellProps } from '@mui/material/TableCell';
 import { type TooltipProps } from '@mui/material/Tooltip';
-import { alpha, darken, lighten } from '@mui/material/styles';
+import { alpha, darken, lighten } from './color.utils';
+import { darken, lighten, transparentize } from './color.utils';
 import { type Theme } from '@mui/material/styles';
 import {
   type MRT_Column,
@@ -34,8 +35,8 @@ export const getMRTTheme = <TData extends MRT_RowData>(
         ? darken(muiTheme.palette.warning.dark, 0.25)
         : lighten(muiTheme.palette.warning.light, 0.5),
     menuBackgroundColor: lighten(baseBackgroundColor, 0.07),
-    pinnedRowBackgroundColor: alpha(muiTheme.palette.primary.main, 0.1),
-    selectedRowBackgroundColor: alpha(muiTheme.palette.primary.main, 0.2),
+    pinnedRowBackgroundColor: transparentize(muiTheme.palette.primary.main, 0.9),
+    selectedRowBackgroundColor: transparentize(muiTheme.palette.primary.main, 0.8),
     ...mrtThemeOverrides,
   };
 };
@@ -65,18 +66,18 @@ export const getCommonPinnedCellStyles = <TData extends MRT_RowData>({
   return {
     '&[data-pinned="true"]': {
       '&:before': {
-        backgroundColor: alpha(
+        backgroundColor: transparentize(
           darken(
             baseBackgroundColor,
             theme.palette.mode === 'dark' ? 0.05 : 0.01,
           ),
-          0.97,
+          0.03,
         ),
         boxShadow: column
           ? isPinned === 'left' && column.getIsLastColumn(isPinned)
-            ? `-4px 0 4px -4px ${alpha(theme.palette.grey[700], 0.5)} inset`
+            ? `-4px 0 4px -4px ${transparentize(theme.palette.grey[700], 0.5)} inset`
             : isPinned === 'right' && column.getIsFirstColumn(isPinned)
-              ? `4px 0 4px -4px ${alpha(theme.palette.grey[700], 0.5)} inset`
+              ? `4px 0 4px -4px ${transparentize(theme.palette.grey[700], 0.5)} inset`
               : undefined
           : undefined,
         ...commonCellBeforeAfterStyles,

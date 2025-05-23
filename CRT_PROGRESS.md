@@ -10,6 +10,7 @@
 ## Next Steps
 - Replace remaining imports from `@mui/material/styles` with Chakra theme utilities.
 - Update any styling utilities in `src/utils/style.utils.ts` to use Chakra's theming functions.
+- Ensure new color helpers are used consistently across the codebase.
 - Continue migrating components in `src/components` to ensure they rely solely on Chakra UI via the aliases.
 - Expand unit test coverage using vitest as migration continues.
 - Replace any leftover MUI style helpers with Chakra or `color2k` equivalents.
