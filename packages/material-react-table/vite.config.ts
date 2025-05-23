@@ -19,6 +19,7 @@ export default defineConfig({
       '@mui/material/TableBody': resolve(__dirname, 'src/custom/TableBody.tsx'),
       '@mui/material/TableFooter': resolve(__dirname, 'src/custom/TableFooter.tsx'),
       '@mui/material/TableContainer': resolve(__dirname, 'src/custom/TableContainer.tsx'),
+      '@mui/material/styles': resolve(__dirname, 'src/utils/color.utils.ts'),
       '@mui/icons-material': resolve(__dirname, 'src/custom/icons'),
     },
   },

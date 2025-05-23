@@ -1,5 +1,5 @@
 import TableRow, { type TableRowProps } from '@mui/material/TableRow';
-import { alpha } from '@mui/material/styles';
+import { transparentize } from '../../utils/color.utils';
 import { MRT_TableHeadCell } from './MRT_TableHeadCell';
 import {
   type MRT_ColumnVirtualizer,
@@ -49,7 +49,7 @@ export const MRT_TableHeadRow = <TData extends MRT_RowData>({
       {...tableRowProps}
       sx={(theme) => ({
         backgroundColor: baseBackgroundColor,
-        boxShadow: `4px 0 8px ${alpha(theme.palette.common.black, 0.1)}`,
+        boxShadow: `4px 0 8px ${transparentize(theme.palette.common.black, 0.9)}`,
         display: layoutMode?.startsWith('grid') ? 'flex' : undefined,
         position:
           enableStickyHeader && layoutMode === 'semantic'
